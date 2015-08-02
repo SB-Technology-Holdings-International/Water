@@ -12,3 +12,29 @@ body {
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
+
+paper-fab {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  z-index: 4;
+}
+.valve {
+  margin: 8px;
+}
+paper-toggle-button {
+  margin-left: 8px;
+}
+input {
+  text-align: center;
+}
+paper-date-picker {
+  margin-bottom: 8px;
+}
+paper-time-picker {
+  width: 540px;
+}
+#done-button {
+    background: #002256;
+    color: white;
+}

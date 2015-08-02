@@ -20,13 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#303F9F">
+  <meta name="theme-color" content="#1A5589">
 
   <!-- Web Application Manifest -->
   <link rel="manifest" href="manifest.json">
 
   <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
+  <meta name="msapplication-TileColor" content="#1A5589">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -59,7 +59,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <paper-drawer-panel id="paperDrawerPanel">
+    <paper-drawer-panel force-narrow="true" id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -101,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Polymer Starter Kit</div>
+            <div class="app-name">Sprinkler Controll</div>
           </div>
 
           <!-- Application sub title -->
@@ -116,13 +116,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
+              <a href="/schedule-add">
+                <paper-fab icon="add" id="add-button" a="/schedule-add"></paper-fab>
+              </a>
               <paper-material elevation="1">
-                <my-greeting></my-greeting>
-
-                <p class="paper-font-subhead">You now have:</p>
-                <my-list></my-list>
-
-                <p class="paper-font-body2">Looking for more Web App layouts? Check out our <a href="https://github.com/PolymerElements/app-layout-templates">layouts</a> collection. You can also <a href="http://polymerelements.github.io/app-layout-templates/">preview</a> them live.</p>
+                <h1>Watering Schedule</h1>
               </paper-material>
               <paper-material elevation="1">
                 <p class="paper-font-body2">This is another card.</p>
@@ -157,12 +155,67 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="user-info">
-              <paper-material elevation="1">
+            <section data-route="schedule-add">
+              <paper-material elevation="1" class="vertical center layout">
                 <h2 class="paper-font-display2">
-                User:<span>{{params.name}}</span>
+                  Add to Watering Schedule
                 </h2>
-                <div>This is <span>{{params.name}}</span>'s section</div>
+                <h1>For valves</h1>
+                <div class="valve">1 <paper-toggle-button></paper-toggle-button></div>
+                <div class="valve">2 <paper-toggle-button></paper-toggle-button></div>
+                <div class="valve">3 <paper-toggle-button></paper-toggle-button></div>
+                <div class="valve">4 <paper-toggle-button></paper-toggle-button></div>
+                <h2>
+                  Turn on water
+                </h2>
+                <paper-radio-group selected="basic">
+                  <paper-radio-button name="basic">Automaticly</paper-radio-button>
+                  <paper-radio-button name="advanced" checked="{{advanced}}">At a Specific Time</paper-radio-button>
+                </paper-radio-group>
+                <div hidden$="{{advanced}}">
+                  For
+                  <paper-input-container style="display: inline-block !important;">
+                    <input is="iron-input" size="1" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                  </paper-input-container>
+                  hours and
+                  <paper-input-container style="display: inline-block !important;">
+                    <input is="iron-input" size="1" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                  </paper-input-container>
+                  minutes every
+                  <paper-radio-group selected="week">
+                    <paper-radio-button name="day">Day</paper-radio-button>
+                    <paper-radio-button name="week">Week</paper-radio-button>
+                    <paper-radio-button name="month">Month</paper-radio-button>
+                  </paper-radio-group>
+                </div>
+                <template is="dom-if" if="{{advanced}}" restamp="true">
+                    <div>
+                      <div class="vertical center layout">
+                        <paper-date-picker></paper-date-picker>
+                        <paper-time-picker></paper-time-picker>
+                      </div>
+                      For
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" size="1" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                      </paper-input-container>
+                      hours and
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" size="1" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                      </paper-input-container>
+                      minutes. Repeat every
+                      <paper-radio-group selected="week">
+                        <paper-radio-button name="day">Day</paper-radio-button>
+                        <paper-radio-button name="week">Week</paper-radio-button>
+                        <paper-radio-button name="month">Month</paper-radio-button>
+                        <paper-radio-button name="never">Never</paper-radio-button>
+                      </paper-radio-group>
+                    </div>
+
+                </template>
+                <div class="horizontal end-justified layout" style="width: 100%;">
+                  <a href="/"><paper-button rasised id="done-button">Done</paper-button></a>
+                </div>
+
               </paper-material>
             </section>
 
@@ -179,10 +232,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-drawer-panel>
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
-    <!--
+
     <paper-toast id="caching-complete"
                  duration="6000"
-                 text="Caching complete! This app will work offline.">
+                 text="Caching complete! This app will load faster.">
     </paper-toast>
 
     <platinum-sw-register auto-register
@@ -193,7 +246,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          precache-file="precache.json">
       </platinum-sw-cache>
     </platinum-sw-register>
-    -->
+
 
   </template>
 
