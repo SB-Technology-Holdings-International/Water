@@ -53,11 +53,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
+
 </head>
 
 <body unresolved class="fullbleed layout vertical">
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
+
+    <!-- toast -->
+    <paper-toast id="schedule-add-done"
+                 duration="6000"
+                 text="Your watering schedule has been updated.">
+    </paper-toast>
 
     <paper-drawer-panel force-narrow="true" id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
@@ -106,7 +113,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">The future of the web today</div>
+            <div class="bottom-title paper-font-subhead">Save water</div>
           </div>
 
         </paper-toolbar>
@@ -120,29 +127,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-fab icon="add" id="add-button" a="/schedule-add"></paper-fab>
               </a>
               <paper-material elevation="1">
-                <h1>Watering Schedule</h1>
-              </paper-material>
-              <paper-material elevation="1">
-                <p class="paper-font-body2">This is another card.</p>
-              </paper-material>
-
-              <paper-material elevation="1" class="paper-font-body2">
-                <h1 id="license">License</h1>
-                <p>Everything in this repo is BSD style license unless otherwise specified.</p>
-                <p>Copyright (c) 2015 The Polymer Authors. All rights reserved.</p>
-                <p>Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</p>
-                <ul>
-                <li>Redistributions of source code must retain the above copyright
-                notice, this list of conditions and the following disclaimer.</li>
-                <li>Redistributions in binary form must reproduce the above
-                copyright notice, this list of conditions and the following disclaimer
-                in the documentation and/or other materials provided with the
-                distribution.</li>
-                <li>Neither the name of Google Inc. nor the names of its
-                contributors may be used to endorse or promote products derived from
-                this software without specific prior written permission.</li>
-                </ul>
-                <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</p>
+                <h2 class="paper-font-display2">Watering Schedule</h2>
+                <h1>Automatic</h1>
+                <h1>Custom</h1>
               </paper-material>
 
             </section>
@@ -161,10 +148,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   Add to Watering Schedule
                 </h2>
                 <h1>For valves</h1>
-                <div class="valve">1 <paper-toggle-button></paper-toggle-button></div>
-                <div class="valve">2 <paper-toggle-button></paper-toggle-button></div>
-                <div class="valve">3 <paper-toggle-button></paper-toggle-button></div>
-                <div class="valve">4 <paper-toggle-button></paper-toggle-button></div>
+                <div class="vertical layout">
+                  <div class="valve">#1<paper-toggle-button class="blue"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve">#2<paper-toggle-button class="red"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve">#3<paper-toggle-button class="green"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve">#4<paper-toggle-button class="orange"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                </div>
+
                 <h2>
                   Turn on water
                 </h2>
@@ -175,11 +165,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <div hidden$="{{advanced}}">
                   For
                   <paper-input-container style="display: inline-block !important;">
-                    <input is="iron-input" size="1" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                    <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
                   </paper-input-container>
                   hours and
                   <paper-input-container style="display: inline-block !important;">
-                    <input is="iron-input" size="1" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                    <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
                   </paper-input-container>
                   minutes every
                   <paper-radio-group selected="week">
@@ -196,24 +186,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       </div>
                       For
                       <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" size="1" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                        <input is="iron-input" class="time" size="1" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
                       </paper-input-container>
                       hours and
                       <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" size="1" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                        <input is="iron-input" class="time" size="1" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
                       </paper-input-container>
                       minutes. Repeat every
                       <paper-radio-group selected="week">
                         <paper-radio-button name="day">Day</paper-radio-button>
                         <paper-radio-button name="week">Week</paper-radio-button>
                         <paper-radio-button name="month">Month</paper-radio-button>
+                        <paper-radio-button name="three">3 Days</paper-radio-button>
                         <paper-radio-button name="never">Never</paper-radio-button>
                       </paper-radio-group>
                     </div>
 
                 </template>
                 <div class="horizontal end-justified layout" style="width: 100%;">
-                  <a href="/"><paper-button rasised id="done-button">Done</paper-button></a>
+                  <a href="/"><paper-button>Cancel</paper-button></a>
+                  <a href="/"><paper-button rasised id="done-button" onclick="{{scheduleAdd}}">Done</paper-button></a>
                 </div>
 
               </paper-material>

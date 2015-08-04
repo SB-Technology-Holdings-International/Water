@@ -8,7 +8,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 body {
-  background: #fafafa;
+  background: #E5FFE5;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
@@ -25,7 +25,11 @@ paper-fab {
 paper-toggle-button {
   margin-left: 8px;
 }
-input {
+paper-input {
+  display: inline-block !important;
+  margin-left: 8px;
+}
+input.time {
   text-align: center;
 }
 paper-date-picker {

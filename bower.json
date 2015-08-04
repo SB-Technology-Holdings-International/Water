@@ -7,7 +7,8 @@
     "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",
     "page": "visionmedia/page.js#~1.6.3",
-    "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3"
+    "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
+    "paper-date-picker": "bendavis78/paper-date-picker#64e43c61e2"
   },
   "devDependencies": {
     "web-component-tester": "*",
