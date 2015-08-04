@@ -21,7 +21,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.scheduleAdd = function() {
     document.querySelector('#schedule-add-done').show();
-    scroll(0,0)
+    scroll(0,0);
   };
 
   // Listen for template bound event to know when bindings
