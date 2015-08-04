@@ -86,6 +86,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     border-bottom: var(--drawer-toolbar-border-color);
   }
 
+  paper-chip[opened] {
+    z-index: 4;
+  }
+  paper-chip:not[opened] {
+    z-index: 0
+  }
+
   paper-scroll-header-panel {
     height: 100%;
   }
