@@ -240,7 +240,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize',
+    'vulcanize', 'precache',
     cb);
     // Note: add , 'precache' , after 'vulcanize', if your are going to use Service Worker
 });
