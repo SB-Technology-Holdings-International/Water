@@ -82,14 +82,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="/users" on-click="onDataRouteClick">
-            <iron-icon icon="info"></iron-icon>
-            <span>Users</span>
+          <a data-route="usage" href="/usage" on-click="onDataRouteClick">
+            <iron-icon icon="trending-up"></iron-icon>
+            <span>Usage</span>
           </a>
 
-          <a data-route="contact" href="/contact" on-click="onDataRouteClick">
-            <iron-icon icon="mail"></iron-icon>
-            <span>Contact</span>
+          <a data-route="help" href="/help" on-click="onDataRouteClick">
+            <iron-icon icon="help"></iron-icon>
+            <span>Help</span>
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
@@ -103,8 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
-          <paper-icon-button icon="refresh"></paper-icon-button>
-          <paper-icon-button icon="search"></paper-icon-button>
+          <a href="/help"><paper-icon-button icon="help"></paper-icon-button></a>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -154,14 +153,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 </paper-chip>
               </paper-material>
 
-            </section>
-
-            <section data-route="users">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Users</h2>
-                <p>This is the users section</p>
-                <a href="/users/Rob">Rob</a>
-              </paper-material>
             </section>
 
             <section data-route="schedule-add">
@@ -233,10 +224,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="contact">
+            <section data-route="usage">
               <paper-material elevation="1">
-                <h2 class="paper-font-display2">Contact</h2>
-                <p>This is the contact section</p>
+                <h2 class="paper-font-display2">Usage</h2>
+                <p>This is the usage section</p>
+              </paper-material>
+            </section>
+
+            <section data-route="help">
+              <paper-material elevation="1">
+                <h2 class="paper-font-display2">Help</h2>
+                <p>This is the help section</p>
               </paper-material>
             </section>
 

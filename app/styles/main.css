@@ -8,7 +8,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 */
 
 body {
-  background: #E5FFE5;
+  background: #F0F8FF;
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: #333;
 }
@@ -24,6 +24,9 @@ paper-fab {
 }
 paper-toggle-button {
   margin-left: 8px;
+}
+paper-icon-button{
+  color: white;
 }
 paper-input {
   display: inline-block !important;
