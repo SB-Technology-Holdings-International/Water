@@ -45,3 +45,46 @@ paper-time-picker {
     background: #002256;
     color: white;
 }
+
+/* Wave css from Chris Spittles */
+#banner {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    background: #000;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+}
+#banner .fill {
+    -webkit-animation-name: fillAction;
+    -webkit-animation-iteration-count: 1;
+    -webkit-animation-timing-function: cubic-bezier(.2, .6, .8, .4);
+    -webkit-animation-duration: 10s;
+    -webkit-animation-fill-mode: forwards;
+}
+#banner #waveShape {
+    -webkit-animation-name: waveAction;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-duration: 0.5s;
+    width:300px;
+    height: 150px;
+    fill: #04ACFF;
+}
+@-webkit-keyframes fillAction {
+    0% {
+        -webkit-transform: translate(0, 150px);
+    }
+    100% {
+        -webkit-transform: translate(0, 20px);
+    }
+}
+@-webkit-keyframes waveAction {
+    0% {
+        -webkit-transform: translate(-150px, 0);
+    }
+    100% {
+        -webkit-transform: translate(0, 0);
+    }
+}
