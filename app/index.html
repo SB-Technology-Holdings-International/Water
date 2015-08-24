@@ -190,6 +190,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <paper-radio-button name="week">Week</paper-radio-button>
                     <paper-radio-button name="month">Month</paper-radio-button>
                   </paper-radio-group>
+                  <paper-select id="select-input-1"
+                    multiple
+                    label-field="name"
+                    bind-value="{{crops}}"
+                    on-input-changed="cropInputChanged"
+                    nonmatching on-adding-item="addCrop" 
+                    label="What plants will be growing here?"
+                  >
+                  </paper-select>
                 </div>
                 <template is="dom-if" if="{{advanced}}" restamp="true">
                     <div>

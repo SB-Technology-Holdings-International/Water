@@ -9,7 +9,8 @@
     "page": "visionmedia/page.js#~1.6.3",
     "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
     "paper-date-picker": "bendavis78/paper-date-picker#64e43c61e2",
-    "paper-chip": "bendavis78/paper-chip#~1.0.0"
+    "paper-chip": "bendavis78/paper-chip#~1.0.0",
+    "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c"
   },
   "devDependencies": {
     "web-component-tester": "*",

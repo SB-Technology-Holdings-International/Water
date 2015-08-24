@@ -6,7 +6,24 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-
+function loadJSON(path, success, error)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                if (success)
+                    success(JSON.parse(xhr.responseText));
+            } else {
+                if (error)
+                    error(xhr);
+            }
+        }
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+}
 (function(document) {
   'use strict';
 
@@ -21,7 +38,42 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   app.scheduleAdd = function() {
     document.querySelector('#schedule-add-done').show();
-    scroll(0,0);
+  };
+  loadJSON('crop-names.json',
+         function(data) { app.cropsList = data; },
+         function(xhr) { console.error(xhr); }
+  );
+
+  app.cropInputChanged = function(e) {
+    var input = (e.detail.value || '').trim().toLowerCase();
+    if (input) {
+      e.target.options = app.cropsList.filter(function(item) {
+        console.log(item);
+        return item.toLowerCase().indexOf(input) !== -1;
+      });
+      e.target.options.sort(function (a, b) {
+        var a_first = a.toLowerCase().indexOf(input) === 0;
+        var b_first = b.toLowerCase().indexOf(input) === 0;
+        if (a_first && !b_first) {
+          return -1;
+        }
+        if (!a_first && b_first) {
+          return 1;
+        }
+        // a must be equal to b
+        return 0;
+      });
+    }
+
+    else
+      e.target.options = [];
+  };
+
+  app.addCrop = function(e) {
+    var input = (e.detail.value || '').trim()
+    e.detail.value = {
+      name: input
+    };
   };
 
   // Listen for template bound event to know when bindings
