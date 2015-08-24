@@ -176,31 +176,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-radio-button name="advanced" checked="{{advanced}}">At a Specific Time</paper-radio-button>
                 </paper-radio-group>
                 <div hidden$="{{advanced}}">
-                  For
-                  <paper-input-container style="display: inline-block !important;">
-                    <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                  </paper-input-container>
-                  hours and
-                  <paper-input-container style="display: inline-block !important;">
-                    <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                  </paper-input-container>
-                  minutes every
-                  <paper-radio-group selected="week">
-                    <paper-radio-button name="day">Day</paper-radio-button>
-                    <paper-radio-button name="week">Week</paper-radio-button>
-                    <paper-radio-button name="month">Month</paper-radio-button>
-                  </paper-radio-group>
                   <paper-select id="select-input-1"
                     multiple
                     label-field="name"
                     bind-value="{{crops}}"
                     on-input-changed="cropInputChanged"
-                    nonmatching on-adding-item="addCrop" 
-                    label="What plants will be growing here?"
+                    nonmatching on-adding-item="addCrop"
+                    label="What plants are growing here?"
+                    style="min-width: 300px;"
                   >
                   </paper-select>
+                  <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                    <div>
+                      Water <span>{{item.lower}}</span> for
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                      </paper-input-container>
+                      hours and
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      minutes every week
+                    </div>
+                  </template>
                 </div>
-                <template is="dom-if" if="{{advanced}}" restamp="true">
+                <template is="dom-if" if="{{advanced}}" id="addPlant">
                     <div>
                       <div class="vertical center layout">
                         <paper-date-picker></paper-date-picker>

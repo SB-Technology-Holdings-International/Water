@@ -32,6 +32,8 @@ function loadJSON(path, success, error)
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  app.newPlants = [];
+
   app.displayInstalledToast = function() {
     document.querySelector('#caching-complete').show();
   };
@@ -46,9 +48,18 @@ function loadJSON(path, success, error)
 
   app.cropInputChanged = function(e) {
     var input = (e.detail.value || '').trim().toLowerCase();
+    if(typeof app.newPlants === 'undefined'){
+       app.newPlants = [];
+     };
+    app.newPlants.forEach(function(z) {
+        if (app.crops.indexOf(z.name) < 0) {
+          var index = app.newPlants.indexOf(z);
+          console.log("delete");
+          app.splice('newPlants', index);
+        }
+    });
     if (input) {
       e.target.options = app.cropsList.filter(function(item) {
-        console.log(item);
         return item.toLowerCase().indexOf(input) !== -1;
       });
       e.target.options.sort(function (a, b) {
@@ -71,9 +82,10 @@ function loadJSON(path, success, error)
 
   app.addCrop = function(e) {
     var input = (e.detail.value || '').trim()
-    e.detail.value = {
-      name: input
-    };
+    var plant = {};
+    plant.name = input;
+    plant.lower = input.toLowerCase()
+    this.push('newPlants', plant);
   };
 
   // Listen for template bound event to know when bindings
