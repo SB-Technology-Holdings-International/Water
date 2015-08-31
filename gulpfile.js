@@ -21,6 +21,7 @@ var path = require('path');
 var fs = require('fs');
 var glob = require('glob');
 var historyApiFallback = require('connect-history-api-fallback');
+var manifest = require('gulp-manifest');
 
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 10',
@@ -158,6 +159,18 @@ gulp.task('vulcanize', function () {
     .pipe($.size({title: 'vulcanize'}));
 });
 
+gulp.task('manifest', function(){
+  gulp.src(['dist/*'])
+    .pipe(manifest({
+      hash: true,
+      preferOnline: true,
+      network: ['*'],
+      filename: 'app.manifest',
+      exclude: 'app.manifest'
+     }))
+    .pipe(gulp.dest('dist'));
+});
+
 // Generate a list of files that should be precached when serving from 'dist'.
 // The list will be consumed by the <platinum-sw-cache> element.
 gulp.task('precache', function (callback) {
@@ -240,7 +253,7 @@ gulp.task('default', ['clean'], function (cb) {
     ['copy', 'styles'],
     'elements',
     ['jshint', 'images', 'fonts', 'html'],
-    'vulcanize', 'precache',
+    'vulcanize', 'manifest', 'precache',
     cb);
     // Note: add , 'precache' , after 'vulcanize', if your are going to use Service Worker
 });

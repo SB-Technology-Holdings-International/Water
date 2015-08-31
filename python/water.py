@@ -1,14 +1,14 @@
 import pyeto
-latitude_deg = 38
+latitude_deg = 38.01
 latitude = pyeto.deg2rad(latitude_deg)
-day_of_year = 235
-tmin = 13
-tmax = 24
+day_of_year = 206
+tmin = 37
+tmax = 53
 coastal = True
-altitude = 300
-rh_min = 20
-rh_max = 66
-ws = 2
+altitude = 147
+rh_min = 13
+rh_max = 88
+ws = 1.3
 
 tmean = pyeto.daily_mean_t(tmin, tmax)
 atmos_pres = pyeto.atm_pressure(altitude)

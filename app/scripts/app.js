@@ -13,15 +13,17 @@ function loadJSON(path, success, error)
     {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
-                if (success)
+                if (success) {
                     success(JSON.parse(xhr.responseText));
+                }
             } else {
-                if (error)
+                if (error) {
                     error(xhr);
+                }
             }
         }
     };
-    xhr.open("GET", path, true);
+    xhr.open('GET', path, true);
     xhr.send();
 }
 (function(document) {
@@ -50,11 +52,11 @@ function loadJSON(path, success, error)
     var input = (e.detail.value || '').trim().toLowerCase();
     if(typeof app.newPlants === 'undefined'){
        app.newPlants = [];
-     };
+     }
     app.newPlants.forEach(function(z) {
         if (app.crops.indexOf(z.name) < 0) {
           var index = app.newPlants.indexOf(z);
-          console.log("delete");
+          console.log('delete');
           app.splice('newPlants', index);
         }
     });
@@ -63,12 +65,12 @@ function loadJSON(path, success, error)
         return item.toLowerCase().indexOf(input) !== -1;
       });
       e.target.options.sort(function (a, b) {
-        var a_first = a.toLowerCase().indexOf(input) === 0;
-        var b_first = b.toLowerCase().indexOf(input) === 0;
-        if (a_first && !b_first) {
+        var aFirst = a.toLowerCase().indexOf(input) === 0;
+        var bFirst = b.toLowerCase().indexOf(input) === 0;
+        if (aFirst && !bFirst) {
           return -1;
         }
-        if (!a_first && b_first) {
+        if (!aFirst && bFirst) {
           return 1;
         }
         // a must be equal to b
@@ -76,15 +78,16 @@ function loadJSON(path, success, error)
       });
     }
 
-    else
+    else {
       e.target.options = [];
+    }
   };
 
   app.addCrop = function(e) {
-    var input = (e.detail.value || '').trim()
+    var input = (e.detail.value || '').trim();
     var plant = {};
     plant.name = input;
-    plant.lower = input.toLowerCase()
+    plant.lower = input.toLowerCase();
     this.push('newPlants', plant);
   };
 
