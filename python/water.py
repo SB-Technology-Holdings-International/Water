@@ -1,3 +1,12 @@
+#watering system check for amount of rain.
+Forever
+    check watering parameters
+        if <10cm then
+            no action
+        if >10cm then
+            initiate watering system
+
+# this data should be from nws.
 import pyeto
 latitude_deg = 38.01
 latitude = pyeto.deg2rad(latitude_deg)
@@ -34,3 +43,14 @@ net_rad = pyeto.net_rad(ni_sw_rad, no_lw_rad)
 
 eto = pyeto.fao56_penman_monteith(net_rad, pyeto.celsius2kelvin(tmean), ws, svp, avp, delta_svp, psy)
 print eto
+
+Forever
+    check the time
+    if not running
+        if eto is <0 then
+            turn on water
+            var ontime = time.time()
+    else
+        time running = ontime - time.time()
+        if time running > eto then
+            turn off water
