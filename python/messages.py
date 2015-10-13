@@ -1,6 +1,5 @@
 '''Endpoints messages.'''
 
-
 from protorpc import messages, message_types
 
 class DataRequest(messages.Message):
@@ -11,6 +10,7 @@ class DataRequest(messages.Message):
     request_type = messages.EnumField(Type, 2)
 
 class ScheduledWater(messages.Message):
+    '''Request to add to watering schedule'''
     valve = messages.IntegerField(1)
     start_time = messages.DateTimeField(2)
     duration_seconds = messages.IntegerField(3)

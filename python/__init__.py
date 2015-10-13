@@ -10,16 +10,17 @@ from protorpc import message_types, remote
 from google.appengine.api import urlfetch
 
 import models
-from messages import ()
+from messages import (DataRequest, ScheduleResponse)
 
 WEB_CLIENT_ID = '981058069504-rjcfv5tc2msk8qvmu42uedqetforee0t.apps.googleusercontent.com'
 ANDROID_CLIENT_ID = ''
 IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
-def load_eto(zip):
+def load_eto(zip_code):
+    '''Load from CIMIS servers'''
     base_url = 'http://et.water.ca.gov/api/data?appKey=c08a073f-1305-4253-8acd-b348c8b3a1b8'
-    targets = '&targets=' + str(zip).strip('[]')
+    targets = '&targets=' + str(zip_code).strip('[]')
     start_date = '&startDate=' + '2015-09-18'
     end_date = '&endDate=' + '2015-09-18'
     data_req = '&dataItems=day-asce-eto,day-precip'
@@ -32,10 +33,11 @@ def load_eto(zip):
 
 @endpoints.api(name='wateringwebclient', version='v1')
 class WateringWebClientApi(remote.Service):
-    @endpoints.method(, , name='get_schedule',
+    '''Api that interacts with web app'''
+    @endpoints.method(DataRequest, ScheduleResponse, name='get_schedule',
                       allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
     def get_schedule(self, request):
-        
+        print request
         return
 
 application = endpoints.api_server([WateringWebClientApi])
