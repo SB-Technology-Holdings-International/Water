@@ -1,26 +1,23 @@
-application: watering-web-client
 
-# Version 1.0 (Alpha 2)
-version: 1-0-a-2
+application: flaming-octo-archer
+version: 1-0-a-1
 api_version: 1
 runtime: python27
 threadsafe: true
 
-
 handlers:
+
 # Endpoints api
 - url: /_ah/spi/.*
-  script: python.application
+  script: server.application
 
-# Static website
+# Main page
 - url: /
   static_files: dist/index.html
   upload: dist/index.html
-- url: /
-  static_dir: dist
 
 libraries:
-- name: endpoints
-  version: 1.0
 - name: pycrypto
   version: latest
+- name: endpoints
+  version: 1.0

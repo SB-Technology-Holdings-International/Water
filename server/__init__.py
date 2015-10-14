@@ -6,8 +6,14 @@ import urllib2
 import json
 
 import endpoints
-from protorpc import message_types, remote
+from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
+
+class MorsecodeRequest(messages.Message):
+    text = messages.StringField(1)
+
+class MorsecodeResponse(messages.Message):
+    message = messages.StringField(1)
 
 #import models
 from messages import (DataRequest, ScheduleResponse, ScheduledWater, Valve)
@@ -31,13 +37,15 @@ def load_eto(zip_code):
     data = json.loads(json_data)
     return data
 
-@endpoints.api(name='watering-web-client', version='v1')
-class WateringWebClientApi(remote.Service):
-    '''Api that interacts with web app'''
-    @endpoints.method(DataRequest, Valve, name='get_schedule',
-                      allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
+@endpoints.api(name='water', version='v1')
+class WaterAPI(remote.Service):
+    '''Water api'''
+    @endpoints.method(MorsecodeRequest,
+                  MorsecodeResponse,
+                  name='get_schedule', path='texttomorse')
     def get_schedule(self, request):
-        '''Returns schedule to website or device'''
-        return Valve(number=1, name='bob')
+        print request.text
+        data = "hi"
+        return MorsecodeResponse(message=data)
 
-application = endpoints.api_server([WateringWebClientApi])
+application = endpoints.api_server([WaterAPI])
