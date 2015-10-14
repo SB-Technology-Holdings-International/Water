@@ -1,6 +1,5 @@
 '''NDB models.'''
 
-
 from google.appengine.ext import ndb
 
 class ScheduleUnit(ndb.Model):
@@ -13,7 +12,7 @@ class Valve(ndb.Model):
     name = ndb.StringField()
 
 class Usage(ndb.Model):
-    
+    pass
 
 class Device(ndb.Model):
     '''The data for one physical device'''

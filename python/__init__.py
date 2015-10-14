@@ -9,10 +9,10 @@ import endpoints
 from protorpc import message_types, remote
 from google.appengine.api import urlfetch
 
-import models
-from messages import (DataRequest, ScheduleResponse)
+#import models
+from messages import (DataRequest, ScheduleResponse, ScheduledWater, Valve)
 
-WEB_CLIENT_ID = '981058069504-rjcfv5tc2msk8qvmu42uedqetforee0t.apps.googleusercontent.com'
+WEB_CLIENT_ID = '651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com'
 ANDROID_CLIENT_ID = ''
 IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = ANDROID_CLIENT_ID
@@ -31,13 +31,13 @@ def load_eto(zip_code):
     data = json.loads(json_data)
     return data
 
-@endpoints.api(name='wateringwebclient', version='v1')
+@endpoints.api(name='watering-web-client', version='v1')
 class WateringWebClientApi(remote.Service):
     '''Api that interacts with web app'''
-    @endpoints.method(DataRequest, ScheduleResponse, name='get_schedule',
+    @endpoints.method(DataRequest, Valve, name='get_schedule',
                       allowed_client_ids=[WEB_CLIENT_ID, endpoints.API_EXPLORER_CLIENT_ID])
     def get_schedule(self, request):
-        print request
-        return
+        '''Returns schedule to website or device'''
+        return Valve(number=1, name='bob')
 
 application = endpoints.api_server([WateringWebClientApi])
