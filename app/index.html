@@ -237,17 +237,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Usage</h2>
                 <p>This is the usage section</p>
-                <div class="horizontal layout">
-                  <div id="banner">
-                    <div class="fill">
-                      <?xml version="1.0" encoding="utf-8"?>
-                      <svg viewBox="0 0 300 300" width="300px" height="300px" xmlns="http://www.w3.org/2000/svg">
-                        <defs/>
-                        <path id="waveShape" d="M 300 300 C 300 300 300 3.37437 300 3.37437 C 281.081 1.06394 258.37 0.332636 258.4 -9.68575e-8 C 258.43 -0.332637 217.8 2.4 217.8 2.4 C 185.827 4.81156 185.873 4.37437 153.9 2.4 C 153.9 2.4 128.1 0.1 113.1 -9.68575e-8 C 98.1 -9.68575e-8 72.3 2.4 72.3 2.4 C 40.3267 4.37437 5 3.41156 0.00000226498 3.01156 C 0.00000226498 3.01156 0.00000226498 300 0.00000226498 300 C 0.00000226498 300 300 300 300 300 Z" style="fill: rgb(4, 172, 255);"/>
-                      </svg>
-                    </div>
-                  </div>
-                  Water usage 60%
+                <div class="vertical center layout">
+                  <chart-line id="chart" class="rectangular-chart" data="{{data}}"></chart-line>
                 </div>
 
               </paper-material>

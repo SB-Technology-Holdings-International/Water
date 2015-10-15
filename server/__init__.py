@@ -1,4 +1,5 @@
 '''The endpoints server.'''
+# https://docs.google.com/drawings/d/1DnJy1rjOXMD7PLMm0Yr1MbEKpViYM2HvmnrgWycSwZU/edit?usp=sharing
 __author__ = 'Sebastian Boyd'
 __copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
 
