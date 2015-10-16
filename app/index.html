@@ -236,13 +236,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="usage">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Usage</h2>
-                <div class="vertical center layout">
                   <template is="dom-if" if="{{loadCharts}}" id="charts">
-                      <div>
-                        <chart-line id="usageChartTime" class="rectangular-chart" data="[[usageTimeData]]"></chart-line>
+                      <div class="vertical center layout">
+                        <chart-doughnut data="[[usageRelativeData]]" class="square-chart"></chart-doughnut>
+                        <chart-line id="usageChartTime" class="square-chart" data="[[usageTimeData]]"></chart-line>
                       </div>
                   </template>
-                </div>
 
               </paper-material>
             </section>
