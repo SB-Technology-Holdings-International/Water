@@ -119,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" selected="{{route}}">
+          <iron-pages attr-for-selected="data-route" id="pages" selected="{{route}}" selectedItem="{{page}}">
 
             <section data-route="home">
               <a href="/schedule-add">
@@ -236,9 +236,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="usage">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Usage</h2>
-                <p>This is the usage section</p>
                 <div class="vertical center layout">
-                  <chart-line id="chart" class="rectangular-chart" data="{{data}}"></chart-line>
+                  <template is="dom-if" if="{{loadCharts}}" id="charts">
+                      <div>
+                        <chart-line id="usageChartTime" class="rectangular-chart" data="[[usageTimeData]]"></chart-line>
+                      </div>
+                  </template>
                 </div>
 
               </paper-material>
