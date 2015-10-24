@@ -3,12 +3,20 @@
 
 from protorpc import messages, message_types
 
+class Status(messages.Enum):
+    OK = 1
+    MISSING_DATA = 2
+    ERROR = 3
+
 class DataRequest(messages.Message):
     device_id = messages.StringField(1)
     class Type(messages.Enum):
         SCHEDULE = 1
         USAGE = 2
     request_type = messages.EnumField(Type, 2)
+
+class StatusResponse(messages.Message):
+    status = messages.EnumField(Status, 1)
 
 class ScheduledWater(messages.Message):
     '''Request to add to watering schedule'''

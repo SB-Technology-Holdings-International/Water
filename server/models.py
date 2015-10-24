@@ -9,10 +9,14 @@ class ScheduleUnit(ndb.Model):
 
 class Valve(ndb.Model):
     valve_id = ndb.IntegerProperty()
-    name = ndb.StringField()
+    name = ndb.StringProperty()
 
-class Usage(ndb.Model):
+class UsageDay(ndb.Model):
     pass
+
+class Person(ndb.Model):
+    '''One user'''
+    user = ndb.UserProperty()
 
 class Device(ndb.Model):
     '''The data for one physical device'''
@@ -20,4 +24,5 @@ class Device(ndb.Model):
     schedule = ndb.StructuredProperty(ScheduleUnit, repeated=True)
     zip_code = ndb.IntegerProperty()
     valves = ndb.StructuredProperty(Valve, repeated=True)
-    usage_history = ndb.StructuredProperty(Usage, repeated=True)
+    usage_history = ndb.StructuredProperty(UsageDay, repeated=True)
+    people = ndb.StructuredProperty(Person, repeated=True)
