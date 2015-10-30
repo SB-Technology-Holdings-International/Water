@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Watering Control">
+  <meta name="apple-mobile-web-app-title" content="Water Control">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
@@ -256,11 +256,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="setup">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Setup</h2>
-                <p>This is the setup section</p>
-
-              </paper-material>
+                <div class="vertical center layout" id="setupFill">
+                  <h2 class="paper-font-display2" style="margin: 32px;">Welcome</h2>
+                    <img src="images/logo.svg" style="height: 50%;">
+                    <img id="loginButton" src="images/google_signin.svg" onClick="{{loginButtonPressed}}" style="height: 12%;">
+                </div>
             </section>
 
           </iron-pages>

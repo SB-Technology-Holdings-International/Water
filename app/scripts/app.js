@@ -34,6 +34,8 @@ function loadJSON(path, success, error)
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
 
+  app.loginOpen = true;
+
   app.usageTimeData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
@@ -114,6 +116,14 @@ function loadJSON(path, success, error)
       };
 
   app.newPlants = [];
+
+  app.loginButtonPressed = function () {
+    document.getElementById('loginButton').src = 'images/google_signin_pressed.svg';
+    setTimeout( function () {
+      document.getElementById('loginButton').src = 'images/google_signin.svg';
+    }, 80 );
+    // Login endpoints
+  };
 
   app.displayInstalledToast = function() {
     document.querySelector('#caching-complete').show();
