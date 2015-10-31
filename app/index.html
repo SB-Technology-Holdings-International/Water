@@ -36,7 +36,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Water Control">
+  <meta name="apple-mobile-web-app-title" content="Water">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
   <!-- Tile icon for Win8 (144x144) -->
@@ -127,6 +127,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-tooltip for="add-button" position="left" animation-delay="0">Add to Schedule</paper-tooltip>
               </a>
               <paper-material elevation="1">
+                <h2 class="paper-font-display2">Manual Controls</h2>
+                <div class="horizontal layout">
+                  <div class="valve">Fruit Trees<paper-toggle-button class="blue"></paper-toggle-button>|</div>
+                  <div class="valve">Garden<paper-toggle-button class="red"></paper-toggle-button>|</div>
+                  <div class="valve">Cactus<paper-toggle-button class="green"></paper-toggle-button>|</div>
+                  <div class="valve">Palm Tree<paper-toggle-button class="orange"></paper-toggle-button></div>
+                </div>
                 <h2 class="paper-font-display2">Watering Schedule</h2>
                 <h1>Automatic</h1>
                 <paper-chip id="chip1">
@@ -161,16 +168,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h2 class="paper-font-display2">
                   Add to Watering Schedule
                 </h2>
-                <h1>For valves</h1>
+                <h1>Valves</h1>
                 <div class="vertical layout">
-                  <div class="valve">#1<paper-toggle-button class="blue"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve">#2<paper-toggle-button class="red"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve">#3<paper-toggle-button class="green"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve">#4<paper-toggle-button class="orange"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve"><paper-toggle-button class="blue"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve"><paper-toggle-button class="red"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve"><paper-toggle-button class="green"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                  <div class="valve"><paper-toggle-button class="orange"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
                 </div>
 
                 <h2>
-                  Turn on water
+                  Water
                 </h2>
                 <paper-radio-group selected="basic">
                   <paper-radio-button name="basic">Automaticly</paper-radio-button>
