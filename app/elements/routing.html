@@ -8,31 +8,46 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<script src="../../bower_components/page/page.js"></script>
+<script src="../bower_components/page/page.js"></script>
 <script>
   window.addEventListener('WebComponentsReady', function() {
 
     // We use Page.js for routing. This is a Micro
     // client-side router inspired by the Express router
     // More info: https://visionmedia.github.io/page.js/
-    page('/', function () {
+
+    // Middleware
+    function scrollToTop(ctx, next) {
+      app.scrollPageToTop();
+      next();
+    }
+
+    // Routes
+    page('/', scrollToTop, function() {
       app.route = 'home';
     });
 
-    page('/setup', function () {
+    page('/setup', scrollToTop, function () {
       app.route = 'setup';
     });
 
-    page('/usage', function () {
+    page('/usage', scrollToTop, function () {
       app.route = 'usage';
     });
 
-    page('/schedule-add', function () {
+    page('/schedule-add', scrollToTop, function () {
       app.route = 'schedule-add';
     });
 
-    page('/help', function () {
+    page('/help', scrollToTop, function () {
       app.route = 'help';
+
+    });
+
+    page('*', function() {
+      app.$.toast.text = 'Can\'t find: ' + window.location.href  + '. Redirected you to Home Page';
+      app.$.toast.show();
+      page.redirect('/');
     });
 
     // add #! before urls

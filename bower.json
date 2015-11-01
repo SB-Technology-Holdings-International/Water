@@ -16,9 +16,10 @@
     "Chart.js": "nnnick/Chart.js#^1.0.1",
     "paper-tooltip": "PolymerElements/paper-tooltip#^1.0.0",
     "paper-dialog": "PolymerElements/paper-dialog#^1.0.0"
+
   },
   "devDependencies": {
-    "web-component-tester": "*",
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0"
+    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
+    "web-component-tester": "*"
   }
 }

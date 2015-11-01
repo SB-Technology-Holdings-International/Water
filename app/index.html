@@ -54,6 +54,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
 
+  <!-- For shared styles, shared-styles.html import in elements.html -->
+  <style is="custom-style" include="shared-styles"></style>
+
 </head>
 
 <body unresolved class="fullbleed layout vertical">
@@ -77,17 +80,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="/" on-click="onDataRouteClick">
+          <a data-route="home" href="/" on-tap="onDataRouteClick">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="usage" href="/usage" on-click="onDataRouteClick">
+          <a data-route="usage" href="/usage" on-tap="onDataRouteClick">
             <iron-icon icon="trending-up"></iron-icon>
             <span>Usage</span>
           </a>
 
-          <a data-route="help" href="/help" on-click="onDataRouteClick">
+          <a data-route="help" href="/help" on-tap="onDataRouteClick">
             <iron-icon icon="help"></iron-icon>
             <span>Help</span>
           </a>
@@ -95,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
 
       <!-- Main Area -->
-      <paper-scroll-header-panel main condenses keep-condensed-header>
+      <paper-scroll-header-panel main id="headerPanelMain" condenses keep-condensed-header>
 
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar" class="tall">
@@ -275,6 +278,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </paper-scroll-header-panel>
     </paper-drawer-panel>
 
+    <paper-toast id="toast">
+      <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
+    </paper-toast>
+
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
 
     <paper-toast id="caching-complete"
@@ -286,8 +293,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                           clients-claim
                           skip-waiting
                           on-service-worker-installed="displayInstalledToast">
-      <platinum-sw-cache default-cache-strategy="networkFirst"
-                         precache-file="precache.json">
+      <platinum-sw-cache default-cache-strategy="fastest"
+                         cache-config-file="cache-config.json">
       </platinum-sw-cache>
     </platinum-sw-register>
 
