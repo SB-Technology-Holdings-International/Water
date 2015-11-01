@@ -6,7 +6,9 @@ from protorpc import messages, message_types
 class Status(messages.Enum):
     OK = 1
     MISSING_DATA = 2
-    ERROR = 3
+    EXISTS = 3
+    BAD_DATA = 4
+    ERROR = 5
 
 class DataRequest(messages.Message):
     device_id = messages.StringField(1)

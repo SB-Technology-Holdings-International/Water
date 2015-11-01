@@ -160,7 +160,7 @@ gulp.task('vulcanize', function () {
 });
 
 gulp.task('manifest', function(){
-  gulp.src(['dist/*'])
+  gulp.src(['dist/**/*'])
     .pipe(manifest({
       hash: true,
       preferOnline: true,

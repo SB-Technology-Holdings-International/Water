@@ -62,18 +62,30 @@ class WaterAPI(remote.Service):
                   name='add_user', path='adduser')
     def add_user(self, request):
         current_user = endpoints.get_current_user()
-        # check user if exists
-        print current_user
-        person = models.Person(user=current_user)
-        # Make child of device
+        # Check for parent
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return StatusResponse(status=Status.BAD_DATA)
+        # Check if user exists
+        if models.Person.query(models.Person.user == current_user, ancestor=device_key).get():
+            return StatusResponse(status=Status.EXISTS)
+        person = models.Person(user=current_user, parent=device_key)
         person.put()
         return StatusResponse(status=Status.OK)
 
     @endpoints.method(SetupRequest, StatusResponse,
                       name='add_device', path='adddevice')
     def add_device(self, request):
-        valves = models.Valves(Valve(valve_id=0),Valve(valve_id=1),Valve(valve_id=2),Valve(valve_id=3))
-        device = models.Device(device_id=request.device_id, zip_code=request.zip_code, valves=valves)
-        return SetupRequest(status=Status.OK)
+        if models.Device.query(models.Device.device_id == request.device_id).get():
+            return StatusResponse(status=Status.EXISTS)
+        device = models.Device(device_id=request.device_id, zip_code=request.zip_code)
+        device_key = device.put()
+        print load_eto(request.zip_code)
+        for i in range(4):
+            valve = models.Valve(valve_id=i, parent=device_key)
+            valve.put()
+        return StatusResponse(status=Status.OK)
 
 application = endpoints.api_server([WaterAPI])
