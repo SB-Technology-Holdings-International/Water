@@ -249,9 +249,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h2 class="paper-font-display2">Usage</h2>
                   <template is="dom-if" if="{{loadCharts}}" id="charts">
                       <div class="vertical center layout">
+                        A bar chart
                         <chart-bar data="[[barData]]" class="square-chart"></chart-bar>
+                        A Doughnut Chart
                         <chart-doughnut data="[[usageRelativeData]]" class="square-chart"></chart-doughnut>
+                        And a line chart
                         <chart-line id="usageChartTime" class="square-chart" data="[[usageTimeData]]"></chart-line>
+                        Thats it!
                       </div>
                   </template>
 
