@@ -20,13 +20,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#1A5589">
+  <meta name="theme-color" content="#1976D2">
 
   <!-- Web Application Manifest -->
   <link rel="manifest" href="manifest.json">
 
   <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#1A5589">
+  <meta name="msapplication-TileColor" content="#1976D2">
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Water">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
@@ -131,16 +131,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </a>
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Manual Controls</h2>
-                <div class="horizontal layout">
-                  <div class="valve">Fruit Trees<paper-toggle-button class="blue"></paper-toggle-button>|</div>
-                  <div class="valve">Garden<paper-toggle-button class="red"></paper-toggle-button>|</div>
-                  <div class="valve">Cactus<paper-toggle-button class="green"></paper-toggle-button>|</div>
-                  <div class="valve">Palm Tree<paper-toggle-button class="orange"></paper-toggle-button></div>
+                <div class="valve-controls">
+                  <span class="valve">Fruit Trees<paper-toggle-button class="blue"></paper-toggle-button></span>
+                  <span class="valve">Garden<paper-toggle-button class="red"></paper-toggle-button></span>
+                  <span class="valve">Cactus<paper-toggle-button class="green"></paper-toggle-button></span>
+                  <span class="valve">Palm Tree<paper-toggle-button class="orange"></paper-toggle-button></span>
                 </div>
+                <br>
                 <h2 class="paper-font-display2">Watering Schedule</h2>
                 <h1>Automatic</h1>
                 <paper-chip id="chip1">
-                  <div class="icon" style="background-color: #03A9F4;"></div>
+                  <div class="icon" style="background-color: #2196F3;"></div>
                   <div class="icon" style="background-color: #FF9800;"></div>
                   <h1>3 Hours 5 Minutes / Week</h1>
                   <h2>Valves 1, 4</h2>
