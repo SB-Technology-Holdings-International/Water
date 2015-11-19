@@ -14,10 +14,10 @@ handlers:
 
 # Static website
 - url: /
-  static_files: dist/index.html
-  upload: dist/index.html
+  static_files: dist/app/index.html
+  upload: dist/app/index.html
 - url: /
-  static_dir: dist
+  static_dir: dist/app
 
 libraries:
 - name: endpoints

@@ -45,7 +45,7 @@ var styleTask = function (stylesPath, srcs) {
     .pipe($.autoprefixer(AUTOPREFIXER_BROWSERS))
     .pipe(gulp.dest('.tmp/' + stylesPath))
     .pipe($.cssmin())
-    .pipe(gulp.dest('dist/' + stylesPath))
+    .pipe(gulp.dest('dist/app' + stylesPath))
     .pipe($.size({title: stylesPath}));
 };
 
@@ -68,7 +68,7 @@ var imageOptimizeTask = function (src, dest) {
 };
 
 var optimizeHtmlTask = function (src, dest) {
-  var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist']});
+  var assets = $.useref.assets({searchPath: ['.tmp', 'app', 'dist/app']});
 
   return gulp.src(src)
     // Replace path for vulcanized assets
@@ -117,7 +117,7 @@ gulp.task('jshint', function () {
 
 // Optimize images
 gulp.task('images', function () {
-  return imageOptimizeTask('app/images/**/*', 'dist/images');
+  return imageOptimizeTask('app/images/**/*', 'dist/app/images');
 });
 
 // Copy all files at the root level (app)
@@ -128,35 +128,35 @@ gulp.task('copy', function () {
     '!app/cache-config.json'
   ], {
     dot: true
-  }).pipe(gulp.dest('dist'));
+  }).pipe(gulp.dest('dist/app'));
 
   var bower = gulp.src([
     'bower_components/**/*'
-  ]).pipe(gulp.dest('dist/bower_components'));
+  ]).pipe(gulp.dest('dist/app/bower_components'));
 
   var elements = gulp.src(['app/elements/**/*.html',
                            'app/elements/**/*.css',
                            'app/elements/**/*.js'])
-    .pipe(gulp.dest('dist/elements'));
+    .pipe(gulp.dest('dist/app/elements'));
 
   var swBootstrap = gulp.src(['bower_components/platinum-sw/bootstrap/*.js'])
-    .pipe(gulp.dest('dist/elements/bootstrap'));
+    .pipe(gulp.dest('dist/app/elements/bootstrap'));
 
   var swToolbox = gulp.src(['bower_components/sw-toolbox/*.js'])
-    .pipe(gulp.dest('dist/sw-toolbox'));
+    .pipe(gulp.dest('dist/app/sw-toolbox'));
 
   var vulcanized = gulp.src(['app/elements/elements.html'])
     .pipe($.rename('elements.vulcanized.html'))
-    .pipe(gulp.dest('dist/elements'));
+    .pipe(gulp.dest('dist/app/elements'));
 
   return merge(app, bower, elements, vulcanized, swBootstrap, swToolbox)
     .pipe($.size({title: 'copy'}));
 });
 
-// Copy web fonts to dist
+// Copy web fonts to dist/app
 gulp.task('fonts', function () {
   return gulp.src(['app/fonts/**'])
-    .pipe(gulp.dest('dist/fonts'))
+    .pipe(gulp.dest('dist/app/fonts'))
     .pipe($.size({title: 'fonts'}));
 });
 
@@ -164,13 +164,13 @@ gulp.task('fonts', function () {
 gulp.task('html', function () {
   return optimizeHtmlTask(
     ['app/**/*.html', '!app/{elements,test}/**/*.html'],
-    'dist');
+    'dist/app');
 });
 
 // Vulcanize granular configuration
 gulp.task('vulcanize', function () {
-  var DEST_DIR = 'dist/elements';
-  return gulp.src('dist/elements/elements.vulcanized.html')
+  var DEST_DIR = 'dist/app/elements';
+  return gulp.src('dist/app/elements/elements.vulcanized.html')
     .pipe($.vulcanize({
       stripComments: true,
       inlineCss: true,
@@ -181,7 +181,7 @@ gulp.task('vulcanize', function () {
 });
 
 gulp.task('manifest', function(){
-  gulp.src(['dist/**/*'])
+  gulp.src(['dist/app/**/*'])
     .pipe(manifest({
       hash: true,
       preferOnline: true,
@@ -189,7 +189,7 @@ gulp.task('manifest', function(){
       filename: 'app.manifest',
       exclude: 'app.manifest'
      }))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('dist/app'));
 });
 
 // Generate config data for the <sw-precache-cache> element.
@@ -200,7 +200,7 @@ gulp.task('manifest', function(){
 // See https://github.com/PolymerElements/polymer-starter-kit#enable-service-worker-support
 // for more context.
 gulp.task('cache-config', function (callback) {
-  var dir = 'dist';
+  var dir = 'dist/app';
   var config = {
     cacheId: packageJson.name || path.basename(__dirname),
     disabled: false
@@ -280,7 +280,7 @@ gulp.task('serve:dist', ['default'], function () {
     // Note: this uses an unsigned certificate which on first access
     //       will present a certificate warning in the browser.
     // https: true,
-    server: 'dist',
+    server: 'dist/app',
     middleware: [ historyApiFallback() ]
   });
 });
