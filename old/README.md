@@ -1,2 +1,0 @@
-# WateringWebClient
-Setup, controll
