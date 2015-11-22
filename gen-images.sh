@@ -9,3 +9,4 @@ convert -background transparent -resize 144x144 logo.svg app/images/touch/ms-ico
 convert -background transparent -resize 144x144 logo.svg app/images/touch/ms-touch-icon-144x144-precomposed.png
 convert -background transparent -resize 16x16 logo.svg app/favicon.ico.png
 convert -background transparent -resize 16x16 logo.svg app/favicon.ico
+convert -background transparent -resize 1024x1024 logo.svg app/images/touch/video-large-1024x1024.png
