@@ -27,7 +27,8 @@ class ScheduledWater(messages.Message):
     duration_seconds = messages.IntegerField(3)
 
 class ScheduleResponse(messages.Message):
-    schedule = messages.MessageField(ScheduledWater, 1, repeated=True)
+    status = messages.EnumField(Status, 1)
+    schedule = messages.MessageField(ScheduledWater, 2, repeated=True)
 
 class UsageResponse(messages.Message):
     usage = messages.StringField(1)

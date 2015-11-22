@@ -7,6 +7,7 @@ import urllib2
 import json
 
 import endpoints
+import datetime
 from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
 import google.appengine.api.users
@@ -42,7 +43,15 @@ def load_eto(zip_code):
 
 def ndb_check_schedule(device_id):
     '''Checks if there is a entry in ndb for today's schedule'''
-    pass
+    device = models.Device.query(models.Device.device_id == device_id).get()
+    try:
+        device_key = device.key
+    except AttributeError:
+        return False
+    schedule = models.ScheduleUnit.query(ancestor=device_key, date=datetime.date.today())
+    if schedule:
+        return True
+
 
 @endpoints.api(name='water', version='v1')
 class WaterAPI(remote.Service):
@@ -51,11 +60,22 @@ class WaterAPI(remote.Service):
                       name='get_schedule', path='getschedule')
     def get_schedule(self, request):
         print request.device_id
-        # Check last update
-        # if not today
-        # update eto
-        # Return schedule
-        return ScheduleResponse()
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return StatusResponse(status=Status.BAD_DATA)
+        schedule = models.ScheduleDay.query(ancestor=device_key, date=datetime.date.today()).get()
+        if schedule:
+            schedule_units = models.ScheduleUnit.query(ancestor=schedule.key).fetch()
+            responses = []
+            for u in schedule_units:
+                responses.append(ScheduledWater(valve=u.valve_id, start_time=u.start_time, duration_seconds=u.duration_seconds))
+        else:
+            # Generate schedule
+            eto_data = load_eto(device.zip_code)
+            
+        return ScheduleResponse(ScheduleResponse(schedule=responses))
 
     @endpoints.method(DataRequest,
                   StatusResponse,
