@@ -65,16 +65,16 @@ class WaterAPI(remote.Service):
             device_key = device.key
         except AttributeError:
             return StatusResponse(status=Status.BAD_DATA)
-        schedule = models.ScheduleDay.query(ancestor=device_key, date=datetime.date.today()).get()
-        if schedule:
-            schedule_units = models.ScheduleUnit.query(ancestor=schedule.key).fetch()
+        schedule_day = models.ScheduleDay.query(ancestor=device_key, date=datetime.date.today()).get()
+        if schedule_day:
+            schedule_units = schedule_day.schedule
             responses = []
             for u in schedule_units:
                 responses.append(ScheduledWater(valve=u.valve_id, start_time=u.start_time, duration_seconds=u.duration_seconds))
         else:
             # Generate schedule
             eto_data = load_eto(device.zip_code)
-            
+
         return ScheduleResponse(ScheduleResponse(schedule=responses))
 
     @endpoints.method(DataRequest,
