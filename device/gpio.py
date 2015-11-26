@@ -23,6 +23,7 @@ def distroy(pin):
 
 def pin_mode(pin, direction):
     pin = str(pin)
+    create(pin)
     sys_write('gpio' + pin + '/direction', direction)
 
 def digital_write(pin, value):

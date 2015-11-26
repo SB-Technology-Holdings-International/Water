@@ -23,7 +23,7 @@ class StatusResponse(messages.Message):
 class ScheduledWater(messages.Message):
     '''Request to add to watering schedule'''
     valve = messages.IntegerField(1)
-    start_time = message_types.DateTimeField(2)
+    start_time = message_types.IntegerField(2)
     duration_seconds = messages.IntegerField(3)
 
 class ScheduleResponse(messages.Message):
