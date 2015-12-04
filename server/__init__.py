@@ -11,6 +11,7 @@ import datetime
 from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
 import google.appengine.api.users
+import api_key
 
 class MorsecodeRequest(messages.Message):
     text = messages.StringField(1)
@@ -29,7 +30,7 @@ ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
 def load_eto(zip_code):
     '''Load from CIMIS servers'''
-    base_url = 'http://et.water.ca.gov/api/data?appKey=c08a073f-1305-4253-8acd-b348c8b3a1b8'
+    base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.key
     targets = '&targets=' + str(zip_code).strip('[]')
     start_date = '&startDate=' + '2015-09-18'
     end_date = '&endDate=' + '2015-09-18'
@@ -74,6 +75,7 @@ class WaterAPI(remote.Service):
         else:
             # Generate schedule
             eto_data = load_eto(device.zip_code)
+            eto_data = json.loads(eto_data)
 
         return ScheduleResponse(ScheduleResponse(schedule=responses))
 
@@ -98,12 +100,13 @@ class WaterAPI(remote.Service):
     @endpoints.method(SetupRequest, StatusResponse,
                       name='add_device', path='adddevice')
     def add_device(self, request):
+        num_devices = 4 # Make set through api
         if models.Device.query(models.Device.device_id == request.device_id).get():
             return StatusResponse(status=Status.EXISTS)
         device = models.Device(device_id=request.device_id, zip_code=request.zip_code)
         device_key = device.put()
         print load_eto(request.zip_code)
-        for i in range(4):
+        for i in range(num_devices):
             valve = models.Valve(valve_id=i, parent=device_key)
             valve.put()
         return StatusResponse(status=Status.OK)
