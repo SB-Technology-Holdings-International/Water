@@ -16,8 +16,8 @@ class RequestHandler(BaseHTTPRequestHandler):
 
 httpd = SocketServer.TCPServer(("", 8080), RequestHandler)
 
-def server(a, stop_event):
-
+def server(a):
+    print a
     httpd.serve_forever()
 
 

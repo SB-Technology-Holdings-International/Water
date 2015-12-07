@@ -37,7 +37,7 @@ def load_eto(zip_code):
     response = urllib2.urlopen(req)
     json_data = response.read()
     data = json.loads(json_data)
-    return data
+    return data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value']
 
 def ndb_check_schedule(device_id):
     '''Checks if there is a entry in ndb for today's schedule'''
@@ -64,7 +64,7 @@ class WaterAPI(remote.Service):
         try:
             device_key = device.key
         except AttributeError:
-            return StatusResponse(status=Status.BAD_DATA)
+            return ScheduleResponse(status=Status.BAD_DATA)
         schedule_day = models.ScheduleDay.query(ancestor=device_key,
                                                 date=datetime.date.today()).get()
         if schedule_day:
@@ -77,7 +77,7 @@ class WaterAPI(remote.Service):
         else:
             # Generate schedule
             eto_data = load_eto(device.zip_code)
-            eto_data = json.loads(eto_data)
+
 
         return ScheduleResponse(ScheduleResponse(schedule=responses))
 
