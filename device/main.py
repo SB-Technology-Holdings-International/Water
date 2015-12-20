@@ -1,27 +1,15 @@
 import gpio
 import datetime
 import time
-import SocketServer
-from BaseHTTPServer import BaseHTTPRequestHandler
-import threading
+from twisted.web import server, resource
+from twisted.internet import reactor
 
+class Simple(resource.Resource):
+    isLeaf = True
+    def render_GET(self, request):
+        return "<html>%s Iterations!</html>"%n
 
-class RequestHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        if self.path == '/local-control':
-            # Insert code here
-            pass
-
-        self.send_response(200)
-
-httpd = SocketServer.TCPServer(("", 8080), RequestHandler)
-
-def server(a):
-    print a
-    httpd.serve_forever()
-
-
-def controller(a, stop_event):
+def main():
     # Valve GPIO pin mapping
     valves = [135, 136, 137, 138] # Not actual values
     # Setup GPIO
@@ -32,8 +20,10 @@ def controller(a, stop_event):
     # Define variables
     last_update = ''
     schedule = [(0, 1000), (0, 1009)] # (valve number, seconds past midnight)
-    print "ok"
-    while(not stop_event.isSet()):
+    site = server.Site(Simple())
+    reactor.listenTCP(9000, site)
+    reactor.startRunning(False)
+    while True:
         # Update once a day
         if last_update != datetime.date.today():
             print "Updating from server..."
@@ -49,18 +39,9 @@ def controller(a, stop_event):
                 #gpio.digital_write(valves[schedule[0][0]], 1)
                 schedule.pop(0)
 
-        # Reduce cpu usage
-        time.sleep(0.5)
-        print "Test"
 
-t1_stop= threading.Event()
-t1 = threading.Thread(target=server, args=(1, t1_stop))
-t1.start()
+        time.sleep(0.001)
+        reactor.iterate()
 
-t2_stop = threading.Event()
-t2 = threading.Thread(target=controller, args=(1, t2_stop))
-t2.start()
-raw_input("Press enter to stop")
-t2_stop.set()
-t1_stop.set()
-httpd.server_close()
+if __name__=="__main__":
+    main()
