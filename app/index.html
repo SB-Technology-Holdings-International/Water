@@ -9,13 +9,13 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<html lang="" manifest="app.manifest">
+<html lang="en" manifest="app.manifest">
 
 <head>
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Polymer Starter Kit" />
+  <meta name="generator" content="Polymer Starter Kit"/>
   <title>Watering Control</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
@@ -50,9 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
 
-  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <!-- Because this project uses vulcanize this should be your only html import
+       in this file. All other imports should go in elements.html -->
   <link rel="import" href="elements/elements.html">
-  <!-- endreplace-->
 
   <!-- For shared styles, shared-styles.html import in elements.html -->
   <style is="custom-style" include="shared-styles"></style>
@@ -80,7 +80,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="/" on-tap="onDataRouteClick">
+          <a data-route="home" href="{{baseUrl}}">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
@@ -93,6 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <a data-route="help" href="/help" on-tap="onDataRouteClick">
             <iron-icon icon="help"></iron-icon>
             <span>Help</span>
+
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
@@ -267,6 +268,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Help</h2>
                 <p>This is the help section</p>
+
               </paper-material>
             </section>
 
@@ -297,6 +299,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
+                          base-uri="bower_components/platinum-sw/bootstrap"
                           on-service-worker-installed="displayInstalledToast">
       <platinum-sw-cache default-cache-strategy="fastest"
                          cache-config-file="cache-config.json">

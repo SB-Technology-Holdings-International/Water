@@ -4,7 +4,7 @@
   "dependencies": {
     "iron-elements": "PolymerElements/iron-elements#^1.0.0",
     "neon-elements": "PolymerElements/neon-elements#^1.0.0",
-    "page": "visionmedia/page.js#~1.6.3",
+    "page": "visionmedia/page.js#~1.6.4",
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
     "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
     "polymer": "Polymer/polymer#^1.2.0",
@@ -15,15 +15,16 @@
     "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c",
     "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
     "Chart.js": "nnnick/Chart.js#^1.0.1",
-    
+
     "paper-tooltip": "PolymerElements/paper-tooltip#^1.0.0",
     "paper-dialog": "PolymerElements/paper-dialog#^1.0.0",
     "webcomponentsjs": "~0.7.20"
+
   },
   "devDependencies": {
-    "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*"
   },
+  "ignore": [],
   "resolutions": {
     "paper-menu": "4fecb43601"
   }

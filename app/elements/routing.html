@@ -16,14 +16,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // client-side router inspired by the Express router
     // More info: https://visionmedia.github.io/page.js/
 
+    // Removes end / from app.baseUrl which page.base requires for production
+    if (window.location.port === '') {  // if production
+      page.base(app.baseUrl.replace(/\/$/, ''));
+    }
+
     // Middleware
     function scrollToTop(ctx, next) {
       app.scrollPageToTop();
       next();
     }
 
+    function closeDrawer(ctx, next) {
+      app.closeDrawer();
+      next();
+    }
+
     // Routes
-    page('/', scrollToTop, function() {
+    page('*', scrollToTop, closeDrawer, function(ctx, next) {
+      next();
+    });
+
+    page('/', function() {
+      app.route = 'home';
+    });
+
+    page(app.baseUrl, function() {
       app.route = 'home';
     });
 
@@ -44,10 +62,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     });
 
+    // 404
     page('*', function() {
       app.$.toast.text = 'Can\'t find that page. Redirected you to Home Page';
       app.$.toast.show();
-      page.redirect('/');
+      page.redirect(app.baseUrl);
     });
 
     // add #! before urls

@@ -3,7 +3,8 @@ dist
 bower_components
 .tmp
 *.pyc
-.publish/
 .editorconfig
 sslkeys
 server/api_key.py
+=======
+.publish/

@@ -125,6 +125,14 @@ function loadJSON(path, success, error)
     // Login endpoints
   };
 
+  // Sets app default base URL
+  app.baseUrl = '/';
+  if (window.location.port === '') {  // if production
+    // Uncomment app.baseURL below and
+    // set app.baseURL to '/your-pathname/' if running from folder in production
+    // app.baseUrl = '/polymer-starter-kit/';
+  }
+
   app.displayInstalledToast = function() {
     // Check to make sure caching is actually enabled—it won't be in the dev environment.
     if (!Polymer.dom(document).querySelector('platinum-sw-cache').disabled) {
@@ -213,8 +221,11 @@ function loadJSON(path, success, error)
     var detail = e.detail;
     var heightDiff = detail.height - detail.condensedHeight;
     var yRatio = Math.min(1, detail.y / heightDiff);
-    var maxMiddleScale = 0.50;  // appName max size when condensed. The smaller the number the smaller the condensed size.
-    var scaleMiddle = Math.max(maxMiddleScale, (heightDiff - detail.y) / (heightDiff / (1-maxMiddleScale))  + maxMiddleScale);
+    // appName max size when condensed. The smaller the number the smaller the condensed size.
+    var maxMiddleScale = 0.50;
+    var auxHeight = heightDiff - detail.y;
+    var auxScale = heightDiff / (1 - maxMiddleScale);
+    var scaleMiddle = Math.max(maxMiddleScale, auxHeight / auxScale + maxMiddleScale);
     var scaleBottom = 1 - yRatio;
 
     // Move/translate middleContainer
@@ -227,17 +238,13 @@ function loadJSON(path, success, error)
     Polymer.Base.transform('scale(' + scaleMiddle + ') translateZ(0)', appName);
   });
 
-  // Close drawer after menu item is selected if drawerPanel is narrow
-  app.onDataRouteClick = function() {
-    var drawerPanel = Polymer.dom(document).querySelector('#paperDrawerPanel');
-    if (drawerPanel.narrow) {
-      drawerPanel.closeDrawer();
-    }
-  };
-
   // Scroll page to top and expand header
   app.scrollPageToTop = function() {
     app.$.headerPanelMain.scrollToTop(true);
+  };
+
+  app.closeDrawer = function() {
+    app.$.paperDrawerPanel.closeDrawer();
   };
 
 })(document);
