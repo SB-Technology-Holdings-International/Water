@@ -35,12 +35,6 @@ paper-input {
 input.time {
   text-align: center;
 }
-paper-date-picker {
-  margin-bottom: 8px;
-}
-paper-time-picker {
-  width: 540px;
-}
 #done-button {
     background: #002256;
     color: white;

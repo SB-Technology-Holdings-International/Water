@@ -184,10 +184,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   Water
                 </h2>
                 <paper-radio-group selected="basic">
-                  <paper-radio-button name="basic">Automaticly</paper-radio-button>
-                  <paper-radio-button name="advanced" checked="{{advanced}}">At a Specific Time</paper-radio-button>
+                  <paper-radio-button name="basic">Normal</paper-radio-button>
+                  <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
                 </paper-radio-group>
                 <div hidden$="{{advanced}}">
+                  <div>
+                    <div class="vertical center layout">
+                      <paper-date-picker></paper-date-picker>
+                      <paper-time-picker></paper-time-picker>
+                    </div>
+                    For
+                    <paper-input-container style="display: inline-block !important;">
+                      <input is="iron-input" class="time" size="3" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                    </paper-input-container>
+                    hours and
+                    <paper-input-container style="display: inline-block !important;">
+                      <input is="iron-input" class="time" size="2" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                    </paper-input-container>
+                    minutes. Repeat every
+                    <paper-radio-group selected="week">
+                      <paper-radio-button name="day">Day</paper-radio-button>
+                      <paper-radio-button name="week">Week</paper-radio-button>
+                      <paper-radio-button name="month">Month</paper-radio-button>
+                      <paper-radio-button name="three">3 Days</paper-radio-button>
+                      <paper-radio-button name="never">Never</paper-radio-button>
+                    </paper-radio-group>
+                  </div>
+
+                </div>
+                <template is="dom-if" if="{{advanced}}" id="addPlant">
                   <paper-select id="select-input-1"
                     multiple
                     label-field="name"
@@ -198,44 +223,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     style="min-width: 300px;"
                   >
                   </paper-select>
-                  <template is="dom-repeat" items="{{newPlants}}" restamp="true">
-                    <div>
-                      Water <span>{{item.lower}}</span> for
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                      </paper-input-container>
-                      hours and
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      minutes every week
-                    </div>
-                  </template>
-                </div>
-                <template is="dom-if" if="{{advanced}}" id="addPlant">
-                    <div>
-                      <div class="vertical center layout">
-                        <paper-date-picker></paper-date-picker>
-                        <paper-time-picker></paper-time-picker>
+                    <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                      <div>
+                        Water <span>{{item.lower}}</span> for
+                        <paper-input-container style="display: inline-block !important;">
+                          <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                        </paper-input-container>
+                        hours and
+                        <paper-input-container style="display: inline-block !important;">
+                          <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                        </paper-input-container>
+                        minutes every week
                       </div>
-                      For
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="3" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                      </paper-input-container>
-                      hours and
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      minutes. Repeat every
-                      <paper-radio-group selected="week">
-                        <paper-radio-button name="day">Day</paper-radio-button>
-                        <paper-radio-button name="week">Week</paper-radio-button>
-                        <paper-radio-button name="month">Month</paper-radio-button>
-                        <paper-radio-button name="three">3 Days</paper-radio-button>
-                        <paper-radio-button name="never">Never</paper-radio-button>
-                      </paper-radio-group>
-                    </div>
-
+                    </template>
                 </template>
                 <div class="horizontal end-justified layout" style="width: 100%;">
                   <a href="/"><paper-button>Cancel</paper-button></a>

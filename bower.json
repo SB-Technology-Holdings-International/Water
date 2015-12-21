@@ -2,24 +2,29 @@
   "name": "polymer-starter-kit",
   "private": true,
   "dependencies": {
-    "chart-elements": "~2.0.0",
-    "google-map": "GoogleWebComponents/google-map#~1.1.0",
-    "iron-elements": "PolymerElements/iron-elements#1.0.0",
-    "neon-elements": "PolymerElements/neon-elements#1.0.0",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.0",
+    "neon-elements": "PolymerElements/neon-elements#^1.0.0",
     "page": "visionmedia/page.js#~1.6.3",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
+    "platinum-elements": "PolymerElements/platinum-elements#^1.1.0",
+    "polymer": "Polymer/polymer#^1.2.0",
+    "paper-menu": "PolymerElements/paper-menu#4fecb43601",
+    "chart-elements": "~2.0.0",
     "paper-chip": "~1.0.0",
-    "paper-date-picker": "bendavis78/paper-date-picker#64e43c61e2",
-    "paper-elements": "PolymerElements/paper-elements#1.0.1",
+    "paper-date-picker": "bendavis78/paper-date-picker",
     "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c",
     "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
-    "platinum-elements": "PolymerElements/platinum-elements#1.0.1",
     "Chart.js": "nnnick/Chart.js#^1.0.1",
+    
     "paper-tooltip": "PolymerElements/paper-tooltip#^1.0.0",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.0.0"
-
+    "paper-dialog": "PolymerElements/paper-dialog#^1.0.0",
+    "webcomponentsjs": "~0.7.20"
   },
   "devDependencies": {
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "web-component-tester": "*"
+  },
+  "resolutions": {
+    "paper-menu": "4fecb43601"
   }
 }

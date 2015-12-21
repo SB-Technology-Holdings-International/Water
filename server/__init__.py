@@ -13,6 +13,7 @@ import google.appengine.api.users
 import api_key
 
 import models
+import crops
 from messages import (DataRequest, ScheduleResponse, ScheduledWater, Valve,
                       StatusResponse, Status, SetupRequest)
 
@@ -31,7 +32,7 @@ def load_eto(zip_code):
     start_date = '&startDate=' + '2015-09-18'
     end_date = '&endDate=' + '2015-09-18'
     data_req = '&dataItems=day-asce-eto,day-precip'
-    units = '&unitOfMeasure=M'
+    units = '&unitOfMeasure=E'
     req = urllib2.Request(base_url + targets + start_date + end_date + data_req
                           + units, None, {'accept':'application/json'})
     response = urllib2.urlopen(req)
@@ -77,6 +78,7 @@ class WaterAPI(remote.Service):
         else:
             # Generate schedule
             eto_data = load_eto(device.zip_code)
+            krdi = 1
 
 
         return ScheduleResponse(ScheduleResponse(schedule=responses))
