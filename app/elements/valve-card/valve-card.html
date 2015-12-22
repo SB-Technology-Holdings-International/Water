@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="valve-card">
+  <template>
+    <style include="shared-styles"></style>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-card heading="Fruit Trees" class="valve-card" style="background-color: [[color]];">
+      <div class="card-content">3 Days / Week</div>
+      <div class="card-actions horizontal center flex layout">
+        <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
+        <paper-icon-button raised icon="create"></paper-icon-button>
+      </div>
+    </paper-card>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'valve-card',
+
+        properties: {
+          color: {
+            type: String,
+            value: '#fff',
+            notify: true
+          }
+          text: {
+            type: String,
+            value: '',
+            notify: true
+          }
+        }
+      });
+    })();
+  </script>
+
+</dom-module>

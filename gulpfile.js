@@ -254,11 +254,11 @@ gulp.task('clean', function() {
 });
 
 // Watch files for changes & reload
-gulp.task('serve', ['lint', 'styles', 'elements', 'images'], function() {
+gulp.task('serve', ['styles', 'elements', 'images'], function() {
   browserSync({
     port: 9999,
     notify: false,
-    logPrefix: 'PSK',
+    logPrefix: 'WATER',
     snippetOptions: {
       rule: {
         match: '<span id="browser-sync-binding"></span>',

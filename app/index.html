@@ -9,14 +9,14 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<html lang="en" manifest="app.manifest">
+<html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Polymer Starter Kit"/>
-  <title>Watering Control</title>
+  <meta name="generator" content="Polymer Starter Kit">
+  <title>Water</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
@@ -30,12 +30,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PSK">
+  <meta name="application-name" content="Water">
   <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
 
   <!-- Add to homescreen for Safari on iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Water">
   <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
 
@@ -63,13 +63,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <!-- toast -->
-    <paper-toast id="schedule-add-done"
-                 duration="6000"
-                 text="Your watering schedule has been updated.">
-    </paper-toast>
-
-    <paper-drawer-panel force-narrow="true" id="paperDrawerPanel">
+    <paper-drawer-panel responsive-width="1100px" id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -85,15 +79,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <span>Home</span>
           </a>
 
-          <a data-route="usage" href="/usage" on-tap="onDataRouteClick">
+          <a data-route="users" href="{{baseUrl}}usage">
             <iron-icon icon="trending-up"></iron-icon>
             <span>Usage</span>
           </a>
 
-          <a data-route="help" href="/help" on-tap="onDataRouteClick">
+          <a data-route="help" href="{{baseUrl}}help">
             <iron-icon icon="help"></iron-icon>
             <span>Help</span>
-
           </a>
         </paper-menu>
       </paper-scroll-header-panel>
@@ -107,23 +100,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
-          <a href="/help"><paper-icon-button icon="help"></paper-icon-button></a>
+          <paper-icon-button icon="help"></paper-icon-button>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
-            <div class="app-name">Watering Control</div>
+            <div class="app-name">Water</div>
           </div>
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">by SB Technology Holdings International</div>
+            <div class="bottom-title paper-font-subhead">Command &amp; Control</div>
           </div>
 
         </paper-toolbar>
 
         <!-- Main Content -->
         <div class="content">
-          <iron-pages attr-for-selected="data-route" id="pages" selected="{{route}}" selectedItem="{{page}}">
+          <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
               <a href="/schedule-add">
@@ -131,39 +124,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-tooltip for="add-button" position="left" animation-delay="0">Add to Schedule</paper-tooltip>
               </a>
               <paper-material elevation="1">
-                <h2 class="paper-font-display2">Manual Controls</h2>
-                <div class="valve-controls">
-                  <span class="valve">Fruit Trees<paper-toggle-button class="blue"></paper-toggle-button></span>
-                  <span class="valve">Garden<paper-toggle-button class="red"></paper-toggle-button></span>
-                  <span class="valve">Cactus<paper-toggle-button class="green"></paper-toggle-button></span>
-                  <span class="valve">Palm Tree<paper-toggle-button class="orange"></paper-toggle-button></span>
-                </div>
-                <br>
                 <h2 class="paper-font-display2">Watering Schedule</h2>
-                <h1>Automatic</h1>
-                <paper-chip id="chip1">
-                  <div class="icon" style="background-color: #2196F3;"></div>
-                  <div class="icon" style="background-color: #FF9800;"></div>
-                  <h1>3 Hours 5 Minutes / Week</h1>
-                  <h2>Valves 1, 4</h2>
-                </paper-chip>
-                <paper-chip id="chip2">
-                  <div class="icon" style="background-color: #F44336;"></div>
-                  <h1>1 Hour / Day</h1>
-                  <h2>Valve 2</h2>
-                </paper-chip>
-                <paper-chip id="chip3">
-                  <div class="icon" style="background-color: #4CAF50;"></div>
-                  <h1>2 Hours 30 Minutes / Week</h1>
-                  <h2>Valve 3</h2>
-                </paper-chip>
-                <h1>Custom</h1>
-                <paper-chip id="chip3">
-                  <div class="icon" style="background-color: #FF9800;"></div>
-                  <div class="icon" style="background-color: #4CAF50;"></div>
-                  <h1>Mondays 3:00 PM - 4:00 PM</h1>
-                  <h2>Valves 2, 3</h2>
-                </paper-chip>
+                <paper-card heading="Fruit Trees" class="valve-card" style="background-color: #2196F3;">
+                  <div class="card-content">3 Days / Week</div>
+                  <div class="card-actions horizontal center flex layout">
+                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
+                    <paper-icon-button raised icon="create"></paper-icon-button>
+                  </div>
+                </paper-card>
+                <paper-card heading="Garden" class="valve-card" style="background-color: #F44336;">
+                  <div class="card-content">1 Hour / Day</div>
+                  <div class="card-actions horizontal center flex layout">
+                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
+                    <paper-icon-button raised icon="create"></paper-icon-button>
+                  </div>
+                </paper-card>
+                <paper-card heading="Cactus" class="valve-card" style="background-color: #4CAF50;">
+                  <div class="card-content">Every 3 days at 8:00 AM</div>
+                  <div class="card-actions horizontal center flex layout">
+                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
+                    <paper-icon-button raised icon="create"></paper-icon-button>
+                  </div>
+                </paper-card>
+                <paper-card heading="Palm Tree" class="valve-card" style="background-color: #FF9800;">
+                  <div class="card-content">3 Days / Week</div>
+                  <div class="card-actions horizontal center flex layout">
+                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
+                    <paper-icon-button raised icon="create"></paper-icon-button>
+                  </div>
+                </paper-card>
+
               </paper-material>
 
             </section>
@@ -261,14 +251,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                       </div>
                   </template>
 
-              </paper-material>
             </section>
 
             <section data-route="help">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Help</h2>
-                <p>This is the help section</p>
-
+                <p>Sorry, I'm busy</p>
               </paper-material>
             </section>
 
@@ -289,13 +277,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>
     </paper-toast>
 
-    <!-- Uncomment next block to enable Service Worker support (1/2) -->
 
     <paper-toast id="caching-complete"
                  duration="6000"
-                 text="Caching complete! This app will load faster.">
+                 text="Caching complete! This app will work offline.">
     </paper-toast>
-
     <platinum-sw-register auto-register
                           clients-claim
                           skip-waiting
@@ -306,13 +292,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </platinum-sw-cache>
     </platinum-sw-register>
 
-
   </template>
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
   <!-- endbuild-->
-
 </body>
 
 </html>

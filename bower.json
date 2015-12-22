@@ -10,16 +10,12 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "paper-menu": "PolymerElements/paper-menu#4fecb43601",
     "chart-elements": "~2.0.0",
-    "paper-chip": "~1.0.0",
+    "paper-chip": "4cb3e4e",
     "paper-date-picker": "bendavis78/paper-date-picker",
     "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c",
     "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
     "Chart.js": "nnnick/Chart.js#^1.0.1",
-
-    "paper-tooltip": "PolymerElements/paper-tooltip#^1.0.0",
-    "paper-dialog": "PolymerElements/paper-dialog#^1.0.0",
     "webcomponentsjs": "~0.7.20"
-
   },
   "devDependencies": {
     "web-component-tester": "*"
