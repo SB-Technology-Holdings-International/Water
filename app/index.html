@@ -125,52 +125,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </a>
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Watering Schedule</h2>
-                <paper-card heading="Fruit Trees" class="valve-card" style="background-color: #2196F3;">
-                  <div class="card-content">3 Days / Week</div>
-                  <div class="card-actions horizontal center flex layout">
-                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
-                    <paper-icon-button raised icon="create"></paper-icon-button>
-                  </div>
-                </paper-card>
-                <paper-card heading="Garden" class="valve-card" style="background-color: #F44336;">
-                  <div class="card-content">1 Hour / Day</div>
-                  <div class="card-actions horizontal center flex layout">
-                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
-                    <paper-icon-button raised icon="create"></paper-icon-button>
-                  </div>
-                </paper-card>
-                <paper-card heading="Cactus" class="valve-card" style="background-color: #4CAF50;">
-                  <div class="card-content">Every 3 days at 8:00 AM</div>
-                  <div class="card-actions horizontal center flex layout">
-                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
-                    <paper-icon-button raised icon="create"></paper-icon-button>
-                  </div>
-                </paper-card>
-                <paper-card heading="Palm Tree" class="valve-card" style="background-color: #FF9800;">
-                  <div class="card-content">3 Days / Week</div>
-                  <div class="card-actions horizontal center flex layout">
-                    <paper-toggle-button class="card-toggle flex-2"></paper-toggle-button>
-                    <paper-icon-button raised icon="create"></paper-icon-button>
-                  </div>
-                </paper-card>
+                <div class="horizontal layout">
+                  <valve-card color="#673AB7" heading="Fruit Trees" schedule="3 Days / Week"></valve-card>
+                  <valve-card color="#F44336" heading="Garden" schedule="1 Hour / Day"></valve-card>
+                  <valve-card color="#4CAF50" heading="Cactus" schedule="Every 3 days at 8:00 AM"></valve-card>
+                  <valve-card color="#FF9800" heading="Palm Tree" schedule="3 Days / Week"></valve-card>
+                </div>
 
               </paper-material>
 
             </section>
 
-            <section data-route="schedule-add">
+            <section data-route="edit-schedule">
               <paper-material elevation="1" class="vertical center layout">
                 <h2 class="paper-font-display2">
-                  Add to Watering Schedule
+                  Edit Watering Schedule
                 </h2>
-                <h1>Valves</h1>
-                <div class="vertical layout">
-                  <div class="valve"><paper-toggle-button class="blue"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve"><paper-toggle-button class="red"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve"><paper-toggle-button class="green"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
-                  <div class="valve"><paper-toggle-button class="orange"></paper-toggle-button><paper-input no-label-float label="Name"></paper-input></div>
+                <div class="horizontal center layout">
+                  <h1>Valve:</h1>
+                  <div class="color-circle"></div>
+                  <paper-input no-label-float label="Name" value="Fruit Trees"></paper-input>
                 </div>
-
                 <h2>
                   Water
                 </h2>
@@ -182,7 +157,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <div>
                     <div class="vertical center layout">
                       <paper-date-picker></paper-date-picker>
-                      <paper-time-picker></paper-time-picker>
+                      <paper-time-picker time="4:20pm"></paper-time-picker>
                     </div>
                     For
                     <paper-input-container style="display: inline-block !important;">

@@ -13,7 +13,7 @@
     "paper-chip": "4cb3e4e",
     "paper-date-picker": "bendavis78/paper-date-picker",
     "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c",
-    "paper-time-picker": "bendavis78/paper-time-picker#~1.0.3",
+    "paper-time-picker": "bendavis78/paper-time-picker",
     "Chart.js": "nnnick/Chart.js#^1.0.1",
     "webcomponentsjs": "~0.7.20"
   },
