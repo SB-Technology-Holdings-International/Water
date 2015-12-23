@@ -32,7 +32,7 @@
       <div class="card-content">[[schedule]]</div>
       <div class="card-actions horizontal center flex layout">
         <paper-toggle-button id="card-toggle" class="flex-2"></paper-toggle-button>
-        <paper-icon-button icon="create"></paper-icon-button>
+        <a href="/schedule/[[name]]"><paper-icon-button icon="create"></paper-icon-button></a>
         <paper-tooltip for="card-toggle" position="left">Turn on now</paper-tooltip>
       </div>
     </paper-card>
@@ -60,6 +60,10 @@
             type: String,
             value: '',
             notify: true
+          },
+          name: {
+            type: String,
+            value: 'valve1'
           }
         }
       });

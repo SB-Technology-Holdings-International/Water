@@ -1,0 +1,121 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="schedule-editor">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --dark-primary-color: var(--editor-primary-dark);
+        --default-primary-color: var(--editor-primary);
+        --light-primary-color: var(--editor-primary-light);
+      }
+      .color-circle {
+        background-color: var(--editor-primary);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        margin-right: 4px;
+        margin-left: 8px;
+      }
+      #done-button {
+        background: var(--editor-primary)
+      }
+    </style>
+    <div>
+      <h2 class="paper-font-display2">
+        Edit Watering Schedule
+      </h2>
+      <div class="horizontal center layout">
+        <h1>Valve:</h1>
+        <div class="color-circle"></div>
+        <paper-input no-label-float label="Name" value="{{heading}}"></paper-input>
+      </div>
+      <h2>
+        Water
+      </h2>
+      <paper-radio-group selected="basic">
+        <paper-radio-button name="basic">Normal</paper-radio-button>
+        <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
+      </paper-radio-group>
+      <div hidden$="{{advanced}}">
+        <div>
+          <div>
+            <paper-time-picker></paper-time-picker>
+            <paper-date-picker></paper-date-picker>
+          </div>
+          For
+          <paper-input-container style="display: inline-block !important;">
+            <input is="iron-input" class="time" size="3" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+          </paper-input-container>
+          hours and
+          <paper-input-container style="display: inline-block !important;">
+            <input is="iron-input" class="time" size="2" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+          </paper-input-container>
+          minutes. Repeat every
+          <paper-radio-group selected="week">
+            <paper-radio-button name="day">Day</paper-radio-button>
+            <paper-radio-button name="week">Week</paper-radio-button>
+            <paper-radio-button name="month">Month</paper-radio-button>
+            <paper-radio-button name="three">3 Days</paper-radio-button>
+            <paper-radio-button name="never">Never</paper-radio-button>
+          </paper-radio-group>
+        </div>
+
+      </div>
+      <template is="dom-if" if="{{advanced}}" id="addPlant">
+        <paper-select id="select-input-1"
+          multiple
+          label-field="name"
+          bind-value="{{crops}}"
+          on-input-changed="cropInputChanged"
+          nonmatching on-adding-item="addCrop"
+          label="What plants are growing here?"
+          style="min-width: 300px;"
+        >
+        </paper-select>
+          <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+            <div>
+              Water <span>{{item.lower}}</span> for
+              <paper-input-container style="display: inline-block !important;">
+                <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+              </paper-input-container>
+              hours and
+              <paper-input-container style="display: inline-block !important;">
+                <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+              </paper-input-container>
+              minutes every week
+            </div>
+          </template>
+      </template>
+      <div class="horizontal end-justified layout" style="width: 100%;">
+        <a href="/"><paper-button rasised id="done-button" onclick="{{scheduleAdd}}">Done</paper-button></a>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      'use strict';
+
+      Polymer({
+        is: 'schedule-editor',
+        properties: {
+          heading: {
+            type: String,
+            value: '',
+            notify: true
+          }
+        }
+      });
+    })();
+  </script>
+</dom-module>

@@ -40,9 +40,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/schedule-add', function() {
       app.route = 'edit-schedule';
     });
-    page('/schedule/:id', function(data) {
-      app.route = 'edit-schedule';
-      app.params = data.params;
+    page('/schedule/valve1', function() {
+      app.route = 'edit-schedule-1';
+    });
+    page('/schedule/valve2', function() {
+      app.route = 'edit-schedule-2';
+    });
+    page('/schedule/valve3', function() {
+      app.route = 'edit-schedule-3';
+    });
+    page('/schedule/valve4', function() {
+      app.route = 'edit-schedule-4';
     });
     page('/help', function() {
       app.route = 'help';

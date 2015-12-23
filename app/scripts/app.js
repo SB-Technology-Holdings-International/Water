@@ -36,6 +36,15 @@ function loadJSON(path, success, error)
 
   app.loginOpen = true;
 
+  app.valve1 = {};
+  app.valve2 = {};
+  app.valve3 = {};
+  app.valve4 = {};
+  app.valve1.heading = 'Fruit Trees';
+  app.valve2.heading = 'Garden';
+  app.valve3.heading = 'Cactus';
+  app.valve4.heading = 'Palm Tree';
+
   app.usageTimeData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [

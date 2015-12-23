@@ -19,17 +19,8 @@ paper-fab {
   bottom: 32px;
   z-index: 4;
 }
-.valve {
-  margin: 8px;
-}
-.color-circle {
-  background-color: #673AB7;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  margin-right: 4px;
-  margin-left: 8px;
-}
+
+
 paper-toggle-button {
   margin-left: 8px;
 }
@@ -39,9 +30,6 @@ paper-icon-button{
 paper-input {
   display: inline-block !important;
   margin-left: 8px;
-}
-input.time {
-  text-align: center;
 }
 #done-button {
     background: #002256;
