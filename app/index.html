@@ -119,9 +119,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
             <section data-route="home">
-              <a href="/schedule-add">
-                <paper-tooltip for="add-button" position="left" animation-delay="0">Add to Schedule</paper-tooltip>
-              </a>
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Watering Schedule</h2>
                 <div class="horizontal layout">
@@ -130,33 +127,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <valve-card color="#4CAF50" heading="{{valve3.heading}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
                   <valve-card color="#FF9800" heading="{{valve4.heading}}" name="valve4" schedule="3 Days / Week"></valve-card>
                 </div>
+
               </paper-material>
+
             </section>
 
             <section data-route="edit-schedule-1">
-              <paper-material elevation="1">
-                <schedule-editor class="valve1" heading="{{valve1.heading}}"></schedule-editor>
-              </paper-material>
+               <paper-material elevation="1">
+                 <schedule-editor class="valve1" heading="{{valve1.heading}}"></schedule-editor>
+               </paper-material>
             </section>
 
             <section data-route="edit-schedule-2">
-              <paper-material elevation="1">
-                <schedule-editor class="valve2" heading="{{valve2.heading}}"></schedule-editor>
-              </paper-material>
+               <paper-material elevation="1">
+                 <schedule-editor class="valve2" heading="{{valve2.heading}}"></schedule-editor>
+               </paper-material>
             </section>
 
             <section data-route="edit-schedule-3">
-              <paper-material elevation="1">
-                <schedule-editor class="valve3" heading="{{valve3.heading}}"></schedule-editor>
-              </paper-material>
+               <paper-material elevation="1">
+                 <schedule-editor class="valve3" heading="{{valve3.heading}}"></schedule-editor>
+               </paper-material>
             </section>
 
             <section data-route="edit-schedule-4">
-              <paper-material elevation="1">
-                <schedule-editor class="valve4" heading="{{valve4.heading}}"></schedule-editor>
-              </paper-material>
+               <paper-material elevation="1">
+                 <schedule-editor class="valve4" heading="{{valve4.heading}}"></schedule-editor>
+               </paper-material>
             </section>
-
 
             <section data-route="usage">
               <paper-material elevation="1">
