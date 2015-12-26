@@ -6,6 +6,7 @@
     <style>
       :host {
         display: block;
+        width: 100%;
       }
       #card {
         color: white;
@@ -26,6 +27,10 @@
         --paper-toggle-button-unchecked-bar-color:  #fff;
         --paper-toggle-button-unchecked-button-color:  #fff;
         --paper-toggle-button-unchecked-ink-color: #fff;
+      }
+      paper-card {
+        min-width: 92px;
+        width: 100%;
       }
     </style>
     <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};">

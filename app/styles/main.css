@@ -20,6 +20,10 @@ paper-fab {
   z-index: 4;
 }
 
+#index {
+  font-size: 5em;
+  margin-left: 5%;
+}
 
 paper-toggle-button {
   margin-left: 8px;
