@@ -13,9 +13,9 @@ import google.appengine.api.users
 import api_key
 
 import models
-import crops
+#import crops
 from messages import (DataRequest, ScheduleResponse, ScheduledWater, Valve,
-                      StatusResponse, Status, SetupRequest)
+                      StatusResponse, Status, SetupRequest, ScheduleAdd)
 
 __author__ = 'Sebastian Boyd'
 __copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
@@ -25,20 +25,24 @@ ANDROID_CLIENT_ID = ''
 IOS_CLIENT_ID = ''
 ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
-def load_eto(zip_code):
+def load_eto(lat, lng):
     '''Load from CIMIS servers'''
-    base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.key
-    targets = '&targets=' + str(zip_code).strip('[]')
+    base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.cimis_key
+    targets = '&targets=lat=' + str(lat) + ',lng=' + str(lng)
     start_date = '&startDate=' + '2015-09-18'
     end_date = '&endDate=' + '2015-09-18'
-    data_req = '&dataItems=day-asce-eto,day-precip'
+    data_req = '&dataItems=day-asce-eto'
     units = '&unitOfMeasure=E'
-    req = urllib2.Request(base_url + targets + start_date + end_date + data_req
-                          + units, None, {'accept':'application/json'})
+    url = base_url + targets + start_date + end_date + data_req + units
+    req = urllib2.Request(url, None, {'accept':'application/json'})
     response = urllib2.urlopen(req)
     json_data = response.read()
     data = json.loads(json_data)
     return data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value']
+
+
+def load_precip(lat, lng):
+    pass
 
 def ndb_check_schedule(device_id):
     '''Checks if there is a entry in ndb for today's schedule'''
@@ -60,28 +64,60 @@ class WaterAPI(remote.Service):
                       name='get_schedule', path='getschedule')
     def get_schedule(self, request):
         ''' Looks up or creates schedule '''
-        print request.device_id
+        responses = []
+        today = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
         device = models.Device.query(models.Device.device_id == request.device_id).get()
         try:
             device_key = device.key
         except AttributeError:
             return ScheduleResponse(status=Status.BAD_DATA)
-        schedule_day = models.ScheduleDay.query(ancestor=device_key,
-                                                date=datetime.date.today()).get()
+        schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today, ancestor=device_key).get()
         if schedule_day:
             schedule_units = schedule_day.schedule
-            responses = []
             for unit in schedule_units:
                 responses.append(ScheduledWater(valve=unit.valve_id,
                                                 start_time=unit.start_time,
                                                 duration_seconds=unit.duration_seconds))
         else:
+            print "NEWWWW"
+            schedule_units = []
             # Generate schedule
-            eto_data = load_eto(device.zip_code)
+            eto = load_eto(device.lat, device.lng)
             krdi = 1
+            # Make up number
+            index = 0.8 # 80%
+
+            max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
+            sunrise_time = 100
+            for s in max_schedules:
+                duration = int(round(s.min_per_day * index))
+                responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
+                                                start_time=sunrise_time))
+                schedule_units.append(models.ScheduleUnit(start_time=sunrise_time, duration_seconds=duration, valve_id=s.valve_id))
+
+            day = models.ScheduleDay(schedule=schedule_units, date=today, parent=device_key)
+            day.put()
+        return ScheduleResponse(schedule=responses, status=Status.OK)
 
 
-        return ScheduleResponse(ScheduleResponse(schedule=responses))
+
+    @endpoints.method(ScheduleAdd, StatusResponse,
+                      name='schedule_add', path='addschedule')
+    def schedule_add(self, request):
+        ''' Edit 100 percent schedule '''
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return StatusResponse(status=Status.BAD_DATA)
+
+        if models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get():
+            return StatusResponse(status=Status.EXISTS)
+
+        schedule = models.MaxSchedule(valve_id=request.valve, min_per_day=request.min_per_day,
+                                      crop_id=request.crop_id, parent=device_key)
+        schedule.put()
+        return StatusResponse(status=Status.OK)
 
     @endpoints.method(DataRequest,
                       StatusResponse,
@@ -108,9 +144,8 @@ class WaterAPI(remote.Service):
         ''' Add device to database '''
         if models.Device.query(models.Device.device_id == request.device_id).get():
             return StatusResponse(status=Status.EXISTS)
-        device = models.Device(device_id=request.device_id, zip_code=request.zip_code)
+        device = models.Device(device_id=request.device_id, lat=request.lat, lng=request.lng)
         device_key = device.put()
-        print load_eto(request.zip_code)
         for i in range(4):
             valve = models.Valve(valve_id=i, parent=device_key)
             valve.put()

@@ -26,7 +26,7 @@ eto = [
   ["Watermelon",0.4,1.00,0.75],
   ["Roots and Tubers",0.5,1.10,0.95],
   ["Beets, table",0.5,1.05,0.95],
-  ["Cassava, year 1 ",0.3,0.80,0.30],
+  ["Cassava, year 1",0.3,0.80,0.30],
   ["Cassava, year 1 ",0.3,1.10,0.50],
   ["Parsnip",0.5,1.05,0.95],
   ["Potato",0.5,1.15,0.75],

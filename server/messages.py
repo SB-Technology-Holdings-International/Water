@@ -35,7 +35,8 @@ class UsageResponse(messages.Message):
 
 class SetupRequest(messages.Message):
     device_id = messages.StringField(1)
-    zip_code = messages.IntegerField(2)
+    lat = messages.FloatField(2)
+    lng = messages.FloatField(3)
 
 class Valve(messages.Message):
     number = messages.IntegerField(1)
@@ -43,6 +44,6 @@ class Valve(messages.Message):
 
 class ScheduleAdd(messages.Message):
     device_id = messages.StringField(1)
-    valves = messages.MessageField(Valve, 2, repeated=True)
-    hours_per_week = messages.IntegerField(3)
+    valve = messages.IntegerField(2)
+    min_per_day = messages.IntegerField(3)
     crop_id = messages.IntegerField(4)
