@@ -1,6 +1,6 @@
 {
-  "name": "Watering Control",
-  "short_name": "Watering Control",
+  "name": "Water",
+  "short_name": "Water",
   "icons": [{
         "src": "images/touch/icon-128x128.png",
         "sizes": "128x128",
@@ -22,7 +22,7 @@
         "sizes": "384x384",
         "type": "image/png"
       }],
-  "background_color": "#3E4EB8",
+  "background_color": "#64B5F6",
   "display": "standalone",
-  "theme_color": "#2E3AA1"
+  "theme_color": "#2196F3"
 }

@@ -79,7 +79,6 @@ class WaterAPI(remote.Service):
                                                 start_time=unit.start_time,
                                                 duration_seconds=unit.duration_seconds))
         else:
-            print "NEWWWW"
             schedule_units = []
             # Generate schedule
             eto = load_eto(device.lat, device.lng)
@@ -88,12 +87,15 @@ class WaterAPI(remote.Service):
             index = 0.8 # 80%
 
             max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
-            sunrise_time = 100
+            start = 100 # fake, will be based on sunrise
             for s in max_schedules:
                 duration = int(round(s.min_per_day * index))
+                print s
+                if s.start_time:
+                    start = s.start_time
                 responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
-                                                start_time=sunrise_time))
-                schedule_units.append(models.ScheduleUnit(start_time=sunrise_time, duration_seconds=duration, valve_id=s.valve_id))
+                                                start_time=start))
+                schedule_units.append(models.ScheduleUnit(start_time=start, duration_seconds=duration, valve_id=s.valve_id))
 
             day = models.ScheduleDay(schedule=schedule_units, date=today, parent=device_key)
             day.put()
@@ -113,9 +115,8 @@ class WaterAPI(remote.Service):
 
         if models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get():
             return StatusResponse(status=Status.EXISTS)
-
         schedule = models.MaxSchedule(valve_id=request.valve, min_per_day=request.min_per_day,
-                                      crop_id=request.crop_id, parent=device_key)
+                                      crop_id=request.crop_id, parent=device_key, start_time=request.start_time)
         schedule.put()
         return StatusResponse(status=Status.OK)
 

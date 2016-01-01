@@ -47,3 +47,4 @@ class ScheduleAdd(messages.Message):
     valve = messages.IntegerField(2)
     min_per_day = messages.IntegerField(3)
     crop_id = messages.IntegerField(4)
+    start_time = messages.IntegerField(5)
