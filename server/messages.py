@@ -41,6 +41,8 @@ class SetupRequest(messages.Message):
 class Valve(messages.Message):
     number = messages.IntegerField(1)
     name = messages.StringField(2, required=False)
+    device_id = messages.StringField(3)
+    status = messages.EnumField(Status, 4)
 
 class ScheduleAdd(messages.Message):
     device_id = messages.StringField(1)

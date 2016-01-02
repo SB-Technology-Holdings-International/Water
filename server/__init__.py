@@ -148,8 +148,34 @@ class WaterAPI(remote.Service):
         device = models.Device(device_id=request.device_id, lat=request.lat, lng=request.lng)
         device_key = device.put()
         for i in range(4):
-            valve = models.Valve(valve_id=i, parent=device_key)
+            valve_name = "Valve " + str(i + 1)
+            valve = models.Valve(valve_id=i, parent=device_key, name=valve_name)
             valve.put()
         return StatusResponse(status=Status.OK)
+
+    @endpoints.method(Valve, Valve,
+                      name='valve_info', path='valve')
+    def valve_info(self, request):
+        ''' Read or write valve info '''
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return Valve(status=Status.BAD_DATA)
+
+        valve = models.Valve.query(models.Valve.valve_id == request.number, ancestor=device_key).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return Valve(status=Status.BAD_DATA)
+
+        if request.name:
+            # Set name
+            valve.name = request.name
+            valve.put()
+            return Valve(status=Status.OK)
+        else:
+            # Read name
+            return Valve(name=valve.name)
 
 application = endpoints.api_server([WaterAPI])
