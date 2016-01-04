@@ -36,44 +36,40 @@ function loadJSON(path, success, error)
 
   app.loginOpen = true;
 
+
+  app.valve0Header = 'Valve 1'
+  app.valve1Header = 'Valve 2'
+  app.valve2Header = 'Valve 3'
+  app.valve3Header = 'Valve 4'
   app.valve0Header = localStorage.valve0Header
-  app.valve1Header = 'Garden';
-  app.valve2Header = 'Cactus';
-  app.valve3Header = 'Palm Tree';
+  app.valve1Header = localStorage.valve1Header
+  app.valve2Header = localStorage.valve2Header
+  app.valve3Header = localStorage.valve3Header
 
   var backend = document.getElementById('backend');
+  CLIENT_ID = '';
+  SCOPES = '';
+  function signin(mode, authorizeCallback) {
+    backend.auth.authorize({client_id: CLIENT_ID,
+      scope: SCOPES, immediate: mode},
+      authorizeCallback);
+  }
+
   backend.addEventListener('google-api-load', function(event) {
+
+
     var request = backend.api.valve_info({
-       device_id: 'test',
-       number: 0
+       device_id: 'test'
     });
     request.execute(function(resp) {
-      app.valve0Header = resp.name;
-      localStorage.valve0Header = resp.name
-    });
-    var request = backend.api.valve_info({
-       device_id: 'test',
-       number: 1
-    });
-    request.execute(function(resp) {
-      app.valve1Header = resp.name;
-      localStorage.valve1Header = resp.name
-    });
-    var request = backend.api.valve_info({
-       device_id: 'test',
-       number: 2
-    });
-    request.execute(function(resp) {
-      app.valve2Header = resp.name;
-      localStorage.valve2Header = resp.name
-    });
-    var request = backend.api.valve_info({
-       device_id: 'test',
-       number: 3
-    });
-    request.execute(function(resp) {
-      app.valve3Header = resp.name;
-      localStorage.valve3Header = resp.name
+      app.valve0Header = resp.valves[0].name;
+      localStorage.valve0Header = resp.valves[0].name;
+      app.valve1Header = resp.valves[1].name;
+      localStorage.valve1Header = resp.valves[1].name;
+      app.valve2Header = resp.valves[2].name;
+      localStorage.valve2Header = resp.valves[2].name;
+      app.valve3Header = resp.valves[3].name;
+      localStorage.valve3Header = resp.valves[3].name;
     });
   });
 
