@@ -15,7 +15,8 @@
     "paper-select": "SB-Technology-Holdings-International/paper-select#a7125b688c",
     "paper-time-picker": "bendavis78/paper-time-picker",
     "Chart.js": "nnnick/Chart.js#^1.0.1",
-    "webcomponentsjs": "~0.7.20"
+    "webcomponentsjs": "~0.7.20",
+    "google-apis": "~1.1.3"
   },
   "devDependencies": {
     "web-component-tester": "*"

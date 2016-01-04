@@ -60,6 +60,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </head>
 
 <body unresolved class="fullbleed layout vertical">
+
+  <google-client-loader id="backend"
+  version="v1"
+  name="water"
+  api-root="http://localhost:8080/_ah/api"></google-client-loader>
+
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
@@ -122,10 +128,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Watering Schedule</h2>
                 <div class="vertical center layout">
-                  <valve-card color="#673AB7" heading="{{valve1.heading}}" name="valve1" schedule="3 Days / Week"></valve-card>
-                  <valve-card color="#F44336" heading="{{valve2.heading}}" name="valve2" schedule="1 Hour / Day"></valve-card>
-                  <valve-card color="#4CAF50" heading="{{valve3.heading}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
-                  <valve-card color="#FF9800" heading="{{valve4.heading}}" name="valve4" schedule="3 Days / Week"></valve-card>
+                  <valve-card color="#673AB7" heading="{{valve0Header}}" name="valve1" schedule="3 Days / Week"></valve-card>
+                  <valve-card color="#F44336" heading="{{valve1Header}}" name="valve2" schedule="1 Hour / Day"></valve-card>
+                  <valve-card color="#4CAF50" heading="{{valve2Header}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
+                  <valve-card color="#FF9800" heading="{{valve3Header}}" name="valve4" schedule="3 Days / Week"></valve-card>
                 </div>
                 <div class="horizontal center layout">
                   <h2 class="paper-font-display2">Watering Index:</h2>

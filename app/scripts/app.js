@@ -36,14 +36,46 @@ function loadJSON(path, success, error)
 
   app.loginOpen = true;
 
-  app.valve1 = {};
-  app.valve2 = {};
-  app.valve3 = {};
-  app.valve4 = {};
-  app.valve1.heading = 'Fruit Trees';
-  app.valve2.heading = 'Garden';
-  app.valve3.heading = 'Cactus';
-  app.valve4.heading = 'Palm Tree';
+  app.valve0Header = localStorage.valve0Header
+  app.valve1Header = 'Garden';
+  app.valve2Header = 'Cactus';
+  app.valve3Header = 'Palm Tree';
+
+  var backend = document.getElementById('backend');
+  backend.addEventListener('google-api-load', function(event) {
+    var request = backend.api.valve_info({
+       device_id: 'test',
+       number: 0
+    });
+    request.execute(function(resp) {
+      app.valve0Header = resp.name;
+      localStorage.valve0Header = resp.name
+    });
+    var request = backend.api.valve_info({
+       device_id: 'test',
+       number: 1
+    });
+    request.execute(function(resp) {
+      app.valve1Header = resp.name;
+      localStorage.valve1Header = resp.name
+    });
+    var request = backend.api.valve_info({
+       device_id: 'test',
+       number: 2
+    });
+    request.execute(function(resp) {
+      app.valve2Header = resp.name;
+      localStorage.valve2Header = resp.name
+    });
+    var request = backend.api.valve_info({
+       device_id: 'test',
+       number: 3
+    });
+    request.execute(function(resp) {
+      app.valve3Header = resp.name;
+      localStorage.valve3Header = resp.name
+    });
+  });
 
   app.usageTimeData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
