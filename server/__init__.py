@@ -14,16 +14,15 @@ import api_key
 
 import models
 #import crops
-from messages import (DataRequest, ScheduleResponse, ScheduledWater, Valve,
-                      StatusResponse, Status, SetupRequest, ScheduleAdd)
+from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
+                      StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
+
+API_EXPLORER = '292824132082.apps.googleusercontent.com'
+CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com', API_EXPLORER]
 
 __author__ = 'Sebastian Boyd'
 __copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
 
-WEB_CLIENT_ID = '651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com'
-ANDROID_CLIENT_ID = ''
-IOS_CLIENT_ID = ''
-ANDROID_AUDIENCE = ANDROID_CLIENT_ID
 
 def load_eto(lat, lng):
     '''Load from CIMIS servers'''
@@ -56,11 +55,11 @@ def ndb_check_schedule(device_id):
         return True
 
 
-@endpoints.api(name='water', version='v1')
+@endpoints.api(name='water', version='v1', allowed_client_ids=CLIENT_IDS)
 class WaterAPI(remote.Service):
     '''Water api'''
 
-    @endpoints.method(DataRequest, ScheduleResponse,
+    @endpoints.method(DataMessage, ScheduleResponse,
                       name='get_schedule', path='getschedule')
     def get_schedule(self, request):
         ''' Looks up or creates schedule '''
@@ -101,8 +100,6 @@ class WaterAPI(remote.Service):
             day.put()
         return ScheduleResponse(schedule=responses, status=Status.OK)
 
-
-
     @endpoints.method(ScheduleAdd, StatusResponse,
                       name='schedule_add', path='addschedule')
     def schedule_add(self, request):
@@ -120,32 +117,48 @@ class WaterAPI(remote.Service):
         schedule.put()
         return StatusResponse(status=Status.OK)
 
-    @endpoints.method(DataRequest,
-                      StatusResponse,
-                      name='add_user', path='adduser')
-    def add_user(self, request):
+    @endpoints.method(DataMessage,
+                      DataMessage,
+                      name='check_user', path='checkuser')
+    def check_user(self, request):
         ''' Add user as admin of device '''
         current_user = endpoints.get_current_user()
-        # Check for parent
-        device = models.Device.query(models.Device.device_id == request.device_id).get()
-        try:
-            device_key = device.key
-        except AttributeError:
-            return StatusResponse(status=Status.BAD_DATA)
+        if current_user is None:
+          raise endpoints.UnauthorizedException('Invalid token.')
+
         # Check if user exists
-        if models.Person.query(models.Person.user == current_user, ancestor=device_key).get():
-            return StatusResponse(status=Status.EXISTS)
-        person = models.Person(user=current_user, parent=device_key)
-        person.put()
-        return StatusResponse(status=Status.OK)
+        person = models.Person.query(models.Person.user == current_user).get()
+        try:
+            person_key = person.key
+            device = models.Device.query(ancestor=person_key).get()
+            if device:
+                # Person already connected to existing device
+                return DataMessage(device_id = device.device_id)
+        except AttributeError:
+            # Person does not exist, will add
+            person = models.Person(user=current_user)
+            person.put()
+        # No device
+        return DataMessage(status=Status.NO_DEVICE)
+
 
     @endpoints.method(SetupRequest, StatusResponse,
                       name='add_device', path='adddevice')
     def add_device(self, request):
         ''' Add device to database '''
+        # Check for device existance
         if models.Device.query(models.Device.device_id == request.device_id).get():
             return StatusResponse(status=Status.EXISTS)
-        device = models.Device(device_id=request.device_id, lat=request.lat, lng=request.lng)
+        # Get person
+        current_user = endpoints.get_current_user()
+        person = models.Person.query(models.Person.user == current_user).get()
+        try:
+            person_key = person.key
+        except AttributeError:
+            # Person does not exist
+            return StatusResponse(status=Status.BAD_DATA)
+
+        device = models.Device(device_id=request.device_id, lat=request.lat, lng=request.lng, parent=person_key)
         device_key = device.put()
         for i in range(4):
             valve_name = "Valve " + str(i + 1)
@@ -153,10 +166,29 @@ class WaterAPI(remote.Service):
             valve.put()
         return StatusResponse(status=Status.OK)
 
-    @endpoints.method(Valve, Valve,
-                      name='valve_info', path='valve')
+    @endpoints.method(DataMessage, ValveDataResponse,
+                      name='valve_info', path='valveinfo')
     def valve_info(self, request):
-        ''' Read or write valve info '''
+        ''' Read valve info '''
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return ValveDataResponse(status=Status.BAD_DATA)
+
+        valves = models.Valve.query(ancestor=device_key).fetch()
+        responses = []
+        for v in valves:
+            responses.append(Valve(name=v.name, number=v.valve_id))
+        def get_key(item):
+            return item.number
+        responses.sort(key=get_key)
+        return ValveDataResponse(valves=responses)
+
+    @endpoints.method(Valve, StatusResponse,
+                      name='valve_edit', path='valveedit')
+    def valve_edit(self, request):
+        ''' Edit valve info '''
         device = models.Device.query(models.Device.device_id == request.device_id).get()
         try:
             device_key = device.key
@@ -164,18 +196,10 @@ class WaterAPI(remote.Service):
             return Valve(status=Status.BAD_DATA)
 
         valve = models.Valve.query(models.Valve.valve_id == request.number, ancestor=device_key).get()
-        try:
-            device_key = device.key
-        except AttributeError:
-            return Valve(status=Status.BAD_DATA)
 
-        if request.name:
-            # Set name
-            valve.name = request.name
-            valve.put()
-            return Valve(status=Status.OK)
-        else:
-            # Read name
-            return Valve(name=valve.name)
+        # Set name
+        valve.name = request.name
+        valve.put()
+        return Valve(status=Status.OK)
 
 application = endpoints.api_server([WaterAPI])

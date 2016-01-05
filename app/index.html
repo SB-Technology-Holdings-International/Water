@@ -190,13 +190,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               </paper-material>
             </section>
 
-            <section data-route="setup">
+            <section data-route="login">
                 <div class="vertical center layout" id="setupFill">
                   <h2 class="paper-font-display2" style="margin: 32px;">Welcome</h2>
-                    <img src="images/logo.svg" style="height: 50%;">
-                    <img id="loginButton" src="images/google_signin.svg" onClick="{{loginButtonPressed}}" style="height: 12%;">
+                  <img src="images/logo.svg" style="height: 50%;">
+                  <img id="loginButton" src="images/google_signin.svg" onClick="{{loginButtonPressed}}" style="height: 12%;">
                 </div>
             </section>
+
+            <section data-route="setup">
+                <div class="vertical center layout" id="setupFill">
+                  <h2 class="paper-font-display2" style="margin: 32px;">Setup</h2>
+                  <template is="dom-if" if="{{setupMode}}" id="addPlant">
+                    <geo-location latitude="{{lat}}" longitude="{{lng}}" ></geo-location>
+                    <google-map latitude="[[lat]]" longitude="[[lng]]">
+                       <google-map-marker latitude="[[lat]]" longitude="[[lng]]" idle={{geoIdle}}></google-map-marker>
+                     </google-map>
+                  </template>
+                </div>
+            </section>
+
 
           </iron-pages>
         </div>

@@ -33,9 +33,10 @@ function loadJSON(path, success, error)
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
+  var device_id = '';
+  app.geoIdle = true;
 
   app.loginOpen = true;
-
 
   app.valve0Header = 'Valve 1'
   app.valve1Header = 'Valve 2'
@@ -47,30 +48,47 @@ function loadJSON(path, success, error)
   app.valve3Header = localStorage.valve3Header
 
   var backend = document.getElementById('backend');
-  CLIENT_ID = '';
-  SCOPES = '';
+  var CLIENT_ID = '651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com';
+  var SCOPES = ['email', 'profile'];
+
   function signin(mode, authorizeCallback) {
     backend.auth.authorize({client_id: CLIENT_ID,
       scope: SCOPES, immediate: mode},
       authorizeCallback);
   }
 
+  function userAuthed() {
+      if (backend.auth.getToken()) {
+        // User is signed in, call Endpoint
+        console.log(backend.auth.getToken());
+        var request = backend.api.check_user({
+        });
+        request.execute(function(resp) {
+          device_id = resp.device_id
+        });
+
+        var request = backend.api.valve_info({
+           device_id: 'test'
+        });
+        request.execute(function(resp) {
+          app.valve0Header = resp.valves[0].name;
+          localStorage.valve0Header = resp.valves[0].name;
+          app.valve1Header = resp.valves[1].name;
+          localStorage.valve1Header = resp.valves[1].name;
+          app.valve2Header = resp.valves[2].name;
+          localStorage.valve2Header = resp.valves[2].name;
+          app.valve3Header = resp.valves[3].name;
+          localStorage.valve3Header = resp.valves[3].name;
+        });
+        app.route = 'home';
+      }
+      if (!backend.auth.getToken()) {
+        app.route = 'login';
+      }
+  }
+
   backend.addEventListener('google-api-load', function(event) {
-
-
-    var request = backend.api.valve_info({
-       device_id: 'test'
-    });
-    request.execute(function(resp) {
-      app.valve0Header = resp.valves[0].name;
-      localStorage.valve0Header = resp.valves[0].name;
-      app.valve1Header = resp.valves[1].name;
-      localStorage.valve1Header = resp.valves[1].name;
-      app.valve2Header = resp.valves[2].name;
-      localStorage.valve2Header = resp.valves[2].name;
-      app.valve3Header = resp.valves[3].name;
-      localStorage.valve3Header = resp.valves[3].name;
-    });
+    signin(true, userAuthed);
   });
 
   app.usageTimeData = {
@@ -159,6 +177,7 @@ function loadJSON(path, success, error)
     setTimeout( function () {
       document.getElementById('loginButton').src = 'images/google_signin.svg';
     }, 80 );
+    signin(false, userAuthed);
     // Login endpoints
   };
 

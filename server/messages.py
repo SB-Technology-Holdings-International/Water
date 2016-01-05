@@ -9,13 +9,11 @@ class Status(messages.Enum):
     EXISTS = 3
     BAD_DATA = 4
     ERROR = 5
+    NO_DEVICE = 6
 
-class DataRequest(messages.Message):
+class DataMessage(messages.Message):
     device_id = messages.StringField(1)
-    class Type(messages.Enum):
-        SCHEDULE = 1
-        USAGE = 2
-    request_type = messages.EnumField(Type, 2)
+    status = messages.EnumField(Status, 2)
 
 class StatusResponse(messages.Message):
     status = messages.EnumField(Status, 1)
@@ -43,6 +41,10 @@ class Valve(messages.Message):
     name = messages.StringField(2, required=False)
     device_id = messages.StringField(3)
     status = messages.EnumField(Status, 4)
+
+class ValveDataResponse(messages.Message):
+    valves = messages.MessageField(Valve, 1, repeated=True)
+    status = messages.EnumField(Status, 2)
 
 class ScheduleAdd(messages.Message):
     device_id = messages.StringField(1)
