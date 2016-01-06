@@ -200,7 +200,7 @@ gulp.task('vulcanize', function() {
     .pipe($.size({title: 'vulcanize'}));
 });
 
-gulp.task('manifest', function(){
+gulp.task('manifest', function() {
   gulp.src(['dist/app/**/*'])
     .pipe(manifest({
       hash: true,
@@ -208,7 +208,7 @@ gulp.task('manifest', function(){
       network: ['*'],
       filename: 'app.manifest',
       exclude: 'app.manifest'
-     }))
+    }))
     .pipe(gulp.dest('dist/app'));
 });
 

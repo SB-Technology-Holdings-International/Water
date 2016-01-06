@@ -6,25 +6,26 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-function loadJSON(path, success, error)
-{
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function()
-    {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                if (success) {
-                    success(JSON.parse(xhr.responseText));
-                }
-            } else {
-                if (error) {
-                    error(xhr);
-                }
-            }
+/* jshint -W106 */
+// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
+function loadJSON(path, success, error) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === XMLHttpRequest.DONE) {
+      if (xhr.status === 200) {
+        if (success) {
+          success(JSON.parse(xhr.responseText));
         }
-    };
-    xhr.open('GET', path, true);
-    xhr.send();
+      } else {
+        if (error) {
+          error(xhr);
+        }
+      }
+    }
+  };
+  xhr.open('GET', path, true);
+  xhr.send();
 }
 (function(document) {
   'use strict';
@@ -41,14 +42,14 @@ function loadJSON(path, success, error)
   app.lng = -120.0;
   app.mapZoom = 6;
 
-  app.valve0Header = 'Valve 1'
-  app.valve1Header = 'Valve 2'
-  app.valve2Header = 'Valve 3'
-  app.valve3Header = 'Valve 4'
-  app.valve0Header = localStorage.valve0Header
-  app.valve1Header = localStorage.valve1Header
-  app.valve2Header = localStorage.valve2Header
-  app.valve3Header = localStorage.valve3Header
+  app.valve0Header = 'Valve 1';
+  app.valve1Header = 'Valve 2';
+  app.valve2Header = 'Valve 3';
+  app.valve3Header = 'Valve 4';
+  app.valve0Header = localStorage.valve0Header;
+  app.valve1Header = localStorage.valve1Header;
+  app.valve2Header = localStorage.valve2Header;
+  app.valve3Header = localStorage.valve3Header;
 
   var backend = document.getElementById('backend');
   var CLIENT_ID = '651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com';
@@ -61,32 +62,31 @@ function loadJSON(path, success, error)
   }
 
   function userAuthed() {
-      var oldLocation = app.route;
-      if (backend.auth.getToken()) {
-        // User is signed in, call Endpoint
-        console.log(backend.auth.getToken());
-        var request = backend.api.check_user({
-        });
-        request.execute(function(resp) {
-          if (resp.device_id){ // Ok get data
-            app.device_id = resp.device_id;
-            deviceConnected()
-          }
-          else { // Setup device
-            app.route = 'setup';
-          }
+    var oldLocation = app.route;
+    if (backend.auth.getToken()) {
+      // User is signed in, call Endpoint
+      console.log(backend.auth.getToken());
+      var request = backend.api.check_user({
+      });
+      request.execute(function(resp) {
+        if (resp.device_id) { // Ok get data
+          app.device_id = resp.device_id;
+          deviceConnected();
+        } else { // Setup device
+          app.route = 'setup';
+        }
 
-        });
-        app.route = oldLocation;
-      }
-      if (!backend.auth.getToken()) {
-        app.route = 'login';
-      }
+      });
+      app.route = oldLocation;
+    }
+    if (!backend.auth.getToken()) {
+      app.route = 'login';
+    }
   }
 
   function deviceConnected() {
     var request = backend.api.valve_info({
-       device_id: app.device_id
+      device_id: app.device_id
     });
     request.execute(function(resp) {
       app.valve0Header = resp.valves[0].name;
@@ -103,7 +103,7 @@ function loadJSON(path, success, error)
   app.useCurrentLocation = function() {
     app.geo = true;
     app.mapZoom = 13;
-  }
+  };
 
   app.setupDone = function() {
     console.log('setup donnne');
@@ -113,22 +113,19 @@ function loadJSON(path, success, error)
       lng: app.lng
     });
     request.execute(function(resp) {
-      console.log(resp);
-      console.log(resp.status == 'OK');
-      if (resp.status == 'OK'){ // Ok get data
+      if (resp.status === 'OK') { // Ok get data
         app.device_id = app.inputDeviceID;
-        app.route = 'home'
-        deviceConnected()
-      }
-      else { // Setup device
+        app.route = 'home';
+        deviceConnected();
+      } else { // Setup device
         // TODO add toast
         app.route = 'setup';
       }
 
     });
-  }
+  };
 
-  backend.addEventListener('google-api-load', function(event) {
+  backend.addEventListener('google-api-load', function() {
     signin(true, userAuthed);
   });
 
@@ -161,7 +158,7 @@ function loadJSON(path, success, error)
   app.usageRelativeData = [
         {
           value: 300,
-          color:'#F7464A',
+          color: '#F7464A',
           highlight: '#FF5A5E',
           label: 'Valve 1'
         },
@@ -184,40 +181,39 @@ function loadJSON(path, success, error)
           label: 'Valve 4'
         }
       ];
-
-      app.barData = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [
-        {
-          label: 'My First dataset',
-          fillColor: 'rgba(220,220,220,0.2)',
-          strokeColor: 'rgba(220,220,220,1)',
-          pointColor: 'rgba(220,220,220,1)',
-          pointStrokeColor: '#fff',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: 'rgba(220,220,220,1)',
-          data: [65, 59, 80, 81, 56, 55, 40]
-        },
-        {
-          label: 'My Second dataset',
-          fillColor: 'rgba(151,187,205,0.2)',
-          strokeColor: 'rgba(151,187,205,1)',
-          pointColor: 'rgba(151,187,205,1)',
-          pointStrokeColor: '#fff',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: 'rgba(151,187,205,1)',
-          data: [28, 48, 40, 19, 86, 27, 90]
-        }
-      ]
-      };
+  app.barData = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    datasets: [
+      {
+        label: 'My First dataset',
+        fillColor: 'rgba(220,220,220,0.2)',
+        strokeColor: 'rgba(220,220,220,1)',
+        pointColor: 'rgba(220,220,220,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(220,220,220,1)',
+        data: [65, 59, 80, 81, 56, 55, 40]
+      },
+      {
+        label: 'My Second dataset',
+        fillColor: 'rgba(151,187,205,0.2)',
+        strokeColor: 'rgba(151,187,205,1)',
+        pointColor: 'rgba(151,187,205,1)',
+        pointStrokeColor: '#fff',
+        pointHighlightFill: '#fff',
+        pointHighlightStroke: 'rgba(151,187,205,1)',
+        data: [28, 48, 40, 19, 86, 27, 90]
+      }
+    ]
+  };
 
   app.newPlants = [];
 
-  app.loginButtonPressed = function () {
+  app.loginButtonPressed = function() {
     document.getElementById('loginButton').src = 'images/google_signin_pressed.svg';
-    setTimeout( function () {
+    setTimeout(function() {
       document.getElementById('loginButton').src = 'images/google_signin.svg';
-    }, 80 );
+    }, 80);
     signin(false, userAuthed);
     // Login endpoints
   };
@@ -247,21 +243,21 @@ function loadJSON(path, success, error)
 
   app.cropInputChanged = function(e) {
     var input = (e.detail.value || '').trim().toLowerCase();
-    if(typeof app.newPlants === 'undefined'){
-       app.newPlants = [];
-     }
+    if (typeof app.newPlants === 'undefined') {
+      app.newPlants = [];
+    }
     app.newPlants.forEach(function(z) {
-        if (app.crops.indexOf(z.name) < 0) {
-          var index = app.newPlants.indexOf(z);
-          console.log('delete');
-          app.splice('newPlants', index);
-        }
+      if (app.crops.indexOf(z.name) < 0) {
+        var index = app.newPlants.indexOf(z);
+        console.log('delete');
+        app.splice('newPlants', index);
+      }
     });
     if (input) {
       e.target.options = app.cropsList.filter(function(item) {
         return item.toLowerCase().indexOf(input) !== -1;
       });
-      e.target.options.sort(function (a, b) {
+      e.target.options.sort(function(a, b) {
         var aFirst = a.toLowerCase().indexOf(input) === 0;
         var bFirst = b.toLowerCase().indexOf(input) === 0;
         if (aFirst && !bFirst) {
@@ -273,9 +269,7 @@ function loadJSON(path, success, error)
         // a must be equal to b
         return 0;
       });
-    }
-
-    else {
+    } else {
       e.target.options = [];
     }
   };
@@ -299,13 +293,11 @@ function loadJSON(path, success, error)
     // imports are loaded and elements have been registered
   });
 
-  addEventListener('iron-select', function () {
-      if (app.route === 'usage') {
-        app.loadCharts = true;
-
-      }
+  addEventListener('iron-select', function() {
+    if (app.route === 'usage') {
+      app.loadCharts = true;
+    }
   });
-
 
   // Main area's paper-scroll-header-panel custom condensing transformation of
   // the appName in the middle-container and the bottom title in the bottom-container.

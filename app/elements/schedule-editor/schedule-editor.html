@@ -106,7 +106,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function() {
       'use strict';
 
-
       Polymer({
         is: 'schedule-editor',
         properties: {
@@ -114,7 +113,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: '',
             notify: true
-          }
+          },
+          startTime: {
+            type: String,
+            value: '',
+            notify: true
+          },
         }
       });
     })();
