@@ -130,7 +130,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     background: white;
   }
 
-  #setupFill {
+  .setupFill {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -138,10 +138,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     top: 0;
     z-index: 4;
     background-color: white;
-    padding: 8px;
   }
 
+#locationDirections {
+  margin: 8px;
+}
+#setupDeviceIDInput {
+  width: calc(100% - 32px);
+  max-width: 720px;
+}
 
+#geoButton {
+  background: var(--default-primary-color);
+  color: white;
+  font-size: 0.8em;
+}
+#setupDoneButton {
+  background: var(--accent-color);
+  color: white;
+  padding-bottom: 16px;
+  margin-bottom: 16px;
+}
 
 .valve-controls {
   text-align: justify;

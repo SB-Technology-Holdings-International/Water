@@ -29,6 +29,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       #done-button {
         background: var(--editor-primary)
       }
+      paper-input-container {
+        text-align: center;
+      }
     </style>
     <div>
       <h2 class="paper-font-display2">
@@ -39,9 +42,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="color-circle"></div>
         <paper-input no-label-float label="Name" value="{{heading}}"></paper-input>
       </div>
-      <h2>
-        Water
-      </h2>
       <paper-radio-group selected="basic">
         <paper-radio-button name="basic">Normal</paper-radio-button>
         <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
@@ -49,25 +49,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div hidden$="{{advanced}}">
         <div>
           <div>
-            <paper-time-picker></paper-time-picker>
-            <paper-date-picker></paper-date-picker>
+            <paper-dropdown-menu label="Start time">
+              <paper-listbox class="dropdown-content" selected="1">
+                <paper-item>Early Morning 3:00 AM</paper-item>
+                <paper-item>Morning - 6:00 AM</paper-item>
+                <paper-item>Afternoon - 1:30 PM</paper-item>
+                <paper-item>Evening - 3:00 PM</paper-item>
+            </paper-listbox>
+            </paper-dropdown-menu>
+
           </div>
           For
           <paper-input-container style="display: inline-block !important;">
-            <input is="iron-input" class="time" size="3" value="3" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+            <input is="iron-input" class="time" size="3" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
           </paper-input-container>
           hours and
           <paper-input-container style="display: inline-block !important;">
-            <input is="iron-input" class="time" size="2" value="0" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+            <input is="iron-input" class="time" size="2" value="30" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
           </paper-input-container>
-          minutes. Repeat every
-          <paper-radio-group selected="week">
-            <paper-radio-button name="day">Day</paper-radio-button>
-            <paper-radio-button name="week">Week</paper-radio-button>
-            <paper-radio-button name="month">Month</paper-radio-button>
-            <paper-radio-button name="three">3 Days</paper-radio-button>
-            <paper-radio-button name="never">Never</paper-radio-button>
-          </paper-radio-group>
+          minutes every day.
         </div>
 
       </div>
@@ -105,6 +105,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <script>
     (function() {
       'use strict';
+
 
       Polymer({
         is: 'schedule-editor',

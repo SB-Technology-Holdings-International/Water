@@ -33,10 +33,13 @@ function loadJSON(path, success, error)
   // and give it some initial binding values
   // Learn more about auto-binding templates at http://goo.gl/Dx1u2g
   var app = document.querySelector('#app');
-  var device_id = '';
   app.geoIdle = true;
 
   app.loginOpen = true;
+
+  app.lat = 37.0;
+  app.lng = -120.0;
+  app.mapZoom = 6;
 
   app.valve0Header = 'Valve 1'
   app.valve1Header = 'Valve 2'
@@ -58,33 +61,71 @@ function loadJSON(path, success, error)
   }
 
   function userAuthed() {
+      var oldLocation = app.route;
       if (backend.auth.getToken()) {
         // User is signed in, call Endpoint
         console.log(backend.auth.getToken());
         var request = backend.api.check_user({
         });
         request.execute(function(resp) {
-          device_id = resp.device_id
-        });
+          if (resp.device_id){ // Ok get data
+            app.device_id = resp.device_id;
+            deviceConnected()
+          }
+          else { // Setup device
+            app.route = 'setup';
+          }
 
-        var request = backend.api.valve_info({
-           device_id: 'test'
         });
-        request.execute(function(resp) {
-          app.valve0Header = resp.valves[0].name;
-          localStorage.valve0Header = resp.valves[0].name;
-          app.valve1Header = resp.valves[1].name;
-          localStorage.valve1Header = resp.valves[1].name;
-          app.valve2Header = resp.valves[2].name;
-          localStorage.valve2Header = resp.valves[2].name;
-          app.valve3Header = resp.valves[3].name;
-          localStorage.valve3Header = resp.valves[3].name;
-        });
-        app.route = 'home';
+        app.route = oldLocation;
       }
       if (!backend.auth.getToken()) {
         app.route = 'login';
       }
+  }
+
+  function deviceConnected() {
+    var request = backend.api.valve_info({
+       device_id: app.device_id
+    });
+    request.execute(function(resp) {
+      app.valve0Header = resp.valves[0].name;
+      localStorage.valve0Header = resp.valves[0].name;
+      app.valve1Header = resp.valves[1].name;
+      localStorage.valve1Header = resp.valves[1].name;
+      app.valve2Header = resp.valves[2].name;
+      localStorage.valve2Header = resp.valves[2].name;
+      app.valve3Header = resp.valves[3].name;
+      localStorage.valve3Header = resp.valves[3].name;
+    });
+  }
+
+  app.useCurrentLocation = function() {
+    app.geo = true;
+    app.mapZoom = 13;
+  }
+
+  app.setupDone = function() {
+    console.log('setup donnne');
+    var request = backend.api.add_device({
+      device_id: app.inputDeviceID,
+      lat: app.lat,
+      lng: app.lng
+    });
+    request.execute(function(resp) {
+      console.log(resp);
+      console.log(resp.status == 'OK');
+      if (resp.status == 'OK'){ // Ok get data
+        app.device_id = app.inputDeviceID;
+        app.route = 'home'
+        deviceConnected()
+      }
+      else { // Setup device
+        // TODO add toast
+        app.route = 'setup';
+      }
+
+    });
   }
 
   backend.addEventListener('google-api-load', function(event) {
