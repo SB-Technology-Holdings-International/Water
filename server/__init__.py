@@ -11,8 +11,8 @@ from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
 import google.appengine.api.users
 import api_key
+import noaa_stations
 from math import cos, asin, sqrt
-
 import models
 #import crops
 from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
@@ -30,6 +30,12 @@ def earth_distance(lat1, lon1, lat2, lon2):
     a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
     return 12742 * asin(sqrt(a))
 
+def find_noaa_station(lat, lng):
+    distances = []
+    for s in noaa_stations.stations:
+        distances.append(earth_distance(lat, lng, s['latitude'], s['longitude']))
+    return noaa_stations.stations[distances.index(min(distances))]['id']
+
 def load_eto(lat, lng, date_value):
     '''Load from CIMIS servers'''
     base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.cimis_key
@@ -45,17 +51,17 @@ def load_eto(lat, lng, date_value):
     data = json.loads(json_data)
     return data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value']
 
-def load_precip(lat, lng):
+def load_precip(station_id, date_value):
     base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
     start_date = '&startdate=' + '2016-01-06'
     end_date = '&enddate=' + '2016-01-06'
-    station = '&stationid=GHCND:USC00047880'
+    station = '&stationid=' + station_id
     url = base_url + start_date + end_date + station
     req = urllib2.Request(url, None, {'token':api_key.noaa_key})
     response = urllib2.urlopen(req)
     json_data = response.read()
     data = json.loads(json_data)
-    return data['results'][0]['value']
+    return data['results'][0]['value'] * (1/25.4)
 
 def ndb_check_schedule(device_id):
     '''Checks if there is a entry in ndb for today's schedule'''
@@ -96,8 +102,9 @@ class WaterAPI(remote.Service):
             # Generate schedule
             eto = load_eto(device.lat, device.lng)
             krdi = 1
+            precip = load_precip(device.noaa_station_id)
             # Make up number
-            index = 0.8 # 80%
+            index = (abs(eto - precip)) / 0.244 # Local 100% value
 
             max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
             start = 100 # fake, will be based on sunrise
@@ -172,7 +179,9 @@ class WaterAPI(remote.Service):
             # Person does not exist
             return StatusResponse(status=Status.BAD_DATA)
 
-        device = models.Device(device_id=request.device_id, lat=request.lat, lng=request.lng, parent=person_key)
+        device = models.Device(device_id=request.device_id, lat=request.lat,
+                               lng=request.lng, parent=person_key,
+                               noaa_station_id=find_noaa_station(request.lat, request.lng))
         device_key = device.put()
         for i in range(4):
             valve_name = "Valve " + str(i + 1)

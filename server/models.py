@@ -33,3 +33,4 @@ class Device(ndb.Model):
     device_id = ndb.StringProperty()
     lat = ndb.FloatProperty()
     lng = ndb.FloatProperty()
+    noaa_station_id = ndb.StringProperty()
