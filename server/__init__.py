@@ -11,6 +11,7 @@ from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
 import google.appengine.api.users
 import api_key
+from math import cos, asin, sqrt
 
 import models
 #import crops
@@ -24,7 +25,12 @@ __author__ = 'Sebastian Boyd'
 __copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
 
 
-def load_eto(lat, lng):
+def earth_distance(lat1, lon1, lat2, lon2):
+    p = 0.017453292519943295
+    a = 0.5 - cos((lat2 - lat1) * p)/2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+    return 12742 * asin(sqrt(a))
+
+def load_eto(lat, lng, date_value):
     '''Load from CIMIS servers'''
     base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.cimis_key
     targets = '&targets=lat=' + str(lat) + ',lng=' + str(lng)
@@ -39,9 +45,17 @@ def load_eto(lat, lng):
     data = json.loads(json_data)
     return data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value']
 
-
 def load_precip(lat, lng):
-    pass
+    base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
+    start_date = '&startdate=' + '2016-01-06'
+    end_date = '&enddate=' + '2016-01-06'
+    station = '&stationid=GHCND:USC00047880'
+    url = base_url + start_date + end_date + station
+    req = urllib2.Request(url, None, {'token':api_key.noaa_key})
+    response = urllib2.urlopen(req)
+    json_data = response.read()
+    data = json.loads(json_data)
+    return data['results'][0]['value']
 
 def ndb_check_schedule(device_id):
     '''Checks if there is a entry in ndb for today's schedule'''
