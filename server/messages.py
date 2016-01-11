@@ -42,9 +42,10 @@ class Valve(messages.Message):
     device_id = messages.StringField(3)
     status = messages.EnumField(Status, 4)
 
-class ValveDataResponse(messages.Message):
+class WebsiteDataResponse(messages.Message):
     valves = messages.MessageField(Valve, 1, repeated=True)
-    status = messages.EnumField(Status, 2)
+    water_index = messages.FloatField(2)
+    status = messages.EnumField(Status, 3)
 
 class ScheduleAdd(messages.Message):
     device_id = messages.StringField(1)

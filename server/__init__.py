@@ -71,7 +71,7 @@ def load_precip(station_id, date_value):
         return 0
 
 def yesterday_local_date():
-    tz = pytz.timezone('America/Los_Angeles')
+    tz = pytz.timezone('America/Los_Angeles') # Only works in California
     utc_date = datetime.date.today() - datetime.timedelta(1)
     utc_time = datetime.datetime.combine(utc_date, datetime.time.min)
     local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
@@ -82,6 +82,46 @@ def today_local_datetime():
     utc_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
     return pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).replace(tzinfo=None)
 
+def find_schedule(device, device_key):
+    responses = []
+    today = today_local_datetime()
+    schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today, ancestor=device_key).get()
+    if schedule_day:
+        schedule_units = schedule_day.schedule
+        for unit in schedule_units:
+            responses.append(ScheduledWater(valve=unit.valve_id,
+                                            start_time=unit.start_time,
+                                            duration_seconds=unit.duration_seconds))
+    else:
+        schedule_units = []
+        # Generate schedule
+        yesterday = yesterday_local_date()
+        eto = load_eto(device.lat, device.lng, yesterday)
+        krdi = 1
+        precip = load_precip(device.noaa_station_id, yesterday)
+        print 'eto ' + str(eto)
+        print 'precip ' + str(precip)
+        # Make up number
+        index = (eto - precip) / 0.244 # Local 100% value
+        if index < 0:
+            index = 0.0
+        print 'index ' + str(index)
+
+        max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
+        start = 100 # fake, will be based on sunrise
+        for s in max_schedules:
+            duration = int(round(s.seconds_per_day * index))
+            print s
+            if s.start_time:
+                start = s.start_time
+            responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
+                                            start_time=start))
+            schedule_units.append(models.ScheduleUnit(start_time=start, duration_seconds=duration, valve_id=s.valve_id))
+
+        day = models.ScheduleDay(schedule=schedule_units, date=today, parent=device_key)
+        day.put()
+    return ScheduleResponse(schedule=responses, status=Status.OK)
+
 @endpoints.api(name='water', version='v1', allowed_client_ids=CLIENT_IDS)
 class WaterAPI(remote.Service):
     '''Water api'''
@@ -90,49 +130,12 @@ class WaterAPI(remote.Service):
                       name='get_schedule', path='getschedule')
     def get_schedule(self, request):
         ''' Looks up or creates schedule '''
-        responses = []
-        today = today_local_datetime()
         device = models.Device.query(models.Device.device_id == request.device_id).get()
         try:
             device_key = device.key
         except AttributeError:
             return ScheduleResponse(status=Status.BAD_DATA)
-        schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today, ancestor=device_key).get()
-        if schedule_day:
-            schedule_units = schedule_day.schedule
-            for unit in schedule_units:
-                responses.append(ScheduledWater(valve=unit.valve_id,
-                                                start_time=unit.start_time,
-                                                duration_seconds=unit.duration_seconds))
-        else:
-            schedule_units = []
-            # Generate schedule
-            yesterday = yesterday_local_date()
-            eto = load_eto(device.lat, device.lng, yesterday)
-            krdi = 1
-            precip = load_precip(device.noaa_station_id, yesterday)
-            print 'eto ' + str(eto)
-            print 'precip ' + str(precip)
-            # Make up number
-            index = (eto - precip) / 0.244 # Local 100% value
-            if index < 0:
-                index = 0.0
-            print 'index ' + str(index)
-
-            max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
-            start = 100 # fake, will be based on sunrise
-            for s in max_schedules:
-                duration = int(round(s.seconds_per_day * index))
-                print s
-                if s.start_time:
-                    start = s.start_time
-                responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
-                                                start_time=start))
-                schedule_units.append(models.ScheduleUnit(start_time=start, duration_seconds=duration, valve_id=s.valve_id))
-
-            day = models.ScheduleDay(schedule=schedule_units, date=today, parent=device_key)
-            day.put()
-        return ScheduleResponse(schedule=responses, status=Status.OK)
+        return find_schedule(device, device_key)
 
     @endpoints.method(ScheduleAdd, StatusResponse,
                       name='schedule_add', path='addschedule')
@@ -202,16 +205,17 @@ class WaterAPI(remote.Service):
             valve.put()
         return StatusResponse(status=Status.OK)
 
-    @endpoints.method(DataMessage, ValveDataResponse,
+    @endpoints.method(DataMessage, WebsiteDataResponse,
                       name='valve_info', path='valveinfo')
-    def valve_info(self, request):
+    def website_info(self, request):
         ''' Read valve info '''
         device = models.Device.query(models.Device.device_id == request.device_id).get()
         try:
             device_key = device.key
         except AttributeError:
-            return ValveDataResponse(status=Status.BAD_DATA)
+            return WebsiteDataResponse(status=Status.BAD_DATA)
 
+        index = find_schedule(device, device_key)
         valves = models.Valve.query(ancestor=device_key).fetch()
         responses = []
         for v in valves:
@@ -219,7 +223,7 @@ class WaterAPI(remote.Service):
         def get_key(item):
             return item.number
         responses.sort(key=get_key)
-        return ValveDataResponse(valves=responses)
+        return WebsiteDataResponse(valves=responses water_index=index)
 
     @endpoints.method(Valve, StatusResponse,
                       name='valve_edit', path='valveedit')

@@ -85,7 +85,7 @@ function loadJSON(path, success, error) {
   }
 
   function deviceConnected() {
-    var request = backend.api.valve_info({
+    var request = backend.api.website_info({
       device_id: app.device_id
     });
     request.execute(function(resp) {

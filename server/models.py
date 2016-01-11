@@ -10,6 +10,7 @@ class ScheduleUnit(ndb.Model):
 class ScheduleDay(ndb.Model):
     date = ndb.DateTimeProperty()
     schedule = ndb.StructuredProperty(ScheduleUnit, repeated=True)
+    index = ndb.FloatProperty()
 
 class MaxSchedule(ndb.Model):
     valve_id = ndb.IntegerProperty()
