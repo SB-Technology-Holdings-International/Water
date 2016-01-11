@@ -14,6 +14,7 @@ import api_key
 import noaa_stations
 from math import cos, asin, sqrt
 import models
+import pytz
 #import crops
 from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
                       StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
@@ -38,42 +39,48 @@ def find_noaa_station(lat, lng):
 
 def load_eto(lat, lng, date_value):
     '''Load from CIMIS servers'''
+    date_string = date_value.strftime("%Y-%m-%d")
     base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.cimis_key
     targets = '&targets=lat=' + str(lat) + ',lng=' + str(lng)
-    start_date = '&startDate=' + '2015-09-18'
-    end_date = '&endDate=' + '2015-09-18'
+    start_date = '&startDate=' + date_string
+    end_date = '&endDate=' + date_string
     data_req = '&dataItems=day-asce-eto'
     units = '&unitOfMeasure=E'
     url = base_url + targets + start_date + end_date + data_req + units
+    print url
     req = urllib2.Request(url, None, {'accept':'application/json'})
     response = urllib2.urlopen(req)
     json_data = response.read()
     data = json.loads(json_data)
-    return data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value']
+    return float(data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value'])
 
 def load_precip(station_id, date_value):
+    date_string = date_value.strftime("%Y-%m-%d")
     base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
-    start_date = '&startdate=' + '2016-01-06'
-    end_date = '&enddate=' + '2016-01-06'
+    start_date = '&startdate=' + date_string
+    end_date = '&enddate=' + date_string
     station = '&stationid=' + station_id
     url = base_url + start_date + end_date + station
     req = urllib2.Request(url, None, {'token':api_key.noaa_key})
     response = urllib2.urlopen(req)
     json_data = response.read()
     data = json.loads(json_data)
-    return data['results'][0]['value'] * (1/25.4)
+    if 'results' in data:
+        return data['results'][0]['value'] * (1/254.0)
+    else:
+        return 0
 
-def ndb_check_schedule(device_id):
-    '''Checks if there is a entry in ndb for today's schedule'''
-    device = models.Device.query(models.Device.device_id == device_id).get()
-    try:
-        device_key = device.key
-    except AttributeError:
-        return False
-    schedule = models.ScheduleUnit.query(ancestor=device_key, date=datetime.date.today())
-    if schedule:
-        return True
+def yesterday_local_date():
+    tz = pytz.timezone('America/Los_Angeles')
+    utc_date = datetime.date.today() - datetime.timedelta(1)
+    utc_time = datetime.datetime.combine(utc_date, datetime.time.min)
+    local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
+    return local
 
+def today_local_datetime():
+    tz = pytz.timezone('America/Los_Angeles')
+    utc_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+    return pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).replace(tzinfo=None)
 
 @endpoints.api(name='water', version='v1', allowed_client_ids=CLIENT_IDS)
 class WaterAPI(remote.Service):
@@ -84,7 +91,7 @@ class WaterAPI(remote.Service):
     def get_schedule(self, request):
         ''' Looks up or creates schedule '''
         responses = []
-        today = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+        today = today_local_datetime()
         device = models.Device.query(models.Device.device_id == request.device_id).get()
         try:
             device_key = device.key
@@ -100,16 +107,22 @@ class WaterAPI(remote.Service):
         else:
             schedule_units = []
             # Generate schedule
-            eto = load_eto(device.lat, device.lng)
+            yesterday = yesterday_local_date()
+            eto = load_eto(device.lat, device.lng, yesterday)
             krdi = 1
-            precip = load_precip(device.noaa_station_id)
+            precip = load_precip(device.noaa_station_id, yesterday)
+            print 'eto ' + str(eto)
+            print 'precip ' + str(precip)
             # Make up number
-            index = (abs(eto - precip)) / 0.244 # Local 100% value
+            index = (eto - precip) / 0.244 # Local 100% value
+            if index < 0:
+                index = 0.0
+            print 'index ' + str(index)
 
             max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
             start = 100 # fake, will be based on sunrise
             for s in max_schedules:
-                duration = int(round(s.min_per_day * index))
+                duration = int(round(s.seconds_per_day * index))
                 print s
                 if s.start_time:
                     start = s.start_time
@@ -133,7 +146,7 @@ class WaterAPI(remote.Service):
 
         if models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get():
             return StatusResponse(status=Status.EXISTS)
-        schedule = models.MaxSchedule(valve_id=request.valve, min_per_day=request.min_per_day,
+        schedule = models.MaxSchedule(valve_id=request.valve, seconds_per_day=request.seconds_per_day,
                                       crop_id=request.crop_id, parent=device_key, start_time=request.start_time)
         schedule.put()
         return StatusResponse(status=Status.OK)

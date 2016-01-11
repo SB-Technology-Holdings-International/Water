@@ -49,6 +49,6 @@ class ValveDataResponse(messages.Message):
 class ScheduleAdd(messages.Message):
     device_id = messages.StringField(1)
     valve = messages.IntegerField(2)
-    min_per_day = messages.IntegerField(3)
+    seconds_per_day = messages.IntegerField(3)
     crop_id = messages.IntegerField(4)
     start_time = messages.IntegerField(5)

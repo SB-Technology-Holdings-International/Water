@@ -13,7 +13,7 @@ class ScheduleDay(ndb.Model):
 
 class MaxSchedule(ndb.Model):
     valve_id = ndb.IntegerProperty()
-    min_per_day = ndb.IntegerProperty()
+    seconds_per_day = ndb.IntegerProperty()
     crop_id = ndb.IntegerProperty()
     start_time = ndb.IntegerProperty()
 
