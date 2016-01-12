@@ -17,7 +17,7 @@ import models
 import pytz
 #import crops
 from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
-                      StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
+                      StatusResponse, Status, SetupRequest, ScheduleAdd, WebsiteDataResponse)
 
 API_EXPLORER = '292824132082.apps.googleusercontent.com'
 CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com', API_EXPLORER]
@@ -47,9 +47,8 @@ def load_eto(lat, lng, date_value):
     data_req = '&dataItems=day-asce-eto'
     units = '&unitOfMeasure=E'
     url = base_url + targets + start_date + end_date + data_req + units
-    print url
     req = urllib2.Request(url, None, {'accept':'application/json'})
-    response = urllib2.urlopen(req)
+    response = urllib2.urlopen(req, None, 15)
     json_data = response.read()
     data = json.loads(json_data)
     return float(data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value'])
@@ -62,7 +61,7 @@ def load_precip(station_id, date_value):
     station = '&stationid=' + station_id
     url = base_url + start_date + end_date + station
     req = urllib2.Request(url, None, {'token':api_key.noaa_key})
-    response = urllib2.urlopen(req)
+    response = urllib2.urlopen(req, None, 15)
     json_data = response.read()
     data = json.loads(json_data)
     if 'results' in data:
@@ -99,19 +98,15 @@ def find_schedule(device, device_key):
         eto = load_eto(device.lat, device.lng, yesterday)
         krdi = 1
         precip = load_precip(device.noaa_station_id, yesterday)
-        print 'eto ' + str(eto)
-        print 'precip ' + str(precip)
         # Make up number
         index = (eto - precip) / 0.244 # Local 100% value
         if index < 0:
             index = 0.0
-        print 'index ' + str(index)
 
         max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
         start = 100 # fake, will be based on sunrise
         for s in max_schedules:
             duration = int(round(s.seconds_per_day * index))
-            print s
             if s.start_time:
                 start = s.start_time
             responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
@@ -206,7 +201,7 @@ class WaterAPI(remote.Service):
         return StatusResponse(status=Status.OK)
 
     @endpoints.method(DataMessage, WebsiteDataResponse,
-                      name='valve_info', path='valveinfo')
+                      name='website_info', path='webinfo')
     def website_info(self, request):
         ''' Read valve info '''
         device = models.Device.query(models.Device.device_id == request.device_id).get()
@@ -223,7 +218,7 @@ class WaterAPI(remote.Service):
         def get_key(item):
             return item.number
         responses.sort(key=get_key)
-        return WebsiteDataResponse(valves=responses water_index=index)
+        return WebsiteDataResponse(valves=responses, water_index=index)
 
     @endpoints.method(Valve, StatusResponse,
                       name='valve_edit', path='valveedit')
