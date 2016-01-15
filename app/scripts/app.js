@@ -66,7 +66,8 @@ function loadJSON(path, success, error) {
     var oldLocation = app.route;
     if (backend.auth.getToken()) {
       // User is signed in, call Endpoint
-      var request = backend.api.check_user({
+      app.api = backend.api;
+      var request = app.api.check_user({
       });
       request.execute(function(resp) {
         if (resp.device_id) { // Ok get data
@@ -85,7 +86,7 @@ function loadJSON(path, success, error) {
   }
 
   function deviceConnected() {
-    var request = backend.api.valve_info({
+    var request = app.api.valve_info({
       device_id: app.device_id
     });
     request.execute(function(resp) {
@@ -106,7 +107,7 @@ function loadJSON(path, success, error) {
   };
 
   app.setupDone = function() {
-    var request = backend.api.add_device({
+    var request = app.api.add_device({
       device_id: app.inputDeviceID,
       lat: app.lat,
       lng: app.lng
