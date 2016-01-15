@@ -40,7 +40,7 @@ var AUTOPREFIXER_BROWSERS = [
   'bb >= 10'
 ];
 
-var DIST = 'dist';
+var DIST = 'dist/app';
 
 var dist = function(subpath) {
   return !subpath ? DIST : path.join(DIST, subpath);
@@ -158,6 +158,20 @@ gulp.task('copy', function() {
 
   }).pipe(gulp.dest(dist()));
 
+  var yaml = gulp.src([
+    'app.yaml'
+  ], {
+    dot: true
+
+  }).pipe(gulp.dest('dist'));
+
+  var server = gulp.src([
+    'server/**/*'
+  ], {
+    dot: true
+
+  }).pipe(gulp.dest('dist/server'));
+
   // Copy over only the bower_components we need
   // These are things which cannot be vulcanized
   var bower = gulp.src([
@@ -165,7 +179,7 @@ gulp.task('copy', function() {
     'app/bower_components/{webcomponentsjs,platinum-sw,sw-toolbox,promise-polyfill}/**/*'
   ]).pipe(gulp.dest(dist('bower_components')));
 
-  return merge(app, bower)
+  return merge(app, bower, yaml, server)
     .pipe($.size({
       title: 'copy'
     }));
@@ -250,7 +264,7 @@ gulp.task('cache-config', function(callback) {
 
 // Clean output directory
 gulp.task('clean', function() {
-  return del(['.tmp', dist()]);
+  return del(['.tmp', 'dist']);
 });
 
 // Watch files for changes & reload
@@ -316,7 +330,7 @@ gulp.task('default', ['clean'], function(cb) {
     'elements',
 
     ['lint', 'images', 'fonts', 'html'],
-    'vulcanize', // 'cache-config',
+    'vulcanize', 'cache-config',
     cb);
 });
 

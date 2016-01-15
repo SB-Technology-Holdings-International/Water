@@ -42,6 +42,7 @@ function loadJSON(path, success, error) {
   app.lng = -120.0;
   app.mapZoom = 6;
 
+  app.apiRoot = '//' + window.location.host + '/_ah/api';
   app.valve0Header = 'Valve 1';
   app.valve1Header = 'Valve 2';
   app.valve2Header = 'Valve 3';
@@ -65,7 +66,6 @@ function loadJSON(path, success, error) {
     var oldLocation = app.route;
     if (backend.auth.getToken()) {
       // User is signed in, call Endpoint
-      console.log(backend.auth.getToken());
       var request = backend.api.check_user({
       });
       request.execute(function(resp) {
@@ -106,7 +106,6 @@ function loadJSON(path, success, error) {
   };
 
   app.setupDone = function() {
-    console.log('setup donnne');
     var request = backend.api.add_device({
       device_id: app.inputDeviceID,
       lat: app.lat,
@@ -249,7 +248,6 @@ function loadJSON(path, success, error) {
     app.newPlants.forEach(function(z) {
       if (app.crops.indexOf(z.name) < 0) {
         var index = app.newPlants.indexOf(z);
-        console.log('delete');
         app.splice('newPlants', index);
       }
     });

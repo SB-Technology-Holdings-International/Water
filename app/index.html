@@ -61,10 +61,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <body unresolved class="fullbleed layout vertical">
 
-  <google-client-loader id="backend"
-  version="v1"
-  name="water"
-  api-root="http://localhost:8080/_ah/api"></google-client-loader>
+  <google-client-loader
+      id="backend"
+      api-root="{{apiRoot}}"
+      version="v1"
+      name="water">
+    </google-client-loader>
 
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
@@ -127,6 +129,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="home">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Watering Schedule</h2>
+                <progress-bubble value="80" max="100" stroke-width="10">
+                    <strong>80%</strong>
+                </progress-bubble>
                 <div class="vertical center layout">
                   <valve-card color="#673AB7" heading="{{valve0Header}}" name="valve1" schedule="3 Days / Week"></valve-card>
                   <valve-card color="#F44336" heading="{{valve1Header}}" name="valve2" schedule="1 Hour / Day"></valve-card>

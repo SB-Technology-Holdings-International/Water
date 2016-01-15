@@ -11,13 +11,16 @@ handlers:
 # Endpoints api
 - url: /_ah/spi/.*
   script: server.application
+  secure: always
 
 # Static website
 - url: /
-  static_files: dist/app/index.html
-  upload: dist/app/index.html
+  static_files: app/index.html
+  upload: app/index\.html
+  secure: always
 - url: /
-  static_dir: dist/app
+  static_dir: app
+  secure: always
 
 libraries:
 - name: endpoints
