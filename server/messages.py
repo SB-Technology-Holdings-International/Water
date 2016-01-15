@@ -50,10 +50,9 @@ class Valve(messages.Message):
   status = messages.EnumField(Status, 4)
 
 
-class WebsiteDataResponse(messages.Message):
+class ValveDataResponse(messages.Message):
   valves = messages.MessageField(Valve, 1, repeated=True)
-  water_index = messages.FloatField(2)
-  status = messages.EnumField(Status, 3)
+  status = messages.EnumField(Status, 2)
 
 
 class ScheduleAdd(messages.Message):

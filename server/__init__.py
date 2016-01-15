@@ -17,7 +17,7 @@ import models
 import pytz
 # import crops
 from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
-                      StatusResponse, Status, SetupRequest, ScheduleAdd, WebsiteDataResponse)
+                      StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
 
 API_EXPLORER = '292824132082.apps.googleusercontent.com'
 CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com', API_EXPLORER]
@@ -58,7 +58,7 @@ def load_eto(lat, lng, date_value):
 
 def load_precip(station_id, date_value):
   date_string = date_value.strftime("%Y-%m-%d")
-  base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
+  base_url = 'http://www.ncdc.noaa.gov/cdo-/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
   start_date = '&startdate=' + date_string
   end_date = '&enddate=' + date_string
   station = '&stationid=' + station_id
@@ -206,17 +206,16 @@ class WaterAPI(remote.Service):
       valve.put()
     return StatusResponse(status=Status.OK)
 
-  @endpoints.method(DataMessage, WebsiteDataResponse,
-                    name='website_info', path='webinfo')
-  def website_info(self, request):
+  @endpoints.method(DataMessage, ValveDataResponse,
+                    name='valve_info', path='valveinfo')
+  def valve_info(self, request):
     ''' Read valve info '''
     device = models.Device.query(models.Device.device_id == request.device_id).get()
     try:
       device_key = device.key
     except AttributeError:
-      return WebsiteDataResponse(status=Status.BAD_DATA)
+      return ValveDataResponse(status=Status.BAD_DATA)
 
-    index = find_schedule(device, device_key)
     valves = models.Valve.query(ancestor=device_key).fetch()
     responses = []
     for v in valves:
@@ -226,7 +225,7 @@ class WaterAPI(remote.Service):
       return item.number
 
     responses.sort(key=get_key)
-    return WebsiteDataResponse(valves=responses, water_index=index)
+    return ValveDataResponse(valves=responses)
 
   @endpoints.method(Valve, StatusResponse,
                     name='valve_edit', path='valveedit')
