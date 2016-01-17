@@ -244,5 +244,21 @@ class WaterAPI(remote.Service):
     valve.put()
     return Valve(status=Status.OK)
 
+  @endpoints.method(Valve, ScheduledWater,
+                    name='get_max_schedule', path='getmaxschedule')
+  def get_max_schedule(self, request):
+    """ Edit valve info """
+    device = models.Device.query(models.Device.device_id == request.device_id).get()
+    try:
+      device_key = device.key
+    except AttributeError:
+      return ScheduledWater(status=Status.BAD_DATA)
+
+    schedule = models.MaxSchedule.query(models.MaxSchedule.valve_id == request.number, ancestor=device_key).get()
+    if schedule:
+        return ScheduledWater(start_time=schedule.start_time, duration_seconds=schedule.seconds_per_day)
+    else:
+        return ScheduledWater(status=Status.MISSING_DATA) # No schedule
+
 
 application = endpoints.api_server([WaterAPI])

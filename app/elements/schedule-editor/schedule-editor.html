@@ -98,32 +98,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </template>
       </template>
       <div class="horizontal end-justified layout" style="width: 100%;">
-        <a href="/"><paper-button rasised id="done-button" onclick="{{scheduleAdd}}">Done</paper-button></a>
+        <paper-button rasised id="done-button" on-click="clickEvent">Done</paper-button>
       </div>
     </div>
   </template>
 
   <script>
+
     (function() {
       'use strict';
 
       Polymer({
         is: 'schedule-editor',
         properties: {
-          heading: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          startTime: {
-            type: String,
-            value: '',
-            notify: true
-          },
-          api: {
+          backend: {
             type: Object,
             notify: true
+          },
+          heading: {
+            type: String,
+            notify: true
           }
+        },
+        ready: function() {
+          this.oldName = this.heading
+        },
+        clickEvent: function() {
+          console.log(this.backend);
         }
       });
     })();
