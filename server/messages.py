@@ -28,6 +28,7 @@ class ScheduledWater(messages.Message):
     duration_seconds = messages.IntegerField(3)
     status = messages.EnumField(Status, 4)
 
+
 class ScheduleResponse(messages.Message):
     status = messages.EnumField(Status, 1)
     schedule = messages.MessageField(ScheduledWater, 2, repeated=True)

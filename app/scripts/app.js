@@ -37,20 +37,26 @@ function loadJSON(path, success, error) {
   app.geoIdle = true;
 
   app.loginOpen = true;
-
+  app.apiRoot = '//' + window.location.host + '/_ah/api';
   app.lat = 37.0;
   app.lng = -120.0;
   app.mapZoom = 6;
+  app.valve0 = {};
 
-  app.apiRoot = '//' + window.location.host + '/_ah/api';
-  app.valve0Header = 'Valve 1';
-  app.valve1Header = 'Valve 2';
-  app.valve2Header = 'Valve 3';
-  app.valve3Header = 'Valve 4';
-  app.valve0Header = localStorage.valve0Header;
-  app.valve1Header = localStorage.valve1Header;
-  app.valve2Header = localStorage.valve2Header;
-  app.valve3Header = localStorage.valve3Header;
+  var i = 0;
+  if (!localStorage.valves) {
+    app.valves = {};
+    for (i = 0; i < 4; i++) {
+      app.valves[i] = {};
+      app.valves[i].header = 'Valve ' + String(i + 1);
+      app.valves[i].startIndex = 1;
+      app.valves[i].hours = 0;
+      app.valves[i].minutes = 30;
+    }
+    localStorage.valves = JSON.stringify(app.valves);
+  } else {
+    app.valves = JSON.parse(localStorage.valves);
+  }
 
   var backend = document.getElementById('backend');
   var CLIENT_ID = '651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com';
@@ -90,14 +96,22 @@ function loadJSON(path, success, error) {
       device_id: app.device_id
     });
     request.execute(function(resp) {
-      app.valve0Header = resp.valves[0].name;
-      localStorage.valve0Header = resp.valves[0].name;
-      app.valve1Header = resp.valves[1].name;
-      localStorage.valve1Header = resp.valves[1].name;
-      app.valve2Header = resp.valves[2].name;
-      localStorage.valve2Header = resp.valves[2].name;
-      app.valve3Header = resp.valves[3].name;
-      localStorage.valve3Header = resp.valves[3].name;
+      for (i = 0; i < 4; i++) {
+        app.valves[i].header = resp.valves[i].name;
+      }
+      localStorage.valves = JSON.stringify(app.valves);
+    });
+
+    request = app.waterApi.get_max_schedule({
+      device_id: app.device_id
+    });
+    request.execute(function(resp) {
+      if (resp.schedule) {
+        for (i = 0; i < 4; i++) {
+          app.valves[i].hours = resp.valves[i].hours;
+        }
+      }
+      localStorage.valves = JSON.stringify(app.valves);
     });
   }
 
@@ -216,6 +230,39 @@ function loadJSON(path, success, error) {
     }, 80);
     signin(false, userAuthed);
     // Login endpoints
+  };
+
+  app.updateSchedule = function() {
+    console.log('yo');
+    var oldValves = JSON.parse(localStorage.valves);
+    function sendUpdate(num) {
+      var start = 0;
+      if (app.valve[num].startIndex === 0) {
+        start = 11 * 60 * 60;
+      } else if (app.valve[num].startIndex === 1) {
+        start = 14 * 60 * 60;
+      } else if (app.valve[num].startIndex === 2) {
+        start = 21 * 60 * 60 + 30 * 60;
+      } else if (app.valve[num].startIndex === 3) {
+        start = 23 * 60 * 60;
+      }
+      var request = app.waterApi.schedule_add({
+        device_id: app.device_id,
+        valve: num,
+        seconds_per_day: app.valve[num].hours * 3600 + app.valve[num].minutes * 60,
+        start_time: start
+      });
+      request.execute(function(resp) {
+        console.log(resp);
+      });
+    }
+    for (i = 0; i < 4; i++) {
+      if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
+
+      } else {
+        sendUpdate(i);
+      }
+    }
   };
 
   // Sets app default base URL
