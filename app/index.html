@@ -133,10 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <strong>80%</strong>
                 </progress-bubble>
                 <div class="vertical center layout">
-                  <valve-card color="#673AB7" heading="{{valve0Header}}" name="valve1" schedule="3 Days / Week"></valve-card>
-                  <valve-card color="#F44336" heading="{{valve1Header}}" name="valve2" schedule="1 Hour / Day"></valve-card>
-                  <valve-card color="#4CAF50" heading="{{valve2Header}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
-                  <valve-card color="#FF9800" heading="{{valve3Header}}" name="valve4" schedule="3 Days / Week"></valve-card>
+                  <valve-card color="#673AB7" heading="{{valves.0.header}}" name="valve1" schedule="3 Days / Week"></valve-card>
+                  <valve-card color="#F44336" heading="{{valves.1.header}}" name="valve2" schedule="1 Hour / Day"></valve-card>
+                  <valve-card color="#4CAF50" heading="{{valves.2.header}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
+                  <valve-card color="#FF9800" heading="{{valves.3.header}}" name="valve4" schedule="3 Days / Week"></valve-card>
                 </div>
                 <div class="horizontal center layout">
                   <h2 class="paper-font-display2">Watering Index:</h2>
@@ -149,26 +149,290 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="edit-schedule-1">
                <paper-material elevation="1">
-                 <schedule-editor class="valve1" heading="{{valve0Header}}" backend="{{waterApi}}"></schedule-editor>
+                 <div>
+                   <h2 class="paper-font-display2">
+                     Edit Watering Schedule
+                   </h2>
+                   <div class="horizontal center layout">
+                     <div class="color-circle"></div>
+                     <h1 style="margin-right:8px;">Valve:</h1>
+                     <paper-input no-label-float label="Name" value="{{valves.0.header}}"></paper-input>
+                   </div>
+                   <paper-radio-group selected="basic">
+                     <paper-radio-button name="basic">Normal</paper-radio-button>
+                     <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
+                   </paper-radio-group>
+                   <div hidden$="{{advanced}}">
+                     <div>
+                       <div>
+                         <paper-dropdown-menu label="Start time">
+                           <paper-listbox class="dropdown-content" selected="{{valves.0.startIndex}}">
+                             <paper-item>Early Morning 3:00 AM</paper-item>
+                             <paper-item>Morning - 6:00 AM</paper-item>
+                             <paper-item>Afternoon - 1:30 PM</paper-item>
+                             <paper-item>Evening - 3:00 PM</paper-item>
+                         </paper-listbox>
+                         </paper-dropdown-menu>
+
+                       </div>
+                       For
+                       <paper-input-container style="display: inline-block !important;">
+                         <input is="iron-input" class="time" size="2" value="{{valves.0.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                       </paper-input-container>
+                       hours and
+                       <paper-input-container style="display: inline-block !important;">
+                         <input is="iron-input" class="time" size="2" value="{{valves.0.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                       </paper-input-container>
+                       minutes every day.
+                     </div>
+
+                   </div>
+                   <template is="dom-if" if="{{advanced}}" id="addPlant">
+                     <paper-select id="select-input-1"
+                       multiple
+                       label-field="name"
+                       bind-value="{{crops}}"
+                       on-input-changed="cropInputChanged"
+                       nonmatching on-adding-item="addCrop"
+                       label="What plants are growing here?"
+                       style="min-width: 300px;"
+                     >
+                     </paper-select>
+                       <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                         <div>
+                           Water <span>{{item.lower}}</span> for
+                           <paper-input-container style="display: inline-block !important;">
+                             <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                           </paper-input-container>
+                           hours and
+                           <paper-input-container style="display: inline-block !important;">
+                             <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                           </paper-input-container>
+                           minutes every week
+                         </div>
+                       </template>
+                   </template>
+                   <div class="horizontal end-justified layout" style="width: 100%;">
+                     <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
+                   </div>
+                 </div>
                </paper-material>
             </section>
 
             <section data-route="edit-schedule-2">
-               <paper-material elevation="1">
-                 <schedule-editor class="valve2" heading="{{valve1Header}}" backend="{{waterApi}}"></schedule-editor>
-               </paper-material>
+              <paper-material elevation="1">
+                <div>
+                  <h2 class="paper-font-display2">
+                    Edit Watering Schedule
+                  </h2>
+                  <div class="horizontal center layout">
+                    <div class="color-circle"></div>
+                    <h1 style="margin-right:8px;">Valve:</h1>
+                    <paper-input no-label-float label="Name" value="{{valves.1.header}}"></paper-input>
+                  </div>
+                  <paper-radio-group selected="basic">
+                    <paper-radio-button name="basic">Normal</paper-radio-button>
+                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
+                  </paper-radio-group>
+                  <div hidden$="{{advanced}}">
+                    <div>
+                      <div>
+                        <paper-dropdown-menu label="Start time">
+                          <paper-listbox class="dropdown-content" selected="{{valves.1.startIndex}}">
+                            <paper-item>Early Morning 3:00 AM</paper-item>
+                            <paper-item>Morning - 6:00 AM</paper-item>
+                            <paper-item>Afternoon - 1:30 PM</paper-item>
+                            <paper-item>Evening - 3:00 PM</paper-item>
+                        </paper-listbox>
+                        </paper-dropdown-menu>
+
+                      </div>
+                      For
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.1.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      hours and
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.1.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      minutes every day.
+                    </div>
+
+                  </div>
+                  <template is="dom-if" if="{{advanced}}" id="addPlant">
+                    <paper-select id="select-input-1"
+                      multiple
+                      label-field="name"
+                      bind-value="{{crops}}"
+                      on-input-changed="cropInputChanged"
+                      nonmatching on-adding-item="addCrop"
+                      label="What plants are growing here?"
+                      style="min-width: 300px;"
+                    >
+                    </paper-select>
+                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                        <div>
+                          Water <span>{{item.lower}}</span> for
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                          </paper-input-container>
+                          hours and
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                          </paper-input-container>
+                          minutes every week
+                        </div>
+                      </template>
+                  </template>
+                  <div class="horizontal end-justified layout" style="width: 100%;">
+                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
+                  </div>
+                </div>
+              </paper-material>
             </section>
 
             <section data-route="edit-schedule-3">
-               <paper-material elevation="1">
-                 <schedule-editor class="valve3" heading="{{valve2Header}}" backend="{{waterApi}}"></schedule-editor>
-               </paper-material>
+              <paper-material elevation="1">
+                <div>
+                  <h2 class="paper-font-display2">
+                    Edit Watering Schedule
+                  </h2>
+                  <div class="horizontal center layout">
+                    <div class="color-circle"></div>
+                    <h1 style="margin-right:8px;">Valve:</h1>
+                    <paper-input no-label-float label="Name" value="{{valves.2.header}}"></paper-input>
+                  </div>
+                  <paper-radio-group selected="basic">
+                    <paper-radio-button name="basic">Normal</paper-radio-button>
+                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
+                  </paper-radio-group>
+                  <div hidden$="{{advanced}}">
+                    <div>
+                      <div>
+                        <paper-dropdown-menu label="Start time">
+                          <paper-listbox class="dropdown-content" selected="{{valves.2.startIndex}}">
+                            <paper-item>Early Morning 3:00 AM</paper-item>
+                            <paper-item>Morning - 6:00 AM</paper-item>
+                            <paper-item>Afternoon - 1:30 PM</paper-item>
+                            <paper-item>Evening - 3:00 PM</paper-item>
+                        </paper-listbox>
+                        </paper-dropdown-menu>
+
+                      </div>
+                      For
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.2.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      hours and
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.2.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      minutes every day.
+                    </div>
+
+                  </div>
+                  <template is="dom-if" if="{{advanced}}" id="addPlant">
+                    <paper-select id="select-input-1"
+                      multiple
+                      label-field="name"
+                      bind-value="{{crops}}"
+                      on-input-changed="cropInputChanged"
+                      nonmatching on-adding-item="addCrop"
+                      label="What plants are growing here?"
+                      style="min-width: 300px;"
+                    >
+                    </paper-select>
+                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                        <div>
+                          Water <span>{{item.lower}}</span> for
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                          </paper-input-container>
+                          hours and
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                          </paper-input-container>
+                          minutes every week
+                        </div>
+                      </template>
+                  </template>
+                  <div class="horizontal end-justified layout" style="width: 100%;">
+                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
+                  </div>
+                </div>
+              </paper-material>
             </section>
 
             <section data-route="edit-schedule-4">
-               <paper-material elevation="1">
-                 <schedule-editor class="valve4" heading="{{valve3Header}}" backend="{{waterApi}}"></schedule-editor>
-               </paper-material>
+              <paper-material elevation="1">
+                <div>
+                  <h2 class="paper-font-display2">
+                    Edit Watering Schedule
+                  </h2>
+                  <div class="horizontal center layout">
+                    <div class="color-circle"></div>
+                    <h1 style="margin-right:8px;">Valve:</h1>
+                    <paper-input no-label-float label="Name" value="{{valves.3.header}}"></paper-input>
+                  </div>
+                  <paper-radio-group selected="basic">
+                    <paper-radio-button name="basic">Normal</paper-radio-button>
+                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
+                  </paper-radio-group>
+                  <div hidden$="{{advanced}}">
+                    <div>
+                      <div>
+                        <paper-dropdown-menu label="Start time">
+                          <paper-listbox class="dropdown-content" selected="{{valves.3.startIndex}}">
+                            <paper-item>Early Morning 3:00 AM</paper-item>
+                            <paper-item>Morning - 6:00 AM</paper-item>
+                            <paper-item>Afternoon - 1:30 PM</paper-item>
+                            <paper-item>Evening - 3:00 PM</paper-item>
+                        </paper-listbox>
+                        </paper-dropdown-menu>
+
+                      </div>
+                      For
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.3.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      hours and
+                      <paper-input-container style="display: inline-block !important;">
+                        <input is="iron-input" class="time" size="2" value="{{valves.3.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                      </paper-input-container>
+                      minutes every day.
+                    </div>
+
+                  </div>
+                  <template is="dom-if" if="{{advanced}}" id="addPlant">
+                    <paper-select id="select-input-1"
+                      multiple
+                      label-field="name"
+                      bind-value="{{crops}}"
+                      on-input-changed="cropInputChanged"
+                      nonmatching on-adding-item="addCrop"
+                      label="What plants are growing here?"
+                      style="min-width: 300px;"
+                    >
+                    </paper-select>
+                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
+                        <div>
+                          Water <span>{{item.lower}}</span> for
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
+                          </paper-input-container>
+                          hours and
+                          <paper-input-container style="display: inline-block !important;">
+                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
+                          </paper-input-container>
+                          minutes every week
+                        </div>
+                      </template>
+                  </template>
+                  <div class="horizontal end-justified layout" style="width: 100%;">
+                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
+                  </div>
+                </div>
+              </paper-material>
             </section>
 
             <section data-route="usage">

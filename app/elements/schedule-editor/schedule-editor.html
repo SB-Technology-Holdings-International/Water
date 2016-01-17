@@ -118,10 +118,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           heading: {
             type: String,
             notify: true
+          },
+          device: {
+            type: String
+          },
+          number: {
+            type: Number
           }
         },
         ready: function() {
-          this.oldName = this.heading
+          this.oldName = this.heading;
+          /*
+          var request = this.backend.get_max_schedule({
+            number: this.number,
+            device_id: app.device_id
+          });
+          request.execute(function(resp) {
+            console.log(resp);
+
+          });
+          */
         },
         clickEvent: function() {
           console.log(this.backend);

@@ -149,8 +149,16 @@ class WaterAPI(remote.Service):
     except AttributeError:
       return StatusResponse(status=Status.BAD_DATA)
 
-    if models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get():
-      return StatusResponse(status=Status.EXISTS)
+    s = models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get()
+    if s:
+        s.valve_id = request.valve
+        seconds_per_day = request.seconds_per_day
+        if request.crop_id:
+            crop_id = request.crop_id
+        start_time = request.start_time
+        s.put()
+        return StatusResponse(status=Status.OK)
+
     schedule = models.MaxSchedule(valve_id=request.valve, seconds_per_day=request.seconds_per_day,
                                   crop_id=request.crop_id, parent=device_key, start_time=request.start_time)
     schedule.put()
