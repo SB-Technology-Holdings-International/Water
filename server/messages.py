@@ -49,6 +49,9 @@ class Valve(messages.Message):
     name = messages.StringField(2, required=False)
     device_id = messages.StringField(3)
     status = messages.EnumField(Status, 4)
+    start_time = messages.IntegerField(5)
+    duration_seconds = messages.IntegerField(6)
+    crop_id = messages.IntegerField(7)
 
 
 class ValveDataResponse(messages.Message):

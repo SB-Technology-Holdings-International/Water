@@ -25,6 +25,9 @@ class MaxSchedule(ndb.Model):
 class Valve(ndb.Model):
   valve_id = ndb.IntegerProperty()
   name = ndb.StringProperty()
+  seconds_per_day = ndb.IntegerProperty()
+  crop_id = ndb.IntegerProperty()
+  start_time = ndb.IntegerProperty()
 
 
 class UsageDay(ndb.Model):

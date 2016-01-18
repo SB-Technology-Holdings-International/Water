@@ -149,19 +149,12 @@ class WaterAPI(remote.Service):
     except AttributeError:
       return StatusResponse(status=Status.BAD_DATA)
 
-    s = models.MaxSchedule.query(models.MaxSchedule.valve_id == request.valve, ancestor=device_key).get()
-    if s:
-        s.valve_id = request.valve
-        seconds_per_day = request.seconds_per_day
-        if request.crop_id:
-            crop_id = request.crop_id
-        start_time = request.start_time
-        s.put()
-        return StatusResponse(status=Status.OK)
-
-    schedule = models.MaxSchedule(valve_id=request.valve, seconds_per_day=request.seconds_per_day,
-                                  crop_id=request.crop_id, parent=device_key, start_time=request.start_time)
-    schedule.put()
+    s = models.Valve.query(models.Valve.valve_id == request.valve, ancestor=device_key).get()
+    s.seconds_per_day = request.seconds_per_day
+    if request.crop_id:
+        s.crop_id = request.crop_id
+    s.start_time = request.start_time
+    s.put()
     return StatusResponse(status=Status.OK)
 
   @endpoints.method(DataMessage,
@@ -210,7 +203,7 @@ class WaterAPI(remote.Service):
     device_key = device.put()
     for i in range(4):
       valve_name = "Valve " + str(i + 1)
-      valve = models.Valve(valve_id=i, parent=device_key, name=valve_name)
+      valve = models.Valve(valve_id=i, parent=device_key, name=valve_name, seconds_per_day=0, start_time=50400)
       valve.put()
     return StatusResponse(status=Status.OK)
 
@@ -227,7 +220,7 @@ class WaterAPI(remote.Service):
     valves = models.Valve.query(ancestor=device_key).fetch()
     responses = []
     for v in valves:
-      responses.append(Valve(name=v.name, number=v.valve_id))
+      responses.append(Valve(name=v.name, number=v.valve_id, start_time=v.start_time, duration_seconds=v.seconds_per_day))
 
     def get_key(item):
       return item.number
@@ -249,8 +242,12 @@ class WaterAPI(remote.Service):
 
     # Set name
     valve.name = request.name
+    valve.seconds_per_day = request.duration_seconds
+    if request.crop_id:
+        valve.crop_id = request.crop_id
+    valve.start_time = request.start_time
     valve.put()
-    return Valve(status=Status.OK)
+    return StatusResponse(status=Status.OK)
 
   @endpoints.method(DataMessage, ScheduleResponse,
                     name='get_max_schedule', path='getmaxschedule')
@@ -265,7 +262,7 @@ class WaterAPI(remote.Service):
     max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
     responses = []
     for i in max_schedules:
-        responses.append(ScheduledWater(start_time=i.start_time, duration_seconds=i.seconds_per_day))
+        responses.append(ScheduledWater(start_time=i.start_time, duration_seconds=i.seconds_per_day, valve=i.valve_id))
     if max_schedules:
         return ScheduleResponse(status=Status.OK, schedule=responses)
     else:

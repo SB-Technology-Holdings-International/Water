@@ -175,15 +175,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                          </paper-dropdown-menu>
 
                        </div>
-                       For
-                       <paper-input-container style="display: inline-block !important;">
-                         <input is="iron-input" class="time" size="2" value="{{valves.0.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                       </paper-input-container>
-                       hours and
-                       <paper-input-container style="display: inline-block !important;">
-                         <input is="iron-input" class="time" size="2" value="{{valves.0.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                       </paper-input-container>
-                       minutes every day.
+                       <div class="horizontal layout center">
+                         For
+                         <paper-input type="number" max="23" min="0" value="{{valves.0.hours}}" class="time" maxlength="2">
+                        </paper-input>
+                         hours and
+                         <paper-input type="number" max="59" min="0" value="{{valves.0.minutes}}" class="time">
+                        </paper-input>
+                         minutes every day.
+                       </div>
                      </div>
 
                    </div>
