@@ -51,7 +51,7 @@ function loadJSON(path, success, error) {
       app.valves[i].header = 'Valve ' + String(i + 1);
       app.valves[i].startIndex = 1;
       app.valves[i].hours = 0;
-      app.valves[i].minutes = 30;
+      app.valves[i].minutes = 0;
     }
     localStorage.valves = JSON.stringify(app.valves);
   } else {
@@ -91,25 +91,34 @@ function loadJSON(path, success, error) {
     }
   }
 
+  function path(n, prop) {
+    return 'valves.' + String(n) + '.' + prop;
+  }
+
   function deviceConnected() {
+    console.log('run');
     var request = app.waterApi.valve_info({
       device_id: app.device_id
     });
     request.execute(function(resp) {
+      console.log(resp);
       for (i = 0; i < 4; i++) {
-        app.valves[i].header = resp.valves[i].name;
-      }
-      localStorage.valves = JSON.stringify(app.valves);
-    });
-
-    request = app.waterApi.get_max_schedule({
-      device_id: app.device_id
-    });
-    request.execute(function(resp) {
-      if (resp.schedule) {
-        for (i = 0; i < 4; i++) {
-          app.valves[i].hours = resp.valves[i].hours;
+        app.set(path(i, 'header'), resp.valves[i].name);
+        var start_time = resp.valves[i].start_time;
+        start_time = +start_time; // Make int
+        if (start_time === 11 * 60 * 60) {
+          app.set(path(i, 'startIndex'), 0);
+        } else if (start_time === 14 * 60 * 60) {
+          app.set(path(i, 'startIndex'), 1);
+        } else if (start_time === 21 * 60 * 60 + 30 * 60) {
+          app.set(path(i, 'startIndex'), 2);
+        } else if (start_time === 23 * 60 * 60) {
+          app.set(path(i, 'startIndex'), 3);
         }
+        var duration_seconds = resp.valves[i].duration_seconds;
+        app.set(path(i, 'hours'), Math.floor(duration_seconds / 3600));
+        duration_seconds %= 3600;
+        app.set(path(i, 'minutes'), Math.floor(duration_seconds / 60));
       }
       localStorage.valves = JSON.stringify(app.valves);
     });
@@ -237,29 +246,35 @@ function loadJSON(path, success, error) {
     var oldValves = JSON.parse(localStorage.valves);
     function sendUpdate(num) {
       var start = 0;
-      if (app.valve[num].startIndex === 0) {
+      if (app.valves[num].startIndex === 0) {
         start = 11 * 60 * 60;
-      } else if (app.valve[num].startIndex === 1) {
+      } else if (app.valves[num].startIndex === 1) {
         start = 14 * 60 * 60;
-      } else if (app.valve[num].startIndex === 2) {
+      } else if (app.valves[num].startIndex === 2) {
         start = 21 * 60 * 60 + 30 * 60;
-      } else if (app.valve[num].startIndex === 3) {
+      } else if (app.valves[num].startIndex === 3) {
         start = 23 * 60 * 60;
       }
-      var request = app.waterApi.schedule_add({
+      var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
+      console.log(duration);
+      var request = app.waterApi.valve_edit({
         device_id: app.device_id,
-        valve: num,
-        seconds_per_day: app.valve[num].hours * 3600 + app.valve[num].minutes * 60,
-        start_time: start
+        number: num,
+        duration_seconds: duration,
+        start_time: start,
+        name: app.valves[num].header
       });
       request.execute(function(resp) {
         console.log(resp);
       });
     }
+
     for (i = 0; i < 4; i++) {
+      console.log(app.valves[i]);
       if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
 
       } else {
+        console.log('update');
         sendUpdate(i);
       }
     }
