@@ -133,14 +133,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <strong>80%</strong>
                 </progress-bubble>
                 <div class="vertical center layout">
-                  <valve-card color="#673AB7" heading="{{valves.0.header}}" name="valve1" schedule="{{hours}} Hours, {{minutes}} Minutes / Day"></valve-card>
-                  <valve-card color="#F44336" heading="{{valves.1.header}}" name="valve2" schedule="1 Hour / Day"></valve-card>
-                  <valve-card color="#4CAF50" heading="{{valves.2.header}}" name="valve3" schedule="Every 3 days at 8:00 AM"></valve-card>
-                  <valve-card color="#FF9800" heading="{{valves.3.header}}" name="valve4" schedule="3 Days / Week"></valve-card>
-                </div>
-                <div class="horizontal center layout">
-                  <h2 class="paper-font-display2">Watering Index:</h2>
-                  <span id="index">0%</span>
+                  <valve-card color="#673AB7" heading="{{valves.0.header}}" name="valve1" schedule="{{valves.0.hours}} Hours, {{valves.0.minutes}} Minutes / Day"></valve-card>
+                  <valve-card color="#F44336" heading="{{valves.1.header}}" name="valve2" schedule="{{valves.1.hours}} Hours, {{valves.1.minutes}} Minutes / Day"></valve-card>
+                  <valve-card color="#4CAF50" heading="{{valves.2.header}}" name="valve3" schedule="{{valves.2.hours}} Hours, {{valves.2.minutes}} Minutes / Day"></valve-card>
+                  <valve-card color="#FF9800" heading="{{valves.3.header}}" name="valve4" schedule="{{valves.3.hours}} Hours, {{valves.3.minutes}} Minutes / Day"></valve-card>
                 </div>
 
               </paper-material>
@@ -247,15 +243,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-dropdown-menu>
 
                       </div>
-                      For
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.1.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      hours and
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.1.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      minutes every day.
+                      <div class="horizontal layout center">
+                        For
+                        <paper-input type="number" max="23" min="0" value="{{valves.1.hours}}" class="time" maxlength="2">
+                       </paper-input>
+                        hours and
+                        <paper-input type="number" max="59" min="0" value="{{valves.1.minutes}}" class="time">
+                       </paper-input>
+                        minutes every day.
+                      </div>
                     </div>
 
                   </div>
@@ -319,15 +315,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-dropdown-menu>
 
                       </div>
-                      For
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.2.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      hours and
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.2.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      minutes every day.
+                      <div class="horizontal layout center">
+                        For
+                        <paper-input type="number" max="23" min="0" value="{{valves.2.hours}}" class="time" maxlength="2">
+                       </paper-input>
+                        hours and
+                        <paper-input type="number" max="59" min="0" value="{{valves.2.minutes}}" class="time">
+                       </paper-input>
+                        minutes every day.
+                      </div>
                     </div>
 
                   </div>
@@ -391,15 +387,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         </paper-dropdown-menu>
 
                       </div>
-                      For
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.3.hours}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      hours and
-                      <paper-input-container style="display: inline-block !important;">
-                        <input is="iron-input" class="time" size="2" value="{{valves.3.minutes}}" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                      </paper-input-container>
-                      minutes every day.
+                      <div class="horizontal layout center">
+                        For
+                        <paper-input type="number" max="23" min="0" value="{{valves.3.hours}}" class="time" maxlength="2">
+                       </paper-input>
+                        hours and
+                        <paper-input type="number" max="59" min="0" value="{{valves.3.minutes}}" class="time">
+                       </paper-input>
+                        minutes every day.
+                      </div>
                     </div>
 
                   </div>

@@ -96,12 +96,10 @@ function loadJSON(path, success, error) {
   }
 
   function deviceConnected() {
-    console.log('run');
     var request = app.waterApi.valve_info({
       device_id: app.device_id
     });
     request.execute(function(resp) {
-      console.log(resp);
       for (i = 0; i < 4; i++) {
         app.set(path(i, 'header'), resp.valves[i].name);
         var start_time = resp.valves[i].start_time;
@@ -242,7 +240,6 @@ function loadJSON(path, success, error) {
   };
 
   app.updateSchedule = function() {
-    console.log('yo');
     var oldValves = JSON.parse(localStorage.valves);
     function sendUpdate(num) {
       var start = 0;
@@ -256,7 +253,6 @@ function loadJSON(path, success, error) {
         start = 23 * 60 * 60;
       }
       var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
-      console.log(duration);
       var request = app.waterApi.valve_edit({
         device_id: app.device_id,
         number: num,
@@ -264,17 +260,15 @@ function loadJSON(path, success, error) {
         start_time: start,
         name: app.valves[num].header
       });
-      request.execute(function(resp) {
-        console.log(resp);
+      request.execute(function() {
+        window.location.hash = '';
       });
     }
 
     for (i = 0; i < 4; i++) {
-      console.log(app.valves[i]);
       if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
-
+        window.location.hash = '';
       } else {
-        console.log('update');
         sendUpdate(i);
       }
     }
