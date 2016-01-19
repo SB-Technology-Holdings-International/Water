@@ -125,22 +125,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
-
             <section data-route="home">
               <paper-material elevation="1">
                 <h2 class="paper-font-display2">Watering Schedule</h2>
-                <progress-bubble value="80" max="100" stroke-width="10">
-                    <strong>80%</strong>
-                </progress-bubble>
-                <div class="vertical center layout">
-                  <valve-card color="#673AB7" heading="{{valves.0.header}}" name="valve1" schedule="{{valves.0.hours}} Hours, {{valves.0.minutes}} Minutes / Day"></valve-card>
-                  <valve-card color="#F44336" heading="{{valves.1.header}}" name="valve2" schedule="{{valves.1.hours}} Hours, {{valves.1.minutes}} Minutes / Day"></valve-card>
-                  <valve-card color="#4CAF50" heading="{{valves.2.header}}" name="valve3" schedule="{{valves.2.hours}} Hours, {{valves.2.minutes}} Minutes / Day"></valve-card>
-                  <valve-card color="#FF9800" heading="{{valves.3.header}}" name="valve4" schedule="{{valves.3.hours}} Hours, {{valves.3.minutes}} Minutes / Day"></valve-card>
+                <div class="vertical layout">
+                  <div class="horizontal center layout">
+                    <valve-card color="#03A9F4" heading="{{valves.0.header}}" name="valve1" schedule="{{valves.0.hours}} Hours, {{valves.0.minutes}} Minutes / Day"></valve-card>
+                    <valve-card color="#03A9F4" heading="{{valves.1.header}}" name="valve2" schedule="{{valves.1.hours}} Hours, {{valves.1.minutes}} Minutes / Day"></valve-card>
+                  </div>
+                  <div class="horizontal center layout">
+                    <valve-card color="#00BCD4" heading="{{valves.2.header}}" name="valve3" schedule="{{valves.2.hours}} Hours, {{valves.2.minutes}} Minutes / Day"></valve-card>
+                    <valve-card color="#00BCD4" heading="{{valves.3.header}}" name="valve4" schedule="{{valves.3.hours}} Hours, {{valves.3.minutes}} Minutes / Day"></valve-card>
+                  </div>
                 </div>
-
               </paper-material>
-
             </section>
 
             <section data-route="edit-schedule-1">
