@@ -69,7 +69,6 @@ function loadJSON(path, success, error) {
   }
 
   function userAuthed() {
-    var oldLocation = app.route;
     if (backend.auth.getToken()) {
       // User is signed in, call Endpoint
       app.waterApi = backend.api;
@@ -84,7 +83,7 @@ function loadJSON(path, success, error) {
         }
 
       });
-      app.route = oldLocation;
+      app.route = 'home';
     }
     if (!backend.auth.getToken()) {
       app.route = 'login';
