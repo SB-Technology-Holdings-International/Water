@@ -4,6 +4,27 @@ import time
 from twisted.web import server, resource
 from twisted.internet import reactor
 
+class Schedule:
+    time_running = 0
+    def __init__(self, valve_number, start_time, length):
+        self.start_time = start_time
+        self.length = length
+        self.valve_number = valve_number
+    def check_timing(self):
+        if (datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
+                                      datetime.datetime.min.time()) +
+                                      datetime.timedelta(seconds=self.start_time))) and
+                                      (datetime.datetime.now() < (datetime.datetime.combine(datetime.date.today(),
+                                      datetime.datetime.min.time()) +
+                                      datetime.timedelta(seconds=self.start_time + self.length))):
+            # Turn on valve
+            pass
+        if datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
+                                      datetime.datetime.min.time()) +
+                                      datetime.timedelta(seconds=self.start_time + self.length)):
+            # Turn off valve
+
+
 class Simple(resource.Resource):
     isLeaf = True
     def render_GET(self, request):
@@ -19,7 +40,8 @@ def main():
     #gpio.pin_mode(valves[3], 'out')
     # Define variables
     last_update = ''
-    schedule = [(0, 1000), (0, 1009)] # (valve number, seconds past midnight)
+    schedule_list = [()]
+    schedule_list = [Schedule(start_time=6700), Schedule(), Schedule(), Schedule()] # (valve number, seconds past midnight, length)
     site = server.Site(Simple())
     reactor.listenTCP(9000, site)
     reactor.startRunning(False)
