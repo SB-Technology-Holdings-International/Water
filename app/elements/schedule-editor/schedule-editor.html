@@ -45,12 +45,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </h2>
         <div class="horizontal center layout">
           <h1 style="margin-right:8px;">Valve Name:</h1>
-          <paper-select id="select-input-1"
+          <paper-select id="selectHeader"
             label-field="name"
             bind-value="{{valve.header}}"
             options="{{data}}"
             on-input-changed="_InputChanged"
-            nonmatching on-adding-item="addItem" select-on-blur
+            nonmatching on-adding-item="addItem"
           >
           </paper-select>
         </div>
@@ -84,7 +84,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </div>
         <template is="dom-if" if="{{advanced}}" id="addPlant">
-          <paper-select id="select-input-1"
+          <paper-select id="select-input-2"
             multiple
             label-field="name"
             bind-value="{{crops}}"
@@ -152,9 +152,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         addItem: function(e) {
           var input = (e.detail.value || '').trim()
-          e.detail.value = {
-            name: input
-          };
+          e.detail.value = input;
+        },
+        ready: function() {
+          this.$.selectHeader.reset()
         }
 
       });
