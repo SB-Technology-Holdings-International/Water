@@ -261,6 +261,17 @@ function loadJSON(path, success, error) {
          function(xhr) { console.error(xhr); }
   );
 
+  app.valveNameList = [
+    'Valve 1',
+    'Valve 2',
+    'Valve 3',
+    'Valve 4',
+    'Garden',
+    'Fruit Trees',
+    'Landscape',
+    'Lawn'
+  ];
+
   app.cropInputChanged = function(e) {
     var input = (e.detail.value || '').trim().toLowerCase();
     if (typeof app.newPlants === 'undefined') {
@@ -307,7 +318,6 @@ function loadJSON(path, success, error) {
     console.log('Our app is ready to rock!');
 
     function update(){
-      console.log('updt');
       var oldValves = JSON.parse(localStorage.valves);
       function sendUpdate(num) {
         var start = 0;

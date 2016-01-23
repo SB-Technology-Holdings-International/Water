@@ -35,7 +35,7 @@
         }
       }
     </style>
-    <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};" image="" preload-image="True">
+    <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};" image="{{imageURL}}" preload-image="True">
       <div class="card-content">[[schedule]]</div>
       <div class="card-actions horizontal center flex layout">
         <paper-toggle-button id="card-toggle" class="flex-2"></paper-toggle-button>
@@ -68,6 +68,9 @@
           name: {
             type: String,
             value: 'valve1'
+          },
+          imageURL: {
+            type: String
           }
         }
       });

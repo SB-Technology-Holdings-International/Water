@@ -34,6 +34,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin-right: 8px;
         padding-bottom: 20px;
       }
+      paper-select {
+        padding-bottom: 12px;
+      }
     </style>
     <paper-material elevation="0">
       <div>
@@ -41,8 +44,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           Edit Watering Schedule
         </h2>
         <div class="horizontal center layout">
-          <h1 style="margin-right:8px;">Valve:</h1>
-          <paper-input no-label-float label="Name" value="{{valve.header}}"></paper-input>
+          <h1 style="margin-right:8px;">Valve Name:</h1>
+          <paper-select id="select-input-1"
+            label-field="name"
+            bind-value="{{valve.header}}"
+            options="{{data}}"
+            on-input-changed="_InputChanged"
+            nonmatching on-adding-item="addItem" select-on-blur
+          >
+          </paper-select>
         </div>
         <paper-radio-group selected="basic">
           <paper-radio-button name="basic">Normal</paper-radio-button>
@@ -117,16 +127,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.fire('update');
         },
 
+        _InputChanged: function(event) {
+          var input = (event.detail.value || '').trim().toLowerCase();
+          if (input)
+            event.target.options = this.data.filter(function(data) {
+                return data.toLowerCase().indexOf(input) === 0;
+              });
+          else
+            event.target.options = [];
+        },
+
         properties: {
           valve: {
             type: Object,
             notify: true
           },
           crops: {
-            type: Object,
-            notify: true
+            type: Object
+          },
+          data: {
+            type: Array
           }
+        },
+
+        addItem: function(e) {
+          var input = (e.detail.value || '').trim()
+          e.detail.value = {
+            name: input
+          };
         }
+
       });
     })();
   </script>
