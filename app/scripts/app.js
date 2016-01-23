@@ -238,41 +238,6 @@ function loadJSON(path, success, error) {
     // Login endpoints
   };
 
-  app.updateSchedule = function() {
-    var oldValves = JSON.parse(localStorage.valves);
-    function sendUpdate(num) {
-      var start = 0;
-      if (app.valves[num].startIndex === 0) {
-        start = 11 * 60 * 60;
-      } else if (app.valves[num].startIndex === 1) {
-        start = 14 * 60 * 60;
-      } else if (app.valves[num].startIndex === 2) {
-        start = 21 * 60 * 60 + 30 * 60;
-      } else if (app.valves[num].startIndex === 3) {
-        start = 23 * 60 * 60;
-      }
-      var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
-      var request = app.waterApi.valve_edit({
-        device_id: app.device_id,
-        number: num,
-        duration_seconds: duration,
-        start_time: start,
-        name: app.valves[num].header
-      });
-      request.execute(function() {
-        window.location.hash = '';
-      });
-    }
-
-    for (i = 0; i < 4; i++) {
-      if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
-        window.location.hash = '';
-      } else {
-        sendUpdate(i);
-      }
-    }
-  };
-
   // Sets app default base URL
   app.baseUrl = '/';
   if (window.location.port === '') {  // if production
@@ -340,6 +305,48 @@ function loadJSON(path, success, error) {
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
+
+    function update(){
+      console.log('updt');
+      var oldValves = JSON.parse(localStorage.valves);
+      function sendUpdate(num) {
+        var start = 0;
+        if (app.valves[num].startIndex === 0) {
+          start = 11 * 60 * 60;
+        } else if (app.valves[num].startIndex === 1) {
+          start = 14 * 60 * 60;
+        } else if (app.valves[num].startIndex === 2) {
+          start = 21 * 60 * 60 + 30 * 60;
+        } else if (app.valves[num].startIndex === 3) {
+          start = 23 * 60 * 60;
+        }
+        var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
+        var request = app.waterApi.valve_edit({
+          device_id: app.device_id,
+          number: num,
+          duration_seconds: duration,
+          start_time: start,
+          name: app.valves[num].header
+        });
+        request.execute(function() {
+          window.location.hash = '';
+        });
+      }
+
+      for (i = 0; i < 4; i++) {
+        if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
+          window.location.hash = '';
+        } else {
+          sendUpdate(i);
+        }
+      }
+    }
+
+    var editors = document.getElementsByTagName('schedule-editor');
+    for (var i = 0; i < editors.length; i++) {
+      editors[i].addEventListener('update', update);
+    }
+
   });
 
   // See https://github.com/Polymer/polymer/issues/1381

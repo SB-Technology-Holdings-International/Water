@@ -117,7 +117,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <!-- Application sub title -->
           <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">Command &amp; Control</div>
+            <div class="bottom-title paper-font-subhead">This is text</div>
           </div>
 
         </paper-toolbar>
@@ -126,8 +126,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="home">
-              <paper-material elevation="1">
-                <h2 class="paper-font-display2">Watering Schedule</h2>
+              <paper-material elevation="0">
+                <h2 class="paper-font-display1">Watering Schedule</h2>
                 <div class="vertical layout">
                   <div class="horizontal center layout">
                     <valve-card color="#03A9F4" heading="{{valves.0.header}}" name="valve1" schedule="{{valves.0.hours}} Hours, {{valves.0.minutes}} Minutes / Day"></valve-card>
@@ -142,295 +142,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="edit-schedule-1">
-               <paper-material elevation="1">
-                 <div>
-                   <h2 class="paper-font-display2">
-                     Edit Watering Schedule
-                   </h2>
-                   <div class="horizontal center layout">
-                     <div class="color-circle"></div>
-                     <h1 style="margin-right:8px;">Valve:</h1>
-                     <paper-input no-label-float label="Name" value="{{valves.0.header}}"></paper-input>
-                   </div>
-                   <paper-radio-group selected="basic">
-                     <paper-radio-button name="basic">Normal</paper-radio-button>
-                     <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
-                   </paper-radio-group>
-                   <div hidden$="{{advanced}}">
-                     <div>
-                       <div>
-                         <paper-dropdown-menu label="Start time">
-                           <paper-listbox class="dropdown-content" selected="{{valves.0.startIndex}}">
-                             <paper-item>Early Morning 3:00 AM</paper-item>
-                             <paper-item>Morning - 6:00 AM</paper-item>
-                             <paper-item>Afternoon - 1:30 PM</paper-item>
-                             <paper-item>Evening - 3:00 PM</paper-item>
-                         </paper-listbox>
-                         </paper-dropdown-menu>
-
-                       </div>
-                       <div class="horizontal layout center">
-                         For
-                         <paper-input type="number" max="23" min="0" value="{{valves.0.hours}}" class="time" maxlength="2">
-                        </paper-input>
-                         hours and
-                         <paper-input type="number" max="59" min="0" value="{{valves.0.minutes}}" class="time">
-                        </paper-input>
-                         minutes every day.
-                       </div>
-                     </div>
-
-                   </div>
-                   <template is="dom-if" if="{{advanced}}" id="addPlant">
-                     <paper-select id="select-input-1"
-                       multiple
-                       label-field="name"
-                       bind-value="{{crops}}"
-                       on-input-changed="cropInputChanged"
-                       nonmatching on-adding-item="addCrop"
-                       label="What plants are growing here?"
-                       style="min-width: 300px;"
-                     >
-                     </paper-select>
-                       <template is="dom-repeat" items="{{newPlants}}" restamp="true">
-                         <div>
-                           Water <span>{{item.lower}}</span> for
-                           <paper-input-container style="display: inline-block !important;">
-                             <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                           </paper-input-container>
-                           hours and
-                           <paper-input-container style="display: inline-block !important;">
-                             <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                           </paper-input-container>
-                           minutes every week
-                         </div>
-                       </template>
-                   </template>
-                   <div class="horizontal end-justified layout" style="width: 100%;">
-                     <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
-                   </div>
-                 </div>
-               </paper-material>
+               <schedule-editor valve="{{valves.0}}" crops="{{crops}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
             </section>
 
             <section data-route="edit-schedule-2">
-              <paper-material elevation="1">
-                <div>
-                  <h2 class="paper-font-display2">
-                    Edit Watering Schedule
-                  </h2>
-                  <div class="horizontal center layout">
-                    <div class="color-circle"></div>
-                    <h1 style="margin-right:8px;">Valve:</h1>
-                    <paper-input no-label-float label="Name" value="{{valves.1.header}}"></paper-input>
-                  </div>
-                  <paper-radio-group selected="basic">
-                    <paper-radio-button name="basic">Normal</paper-radio-button>
-                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
-                  </paper-radio-group>
-                  <div hidden$="{{advanced}}">
-                    <div>
-                      <div>
-                        <paper-dropdown-menu label="Start time">
-                          <paper-listbox class="dropdown-content" selected="{{valves.1.startIndex}}">
-                            <paper-item>Early Morning 3:00 AM</paper-item>
-                            <paper-item>Morning - 6:00 AM</paper-item>
-                            <paper-item>Afternoon - 1:30 PM</paper-item>
-                            <paper-item>Evening - 3:00 PM</paper-item>
-                        </paper-listbox>
-                        </paper-dropdown-menu>
-
-                      </div>
-                      <div class="horizontal layout center">
-                        For
-                        <paper-input type="number" max="23" min="0" value="{{valves.1.hours}}" class="time" maxlength="2">
-                       </paper-input>
-                        hours and
-                        <paper-input type="number" max="59" min="0" value="{{valves.1.minutes}}" class="time">
-                       </paper-input>
-                        minutes every day.
-                      </div>
-                    </div>
-
-                  </div>
-                  <template is="dom-if" if="{{advanced}}" id="addPlant">
-                    <paper-select id="select-input-1"
-                      multiple
-                      label-field="name"
-                      bind-value="{{crops}}"
-                      on-input-changed="cropInputChanged"
-                      nonmatching on-adding-item="addCrop"
-                      label="What plants are growing here?"
-                      style="min-width: 300px;"
-                    >
-                    </paper-select>
-                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
-                        <div>
-                          Water <span>{{item.lower}}</span> for
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                          </paper-input-container>
-                          hours and
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                          </paper-input-container>
-                          minutes every week
-                        </div>
-                      </template>
-                  </template>
-                  <div class="horizontal end-justified layout" style="width: 100%;">
-                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
-                  </div>
-                </div>
-              </paper-material>
+              <schedule-editor valve="{{valves.1}}" crops="{{crops}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
             </section>
 
             <section data-route="edit-schedule-3">
-              <paper-material elevation="1">
-                <div>
-                  <h2 class="paper-font-display2">
-                    Edit Watering Schedule
-                  </h2>
-                  <div class="horizontal center layout">
-                    <div class="color-circle"></div>
-                    <h1 style="margin-right:8px;">Valve:</h1>
-                    <paper-input no-label-float label="Name" value="{{valves.2.header}}"></paper-input>
-                  </div>
-                  <paper-radio-group selected="basic">
-                    <paper-radio-button name="basic">Normal</paper-radio-button>
-                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
-                  </paper-radio-group>
-                  <div hidden$="{{advanced}}">
-                    <div>
-                      <div>
-                        <paper-dropdown-menu label="Start time">
-                          <paper-listbox class="dropdown-content" selected="{{valves.2.startIndex}}">
-                            <paper-item>Early Morning 3:00 AM</paper-item>
-                            <paper-item>Morning - 6:00 AM</paper-item>
-                            <paper-item>Afternoon - 1:30 PM</paper-item>
-                            <paper-item>Evening - 3:00 PM</paper-item>
-                        </paper-listbox>
-                        </paper-dropdown-menu>
-
-                      </div>
-                      <div class="horizontal layout center">
-                        For
-                        <paper-input type="number" max="23" min="0" value="{{valves.2.hours}}" class="time" maxlength="2">
-                       </paper-input>
-                        hours and
-                        <paper-input type="number" max="59" min="0" value="{{valves.2.minutes}}" class="time">
-                       </paper-input>
-                        minutes every day.
-                      </div>
-                    </div>
-
-                  </div>
-                  <template is="dom-if" if="{{advanced}}" id="addPlant">
-                    <paper-select id="select-input-1"
-                      multiple
-                      label-field="name"
-                      bind-value="{{crops}}"
-                      on-input-changed="cropInputChanged"
-                      nonmatching on-adding-item="addCrop"
-                      label="What plants are growing here?"
-                      style="min-width: 300px;"
-                    >
-                    </paper-select>
-                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
-                        <div>
-                          Water <span>{{item.lower}}</span> for
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                          </paper-input-container>
-                          hours and
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                          </paper-input-container>
-                          minutes every week
-                        </div>
-                      </template>
-                  </template>
-                  <div class="horizontal end-justified layout" style="width: 100%;">
-                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
-                  </div>
-                </div>
-              </paper-material>
+              <schedule-editor valve="{{valves.2}}" crops="{{crops}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
             </section>
 
             <section data-route="edit-schedule-4">
-              <paper-material elevation="1">
-                <div>
-                  <h2 class="paper-font-display2">
-                    Edit Watering Schedule
-                  </h2>
-                  <div class="horizontal center layout">
-                    <div class="color-circle"></div>
-                    <h1 style="margin-right:8px;">Valve:</h1>
-                    <paper-input no-label-float label="Name" value="{{valves.3.header}}"></paper-input>
-                  </div>
-                  <paper-radio-group selected="basic">
-                    <paper-radio-button name="basic">Normal</paper-radio-button>
-                    <paper-radio-button name="advanced" checked="{{advanced}}">Auto (beta)</paper-radio-button>
-                  </paper-radio-group>
-                  <div hidden$="{{advanced}}">
-                    <div>
-                      <div>
-                        <paper-dropdown-menu label="Start time">
-                          <paper-listbox class="dropdown-content" selected="{{valves.3.startIndex}}">
-                            <paper-item>Early Morning 3:00 AM</paper-item>
-                            <paper-item>Morning - 6:00 AM</paper-item>
-                            <paper-item>Afternoon - 1:30 PM</paper-item>
-                            <paper-item>Evening - 3:00 PM</paper-item>
-                        </paper-listbox>
-                        </paper-dropdown-menu>
-
-                      </div>
-                      <div class="horizontal layout center">
-                        For
-                        <paper-input type="number" max="23" min="0" value="{{valves.3.hours}}" class="time" maxlength="2">
-                       </paper-input>
-                        hours and
-                        <paper-input type="number" max="59" min="0" value="{{valves.3.minutes}}" class="time">
-                       </paper-input>
-                        minutes every day.
-                      </div>
-                    </div>
-
-                  </div>
-                  <template is="dom-if" if="{{advanced}}" id="addPlant">
-                    <paper-select id="select-input-1"
-                      multiple
-                      label-field="name"
-                      bind-value="{{crops}}"
-                      on-input-changed="cropInputChanged"
-                      nonmatching on-adding-item="addCrop"
-                      label="What plants are growing here?"
-                      style="min-width: 300px;"
-                    >
-                    </paper-select>
-                      <template is="dom-repeat" items="{{newPlants}}" restamp="true">
-                        <div>
-                          Water <span>{{item.lower}}</span> for
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="3">
-                          </paper-input-container>
-                          hours and
-                          <paper-input-container style="display: inline-block !important;">
-                            <input is="iron-input" size="1" class="time" prevent-invalid-input allowed-pattern="[0-9]" maxlength="2">
-                          </paper-input-container>
-                          minutes every week
-                        </div>
-                      </template>
-                  </template>
-                  <div class="horizontal end-justified layout" style="width: 100%;">
-                    <paper-button rasised id="done-button" onClick="{{updateSchedule}}">Done</paper-button>
-                  </div>
-                </div>
-              </paper-material>
+              <schedule-editor valve="{{valves.3}}" crops="{{crops}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
             </section>
 
             <section data-route="usage">
-              <paper-material elevation="1">
+              <paper-material elevation="0">
                 <h2 class="paper-font-display2">Usage</h2>
                   <template is="dom-if" if="{{loadCharts}}" id="charts">
                       <div class="vertical center layout">
@@ -447,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="help">
-              <paper-material elevation="1">
+              <paper-material elevation="0">
                 <h2 class="paper-font-display2">Help</h2>
                 <p></p>
               </paper-material>

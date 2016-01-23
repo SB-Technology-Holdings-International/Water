@@ -5,25 +5,25 @@ from twisted.web import server, resource
 from twisted.internet import reactor
 
 class Schedule:
-    time_running = 0
-    def __init__(self, valve_number, start_time, length):
+    def __init__(self, valve_number, start_time, length, valve_gpio):
         self.start_time = start_time
         self.length = length
         self.valve_number = valve_number
+        self.valve_gpio = valve_gpio
     def check_timing(self):
         if (datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
                                       datetime.datetime.min.time()) +
-                                      datetime.timedelta(seconds=self.start_time))) and
-                                      (datetime.datetime.now() < (datetime.datetime.combine(datetime.date.today(),
+                                      datetime.timedelta(seconds=self.start_time)) and
+                                      datetime.datetime.now() < (datetime.datetime.combine(datetime.date.today(),
                                       datetime.datetime.min.time()) +
                                       datetime.timedelta(seconds=self.start_time + self.length))):
             # Turn on valve
-            pass
+            print "Turn on"
         if datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
                                       datetime.datetime.min.time()) +
                                       datetime.timedelta(seconds=self.start_time + self.length)):
             # Turn off valve
-
+            print "off"
 
 class Simple(resource.Resource):
     isLeaf = True

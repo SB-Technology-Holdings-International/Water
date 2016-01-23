@@ -18,7 +18,6 @@
         --paper-tooltip: {
           font-size: 0.8em;
         };
-
       }
       paper-toggle-button {
         --paper-toggle-button-checked-bar-color:  #000;
@@ -31,9 +30,12 @@
       paper-card {
         min-width: 92px;
         width: 100%;
+        --paper-card-header-image: {
+             height: 250px;
+        }
       }
     </style>
-    <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};">
+    <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};" image="" preload-image="True">
       <div class="card-content">[[schedule]]</div>
       <div class="card-actions horizontal center flex layout">
         <paper-toggle-button id="card-toggle" class="flex-2"></paper-toggle-button>
