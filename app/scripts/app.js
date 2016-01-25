@@ -52,8 +52,8 @@ function loadJSON(path, success, error) {
     {'name': 'Valve 2', 'url':''},
     {'name': 'Valve 3', 'url':''},
     {'name': 'Valve 4', 'url':''},
-    {'name': 'Garden', 'url':''},
-    {'name': 'Landscape', 'url':''},
+    {'name': 'Garden', 'url':'https://upload.wikimedia.org/wikipedia/commons/a/a2/Jardin_potager_6.jpg'},
+    {'name': 'English Garden', 'url':'https://upload.wikimedia.org/wikipedia/commons/1/18/Knot_Garden_at_Little_Moreton_Hall%2C_Cheshire_-_geograph.org.uk_-_1527.jpg'},
     {'name': 'Fruit Trees', 'url':'https://upload.wikimedia.org/wikipedia/commons/b/b0/OrangeBloss_wb.jpg'},
     {'name': 'Lawn', 'url':'https://upload.wikimedia.org/wikipedia/commons/2/2f/%28Unmowed%29_grass_4.JPG'},
   ];

@@ -144,7 +144,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           var input = (e.detail.value || '').trim().toLowerCase();
           if (input)
             e.target.options = this.data.filter(function(item) {
-              return item.name.toLowerCase().indexOf(input) === 0;
+              return (item.name.toLowerCase().indexOf(input) === 0 || item.name.toLowerCase().indexOf(' ' + input) !== -1);
             }).map(function(e) {
               return e.name;
             });

@@ -31,11 +31,18 @@
         min-width: 92px;
         width: 100%;
         --paper-card-header-image: {
-             height: 200px;
+          height: 200px;
+          border-top-left-radius: 2px;
+          border-top-right-radius: 2px;
+        }
+        --paper-card-header-image-text: {
+          width: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          margin-bottom: 4px;
         }
       }
     </style>
-    <paper-card heading="[[valve.header]]" id="card" style$="background-color: {{color}};" image="{{valve.image}}" preload-image>
+    <paper-card heading="[[valve.header]]" id="card" style$="background-color: {{color}};" image="{{valve.image}}" preload-image="True">
       <div class="card-content">{{valve.hours}} Hours, {{valve.minutes}} Minutes / Day</div>
       <div class="card-actions horizontal center flex layout">
         <paper-toggle-button id="card-toggle" class="flex-2"></paper-toggle-button>
