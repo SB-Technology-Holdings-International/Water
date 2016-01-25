@@ -124,17 +124,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'schedule-editor',
 
         update: function() {
+          this.setImg()
           this.fire('update');
         },
 
-        _InputChanged: function(event) {
-          var input = (event.detail.value || '').trim().toLowerCase();
+        setImg: function() {
+          var a = this.valve.header;
+          var result = this.data.filter(function( obj ) {
+            return obj.name == a;
+          });
+          if (0 < result.length) {
+            this.set('valve.image', result[0].url);
+          } else {
+            this.set('valve.image', '');
+          }
+        },
+
+        _InputChanged: function(e) {
+          var input = (e.detail.value || '').trim().toLowerCase();
           if (input)
-            event.target.options = this.data.filter(function(data) {
-                return data.toLowerCase().indexOf(input) === 0;
-              });
+            e.target.options = this.data.filter(function(item) {
+              return item.name.toLowerCase().indexOf(input) === 0;
+            }).map(function(e) {
+              return e.name;
+            });
           else
-            event.target.options = [];
+            e.target.options = [];
         },
 
         properties: {
@@ -155,7 +170,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           e.detail.value = input;
         },
         ready: function() {
-          this.$.selectHeader.reset()
+          this.$.selectHeader.reset();
+          this.setImg()
         }
 
       });

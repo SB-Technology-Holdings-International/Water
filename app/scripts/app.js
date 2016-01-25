@@ -43,6 +43,21 @@ function loadJSON(path, success, error) {
   app.mapZoom = 6;
   app.valve0 = {};
 
+  function path(n, prop) {
+    return 'valves.' + String(n) + '.' + prop;
+  }
+
+  app.valveNameList = [
+    {'name': 'Valve 1', 'url':''},
+    {'name': 'Valve 2', 'url':''},
+    {'name': 'Valve 3', 'url':''},
+    {'name': 'Valve 4', 'url':''},
+    {'name': 'Garden', 'url':''},
+    {'name': 'Landscape', 'url':''},
+    {'name': 'Fruit Trees', 'url':'https://upload.wikimedia.org/wikipedia/commons/b/b0/OrangeBloss_wb.jpg'},
+    {'name': 'Lawn', 'url':'https://upload.wikimedia.org/wikipedia/commons/2/2f/%28Unmowed%29_grass_4.JPG'},
+  ];
+
   var i = 0;
   if (!localStorage.valves) {
     app.valves = {};
@@ -52,6 +67,8 @@ function loadJSON(path, success, error) {
       app.valves[i].startIndex = 1;
       app.valves[i].hours = 0;
       app.valves[i].minutes = 0;
+      app.valves[i].url = 'valve' + String(i + 1);
+
     }
     localStorage.valves = JSON.stringify(app.valves);
   } else {
@@ -90,15 +107,14 @@ function loadJSON(path, success, error) {
     }
   }
 
-  function path(n, prop) {
-    return 'valves.' + String(n) + '.' + prop;
-  }
-
   function deviceConnected() {
     var request = app.waterApi.valve_info({
       device_id: app.device_id
     });
     request.execute(function(resp) {
+      var filterMethod = function( obj ) {
+        return obj.name === a;
+      };
       for (i = 0; i < 4; i++) {
         app.set(path(i, 'header'), resp.valves[i].name);
         var start_time = resp.valves[i].start_time;
@@ -116,6 +132,15 @@ function loadJSON(path, success, error) {
         app.set(path(i, 'hours'), Math.floor(duration_seconds / 3600));
         duration_seconds %= 3600;
         app.set(path(i, 'minutes'), Math.floor(duration_seconds / 60));
+
+        var a = app.valves[i].header;
+        var result = app.valveNameList.filter(filterMethod);
+        console.log(result);
+        if (0 < result.length) {
+          app.set(path(i, 'image'), result[0].url);
+        } else {
+          app.set(path(i, 'image'), '');
+        }
       }
       localStorage.valves = JSON.stringify(app.valves);
     });
@@ -260,17 +285,6 @@ function loadJSON(path, success, error) {
          function(data) { app.cropsList = data; },
          function(xhr) { console.error(xhr); }
   );
-
-  app.valveNameList = [
-    'Valve 1',
-    'Valve 2',
-    'Valve 3',
-    'Valve 4',
-    'Garden',
-    'Fruit Trees',
-    'Landscape',
-    'Lawn'
-  ];
 
   app.cropInputChanged = function(e) {
     var input = (e.detail.value || '').trim().toLowerCase();

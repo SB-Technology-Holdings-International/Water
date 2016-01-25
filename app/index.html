@@ -130,15 +130,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h2 class="paper-font-display1">Watering Schedule</h2>
                 <div class="vertical layout">
                   <div class="horizontal center layout">
-                    <valve-card color="#03A9F4" heading="{{valves.0.header}}"
-                                name="valve1"
-                                schedule="{{valves.0.hours}} Hours, {{valves.0.minutes}} Minutes / Day"
-                                image="https://images.unsplash.com/photo-1444021465936-c6ca81d39b84?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=ddd10a1ab72b5ff8905e45203bb1399b"></valve-card>
-                    <valve-card color="#03A9F4" heading="{{valves.1.header}}" name="valve2" schedule="{{valves.1.hours}} Hours, {{valves.1.minutes}} Minutes / Day"></valve-card>
+                    <valve-card color="#03A9F4" valve="{{valves.0}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#03A9F4" valve="{{valves.1}}" data="{{valveNameList}}"></valve-card>
                   </div>
                   <div class="horizontal center layout">
-                    <valve-card color="#00BCD4" heading="{{valves.2.header}}" name="valve3" schedule="{{valves.2.hours}} Hours, {{valves.2.minutes}} Minutes / Day"></valve-card>
-                    <valve-card color="#00BCD4" heading="{{valves.3.header}}" name="valve4" schedule="{{valves.3.hours}} Hours, {{valves.3.minutes}} Minutes / Day"></valve-card>
+                    <valve-card color="#00BCD4" valve="{{valves.2}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#00BCD4" valve="{{valves.3}}" data="{{valveNameList}}"></valve-card>
                   </div>
                 </div>
               </paper-material>

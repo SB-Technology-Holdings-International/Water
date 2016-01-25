@@ -35,11 +35,11 @@
         }
       }
     </style>
-    <paper-card heading="[[heading]]" id="card" style$="background-color: {{color}};" image="{{image}}" preload-image="True">
-      <div class="card-content">[[schedule]]</div>
+    <paper-card heading="[[valve.header]]" id="card" style$="background-color: {{color}};" image="{{valve.image}}" preload-image>
+      <div class="card-content">{{valve.hours}} Hours, {{valve.minutes}} Minutes / Day</div>
       <div class="card-actions horizontal center flex layout">
         <paper-toggle-button id="card-toggle" class="flex-2"></paper-toggle-button>
-        <a href="/schedule/[[name]]"><paper-icon-button icon="create"></paper-icon-button></a>
+        <a href="/schedule/[[valve.url]]"><paper-icon-button icon="create"></paper-icon-button></a>
         <paper-tooltip for="card-toggle" position="left">Turn on now</paper-tooltip>
       </div>
     </paper-card>
@@ -57,22 +57,11 @@
             type: String,
             value: '#66b'
           },
-          schedule: {
-            type: String,
-            value: 'Never on'
+          valve: {
+            type: Object
           },
-          heading: {
-            type: String,
-            value: ''
-          },
-          name: {
-            type: String,
-            value: 'valve1'
-          },
-          image: {
-            type: String,
-            value: 'https://images.unsplash.com/photo-1442589031151-61d5645469d7?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=12154afe0240145e09bdad8a752d4fd6',
-            notify: true
+          data: {
+            type: Array
           }
         }
       });
