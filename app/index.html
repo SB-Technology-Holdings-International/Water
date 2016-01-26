@@ -71,7 +71,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    <paper-drawer-panel responsive-width="1100px" id="paperDrawerPanel">
+    <paper-drawer-panel responsive-width="1260px" id="paperDrawerPanel">
       <!-- Drawer Scroll Header Panel -->
       <paper-scroll-header-panel drawer fixed>
 
@@ -128,15 +128,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="home">
               <paper-material elevation="0">
                 <h2 class="paper-font-display1">Watering Schedule</h2>
-                <div class="vertical layout">
-                  <div class="horizontal center layout">
+                <div class="layout center justified" style="">
                     <valve-card color="#00BCD4" valve="{{valves.0}}" data="{{valveNameList}}"></valve-card>
                     <valve-card color="#00BCD4" valve="{{valves.1}}" data="{{valveNameList}}"></valve-card>
-                  </div>
-                  <div class="horizontal center layout">
+
                     <valve-card color="#00BCD4" valve="{{valves.2}}" data="{{valveNameList}}"></valve-card>
                     <valve-card color="#00BCD4" valve="{{valves.3}}" data="{{valveNameList}}"></valve-card>
-                  </div>
+
                 </div>
               </paper-material>
             </section>
