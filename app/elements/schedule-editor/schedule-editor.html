@@ -116,6 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+  //jscs:disable maximumLineLength
 
     (function() {
       'use strict';
@@ -124,15 +125,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         is: 'schedule-editor',
 
         update: function() {
-          this.setImg()
+          this.setImg();
           this.fire('update');
         },
 
         setImg: function() {
           var a = this.valve.header;
-          var result = this.data.filter(function( obj ) {
-            return obj.name == a;
+          var result = this.data.filter(function(obj) {
+            return obj.name === a;
           });
+
           if (0 < result.length) {
             this.set('valve.image', result[0].url);
           } else {
@@ -142,14 +144,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         _InputChanged: function(e) {
           var input = (e.detail.value || '').trim().toLowerCase();
-          if (input)
+          if (input) {
             e.target.options = this.data.filter(function(item) {
               return (item.name.toLowerCase().indexOf(input) === 0 || item.name.toLowerCase().indexOf(' ' + input) !== -1);
             }).map(function(e) {
               return e.name;
             });
-          else
+          } else {
             e.target.options = [];
+          }
+
         },
 
         properties: {
@@ -166,12 +170,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         addItem: function(e) {
-          var input = (e.detail.value || '').trim()
+          var input = (e.detail.value || '').trim();
           e.detail.value = input;
         },
         ready: function() {
           this.$.selectHeader.reset();
-          this.setImg()
+          this.setImg();
         }
 
       });

@@ -7,6 +7,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
 /* jshint -W106 */
+//jscs:disable maximumLineLength
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
 function loadJSON(path, success, error) {
@@ -48,14 +49,26 @@ function loadJSON(path, success, error) {
   }
 
   app.valveNameList = [
-    {'name': 'Valve 1', 'url':''},
-    {'name': 'Valve 2', 'url':''},
-    {'name': 'Valve 3', 'url':''},
-    {'name': 'Valve 4', 'url':''},
-    {'name': 'Garden', 'url':'https://upload.wikimedia.org/wikipedia/commons/a/a2/Jardin_potager_6.jpg'},
-    {'name': 'English Garden', 'url':'https://upload.wikimedia.org/wikipedia/commons/1/18/Knot_Garden_at_Little_Moreton_Hall%2C_Cheshire_-_geograph.org.uk_-_1527.jpg'},
-    {'name': 'Fruit Trees', 'url':'https://upload.wikimedia.org/wikipedia/commons/b/b0/OrangeBloss_wb.jpg'},
-    {'name': 'Lawn', 'url':'https://upload.wikimedia.org/wikipedia/commons/2/2f/%28Unmowed%29_grass_4.JPG'},
+    {'name': 'Valve 1', 'url': ''},
+    {'name': 'Valve 2', 'url': ''},
+    {'name': 'Valve 3', 'url': ''},
+    {'name': 'Valve 4', 'url': ''},
+    {
+      'name': 'Garden',
+      'url': 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Jardin_potager_6.jpg'
+    },
+    {
+      'name': 'English Garden',
+      'url': 'https://upload.wikimedia.org/wikipedia/commons/1/18/Knot_Garden_at_Little_Moreton_Hall%2C_Cheshire_-_geograph.org.uk_-_1527.jpg'
+    },
+    {
+      'name': 'Fruit Trees',
+      'url': 'https://upload.wikimedia.org/wikipedia/commons/b/b0/OrangeBloss_wb.jpg'
+    },
+    {
+      'name': 'Lawn',
+      'url': 'https://upload.wikimedia.org/wikipedia/commons/2/2f/%28Unmowed%29_grass_4.JPG'
+    },
   ];
 
   var i = 0;
@@ -112,7 +125,7 @@ function loadJSON(path, success, error) {
       device_id: app.device_id
     });
     request.execute(function(resp) {
-      var filterMethod = function( obj ) {
+      var filterMethod = function(obj) {
         return obj.name === a;
       };
       for (i = 0; i < 4; i++) {
@@ -331,7 +344,7 @@ function loadJSON(path, success, error) {
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
 
-    function update(){
+    function update() {
       var oldValves = JSON.parse(localStorage.valves);
       function sendUpdate(num) {
         var start = 0;
