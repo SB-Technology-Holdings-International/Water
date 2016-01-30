@@ -11,17 +11,18 @@ class Schedule:
         self.valve_number = valve_number
         self.valve_gpio = valve_gpio
     def check_timing(self):
-        if (datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
-                                      datetime.datetime.min.time()) +
-                                      datetime.timedelta(seconds=self.start_time)) and
-                                      datetime.datetime.now() < (datetime.datetime.combine(datetime.date.today(),
-                                      datetime.datetime.min.time()) +
-                                      datetime.timedelta(seconds=self.start_time + self.length))):
+        now = datetime.datetime.now()
+        start = datetime.datetime.combine(datetime.date.today(),
+                datetime.datetime.min.time()) +
+                datetime.timedelta(seconds=self.start_time)
+        end = datetime.datetime.combine(datetime.date.today(),
+              datetime.datetime.min.time()) +
+              datetime.timedelta(seconds=self.start_time + self.length)
+
+        if (now > start and now < end):
             # Turn on valve
             print "Turn on"
-        if datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
-                                      datetime.datetime.min.time()) +
-                                      datetime.timedelta(seconds=self.start_time + self.length)):
+        if now > end:
             # Turn off valve
             print "off"
 
