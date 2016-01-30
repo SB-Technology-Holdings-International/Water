@@ -124,7 +124,7 @@ def find_schedule(device, device_key):
   return ScheduleResponse(schedule=responses, status=Status.OK)
 
 
-@endpoints.api(name='water', version='v1', allowed_client_ids=CLIENT_IDS)
+@endpoints.api(name='water', version='v1')
 class WaterAPI(remote.Service):
   '''Water api'''
 
@@ -140,7 +140,7 @@ class WaterAPI(remote.Service):
     return find_schedule(device, device_key)
 
   @endpoints.method(ScheduleAdd, StatusResponse,
-                    name='schedule_add', path='addschedule')
+                    name='schedule_add', path='addschedule', allowed_client_ids=CLIENT_IDS)
   def schedule_add(self, request):
     """ Edit 100 percent schedule """
     device = models.Device.query(models.Device.device_id == request.device_id).get()
@@ -159,7 +159,7 @@ class WaterAPI(remote.Service):
 
   @endpoints.method(DataMessage,
                     DataMessage,
-                    name='check_user', path='checkuser')
+                    name='check_user', path='checkuser', allowed_client_ids=CLIENT_IDS)
   def check_user(self, request):
     """ Add user as admin of device """
     current_user = endpoints.get_current_user()
@@ -182,7 +182,7 @@ class WaterAPI(remote.Service):
     return DataMessage(status=Status.NO_DEVICE)
 
   @endpoints.method(SetupRequest, StatusResponse,
-                    name='add_device', path='adddevice')
+                    name='add_device', path='adddevice', allowed_client_ids=CLIENT_IDS)
   def add_device(self, request):
     ''' Add device to database '''
     # Check for device existance
@@ -208,7 +208,7 @@ class WaterAPI(remote.Service):
     return StatusResponse(status=Status.OK)
 
   @endpoints.method(DataMessage, ValveDataResponse,
-                    name='valve_info', path='valveinfo')
+                    name='valve_info', path='valveinfo', allowed_client_ids=CLIENT_IDS)
   def valve_info(self, request):
     ''' Read valve info '''
     device = models.Device.query(models.Device.device_id == request.device_id).get()
@@ -229,7 +229,7 @@ class WaterAPI(remote.Service):
     return ValveDataResponse(valves=responses)
 
   @endpoints.method(Valve, StatusResponse,
-                    name='valve_edit', path='valveedit')
+                    name='valve_edit', path='valveedit', allowed_client_ids=CLIENT_IDS)
   def valve_edit(self, request):
     """ Edit valve info """
     device = models.Device.query(models.Device.device_id == request.device_id).get()
@@ -250,7 +250,7 @@ class WaterAPI(remote.Service):
     return StatusResponse(status=Status.OK)
 
   @endpoints.method(DataMessage, ScheduleResponse,
-                    name='get_max_schedule', path='getmaxschedule')
+                    name='get_max_schedule', path='getmaxschedule', allowed_client_ids=CLIENT_IDS)
   def get_max_schedule(self, request):
     """ Edit valve info """
     device = models.Device.query(models.Device.device_id == request.device_id).get()

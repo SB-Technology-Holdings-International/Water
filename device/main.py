@@ -3,6 +3,7 @@ import datetime
 import time
 from twisted.web import server, resource
 from twisted.internet import reactor
+from apiclient.discovery import build
 
 class Schedule:
     def __init__(self, valve_number, start_time, length, valve_gpio):
@@ -10,6 +11,7 @@ class Schedule:
         self.length = length
         self.valve_number = valve_number
         self.valve_gpio = valve_gpio
+        gpio.pin_mode(self.valve_gpio, 'out')
     def check_timing(self):
         now = datetime.datetime.now()
         start = datetime.datetime.combine(datetime.date.today(),
@@ -34,11 +36,6 @@ class Simple(resource.Resource):
 def main():
     # Valve GPIO pin mapping
     valves = [135, 136, 137, 138] # Not actual values
-    # Setup GPIO
-    #gpio.pin_mode(valves[0], 'out')
-    #gpio.pin_mode(valves[1], 'out')
-    #gpio.pin_mode(valves[2], 'out')
-    #gpio.pin_mode(valves[3], 'out')
     # Define variables
     last_update = ''
     schedule_list = [()]
