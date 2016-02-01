@@ -6,6 +6,7 @@ from twisted.internet import reactor
 from apiclient.discovery import build
 
 class Schedule:
+    self.done = False
     def __init__(self, valve_number, start_time, length, valve_gpio):
         self.start_time = start_time
         self.length = length
@@ -27,6 +28,7 @@ class Schedule:
         if now > end:
             # Turn off valve
             print "off"
+            self.done = True
 
 class Simple(resource.Resource):
     isLeaf = True
@@ -37,8 +39,7 @@ def main():
     # Valve GPIO pin mapping
     valves = [135, 136, 137, 138] # Not actual values
     # Define variables
-    last_update = ''
-    schedule_list = [()]
+    last_update = None
     schedule_list = [Schedule(start_time=6700), Schedule(), Schedule(), Schedule()] # (valve number, seconds past midnight, length)
     site = server.Site(Simple())
     reactor.listenTCP(9000, site)
@@ -51,14 +52,11 @@ def main():
             # If things work out:
             last_update = datetime.date.today()
 
-        if schedule != []:
-            if datetime.datetime.now() > (datetime.datetime.combine(datetime.date.today(),
-                                          datetime.datetime.min.time()) +
-                                          datetime.timedelta(seconds=schedule[0][1])):
-                print "Turning on"
-                #gpio.digital_write(valves[schedule[0][0]], 1)
-                schedule.pop(0)
-
+        if schedule_list != []:
+            for i in schedule_list:
+                i.check_timing()
+                if i.done:
+                    a.remove(i)
 
         time.sleep(0.001)
         reactor.iterate()
