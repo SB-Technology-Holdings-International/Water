@@ -58,7 +58,7 @@ def load_eto(lat, lng, date_value):
 
 def load_precip(station_id, date_value):
   date_string = date_value.strftime("%Y-%m-%d")
-  base_url = 'http://www.ncdc.noaa.gov/cdo-/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
+  base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
   start_date = '&startdate=' + date_string
   end_date = '&enddate=' + date_string
   station = '&stationid=' + station_id
