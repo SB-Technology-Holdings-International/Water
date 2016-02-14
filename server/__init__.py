@@ -74,18 +74,17 @@ def load_precip(station_id, date_value):
 
 
 def yesterday_local_date():
-  tz = pytz.timezone('America/Los_Angeles')  # Only works in California
-  utc_date = datetime.date.today() - datetime.timedelta(1)
-  utc_time = datetime.datetime.combine(utc_date, datetime.time.min)
+  tz = pytz.timezone('America/Los_Angeles')
+  utc_time = datetime.datetime.now() - datetime.timedelta(days=1)
   local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
   return local
 
-
 def today_local_datetime():
   tz = pytz.timezone('America/Los_Angeles')
+  utc_time = datetime.datetime.now()
   utc_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
-  return pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).replace(tzinfo=None)
-
+  local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
+  return datetime.datetime.combine(local, datetime.time.min)
 
 def find_schedule(device, device_key):
   responses = []
@@ -109,7 +108,7 @@ def find_schedule(device, device_key):
     if index < 0:
       index = 0.0
 
-    max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
+    max_schedules = models.Valve.query(ancestor=device_key).fetch()
     start = 100  # fake, will be based on sunrise
     for s in max_schedules:
       duration = int(round(s.seconds_per_day * index))
@@ -119,7 +118,7 @@ def find_schedule(device, device_key):
                                       start_time=start))
       schedule_units.append(models.ScheduleUnit(start_time=start, duration_seconds=duration, valve_id=s.valve_id))
 
-    day = models.ScheduleDay(schedule=schedule_units, date=today, parent=device_key)
+    day = models.ScheduleDay(schedule=schedule_units, date=today, index=index, parent=device_key)
     day.put()
   return ScheduleResponse(schedule=responses, status=Status.OK)
 
