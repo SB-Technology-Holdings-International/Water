@@ -7,12 +7,21 @@ from apiclient.discovery import build
 
 class Schedule:
     self.done = False
-    def __init__(self, valve_number, start_time, length, valve_gpio):
+    def __init__(self, valve_number, start_time, length):
         self.start_time = start_time
         self.length = length
         self.valve_number = valve_number
-        self.valve_gpio = valve_gpio
+        if valve_number == 0:
+            self.valve_gpio = 0000
+        elif valve_number == 1:
+            self.valve_gpio = 0000
+        elif valve_number == 2:
+            self.valve_gpio = 0000
+        elif valve_number == 3:
+            self.valve_gpio = 0000
+
         gpio.pin_mode(self.valve_gpio, 'out')
+
     def check_timing(self):
         now = datetime.datetime.now()
         start = datetime.datetime.combine(datetime.date.today(),
@@ -24,10 +33,11 @@ class Schedule:
 
         if (now > start and now < end):
             # Turn on valve
-            print "Turn on"
+            gpio.digital_write(self.valve_gpio, 1)
+
         if now > end:
             # Turn off valve
-            print "off"
+            gpio.digital_write(self.valve_gpio, 0)
             self.done = True
 
 class Simple(resource.Resource):
@@ -36,19 +46,30 @@ class Simple(resource.Resource):
         return "<html>%s Iterations!</html>"%n
 
 def main():
-    # Valve GPIO pin mapping
-    valves = [135, 136, 137, 138] # Not actual values
+    # setup endpoints
+    api_root = 'https://watering-web-client.appspot.com/_ah/api'
+    api = 'water'
+    version = 'v1'
+    discovery_url = '%s/discovery/v1/apis/%s/%s/rest' % (api_root, api, version)
+    service = build(api, version, discoveryServiceUrl=discovery_url)
+
     # Define variables
     last_update = None
-    schedule_list = [Schedule(start_time=6700), Schedule(), Schedule(), Schedule()] # (valve number, seconds past midnight, length)
-    site = server.Site(Simple())
     reactor.listenTCP(9000, site)
     reactor.startRunning(False)
+
     while True:
         # Update once a day
         if last_update != datetime.date.today():
             print "Updating from server..."
-            # Fetch latest data
+            schedule_list = []
+            schedule = service.get_schedule(body={'device_id': '000'}).execute()
+            # Format
+            for s in schedule['schedule']:
+                start = int(s['start_time'])
+                duration = int(s['duration_seconds'])
+                valve = int(s['valve'])
+                schedule_list.append(Schedule(start_time=start, valve_number=valve, length=duration))
             # If things work out:
             last_update = datetime.date.today()
 

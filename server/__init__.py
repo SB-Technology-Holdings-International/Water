@@ -82,7 +82,6 @@ def yesterday_local_date():
 def today_local_datetime():
   tz = pytz.timezone('America/Los_Angeles')
   utc_time = datetime.datetime.now()
-  utc_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
   local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
   return datetime.datetime.combine(local, datetime.time.min)
 
