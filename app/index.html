@@ -82,17 +82,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="[[route]]">
-          <a data-route="home" href="{{baseUrl}}">
+          <a data-route="home" href="[[baseUrl]]">
             <iron-icon icon="home"></iron-icon>
             <span>Home</span>
           </a>
 
-          <a data-route="users" href="{{baseUrl}}usage">
+          <a data-route="users" href="[[baseUrl]]usage">
             <iron-icon icon="trending-up"></iron-icon>
             <span>Usage</span>
           </a>
 
-          <a data-route="help" href="{{baseUrl}}help">
+          <a data-route="help" href="[[baseUrl]]help">
             <iron-icon icon="help"></iron-icon>
             <span>Help</span>
           </a>
@@ -108,7 +108,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <span class="flex"></span>
 
           <!-- Toolbar icons -->
-          <a data-route="help" href="{{baseUrl}}help"><paper-icon-button icon="help"></paper-icon-button></a>
+          <a data-route="help" href="[[baseUrl]]help"><paper-icon-button icon="help"></paper-icon-button></a>
 
           <!-- Application name -->
           <div class="middle middle-container center horizontal layout">
@@ -140,7 +140,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="edit-schedule-1">
-               <schedule-editor valve="{{valves.0}}" data="{{valveNameList}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
+              <template is="dom-if">
+                <schedule-editor valve="{{valves.0}}" data="{{valveNameList}}" updateSchedule="{{updateSchedule}}"></schedule-editor>
+              </template>
             </section>
 
             <section data-route="edit-schedule-2">
@@ -206,7 +208,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   <paper-button raised onClick="{{setupDone}}" id="setupDoneButton">Continue</paper-button>
                 </div>
             </section>
-
 
           </iron-pages>
         </div>
