@@ -12,15 +12,16 @@ class Schedule:
         self.length = length
         self.valve_number = valve_number
         if valve_number == 0:
-            self.valve_gpio = 0000
+            self.valve_gpio = 125
         elif valve_number == 1:
-            self.valve_gpio = 0000
+            self.valve_gpio = 126
         elif valve_number == 2:
-            self.valve_gpio = 0000
+            self.valve_gpio = 127
         elif valve_number == 3:
-            self.valve_gpio = 0000
+            self.valve_gpio = 129 # Why?
 
-        gpio.pin_mode(self.valve_gpio, 'out')
+        gpio.pin_mode(self.valve_gpio, 'high', True)
+        gpio.digital_write(self.valve_gpio, 0)
 
     def check_timing(self):
         now = datetime.datetime.now()

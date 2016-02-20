@@ -19,11 +19,16 @@ def create(pin):
     open_pins.append(pin)
 
 def distroy(pin):
+    if 'out' in sys_read('gpio' + pin + '/direction'):
+        digital_write(pin, 0)
     sys_write('unexport', pin)
+    open_pins.remove(pin)
 
-def pin_mode(pin, direction):
+def pin_mode(pin, direction, invert=False):
     pin = str(pin)
     create(pin)
+    if invert:
+        sys_write('gpio' + pin + '/active_low', '1')
     sys_write('gpio' + pin + '/direction', direction)
 
 def digital_write(pin, value):
@@ -32,9 +37,6 @@ def digital_write(pin, value):
 
 def clean():
     for p in open_pins:
-        if 'out' in sys_read('gpio' + p + '/direction'):
-            digital_write(p, 0)
         distroy(p)
-        open_pins.remove(p)
 
 atexit.register(clean)
