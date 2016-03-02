@@ -115,10 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <div class="app-name">Water</div>
           </div>
 
-          <!-- Application sub title -->
-          <div class="bottom bottom-container center horizontal layout">
-            <div class="bottom-title paper-font-subhead">This is text</div>
-          </div>
+
 
         </paper-toolbar>
 
@@ -160,13 +157,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <h2 class="paper-font-display2">Usage</h2>
                   <template is="dom-if" if="{{loadCharts}}" id="charts">
                       <div class="vertical center layout">
-                        A bar chart
-                        <chart-bar data="[[barData]]" class="square-chart"></chart-bar>
-                        A Doughnut Chart
-                        <chart-doughnut data="[[usageRelativeData]]" class="square-chart"></chart-doughnut>
-                        And a line chart
-                        <chart-line id="usageChartTime" class="square-chart" data="[[usageTimeData]]"></chart-line>
-                        Thats it!
+                        <h2 class="paper-font-display1">This week</h2>
+                        <chart-line id="usageChartTime" class="square-chart" data="[[usageTimeData]]" options="[[chartOptions]]"></chart-line>
+
+                        <div class="horizontal center layout">
+                          <chart-doughnut data="[[usageRelativeData]]" class="square-chart"></chart-doughnut>
+                          Valve relative usage
+                        </div>
+
+
                       </div>
                   </template>
 

@@ -190,31 +190,31 @@ function loadJSON(path, success, error) {
   });
 
   app.usageTimeData = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     datasets: [
       {
         label: 'My First dataset',
-        fillColor: 'rgba(220,220,220,0.2)',
-        strokeColor: 'rgba(220,220,220,1)',
-        pointColor: 'rgba(220,220,220,1)',
+        fillColor: 'rgba(33, 150, 243, 0.2)',
+        strokeColor: '#2196F3',
+        pointColor: '#1976D2',
         pointStrokeColor: '#fff',
         pointHighlightFill: '#fff',
         pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: [65, 59, 80, 81, 56, 55, 40]
-      },
-      {
-        label: 'My Second dataset',
-        fillColor: 'rgba(151,187,205,0.2)',
-        strokeColor: 'rgba(151,187,205,1)',
-        pointColor: 'rgba(151,187,205,1)',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(151,187,205,1)',
-        data: [28, 48, 40, 19, 86, 27, 90]
+        data: [65, 59, 80, 81, 23, 55, 67]
       }
     ]
   };
-
+  app.chartOptions = {
+    scaleOverride : true,
+    scaleSteps : 4,
+    scaleStepWidth : 25,
+    scaleStartValue : 0,
+    animation: false,
+    scaleFontSize: 14,
+    responsive: false,
+    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
+    tooltipTemplate: '<%if (label){%><%=label%>: <%}%><%= value %>%',
+  };
   app.usageRelativeData = [
         {
           value: 300,
