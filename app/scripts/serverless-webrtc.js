@@ -54,7 +54,7 @@ function setupDC1() {
       if (e.data.size) {
         fileReceiver1.receive(e.data, {});
       } else {
-        if (e.data.charCodeAt(0) == 2) {
+        if (e.data.charCodeAt(0) === 2) {
           // The first message we get from Firefox (but not Chrome)
           // is literal ASCII 2 and I don't understand why -- if we
           // leave it in, JSON.parse() will barf.
@@ -151,8 +151,9 @@ function handleOfferFromPC1(offerDesc) {
 }
 pc2.onicecandidate = function (e) {
   console.log('ICE candidate (pc2)', e);
-  if (e.candidate === null)
-    console.log(JSON.stringify(pc2.localDescription));
+  if (e.candidate === null) {
+      console.log(JSON.stringify(pc2.localDescription));
+  }
 };
 pc2.onsignalingstatechange = onsignalingstatechange;
 pc2.oniceconnectionstatechange = oniceconnectionstatechange;

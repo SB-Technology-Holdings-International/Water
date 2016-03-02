@@ -98,28 +98,6 @@ function loadJSON(path, success, error) {
       authorizeCallback);
   }
 
-  function userAuthed() {
-    if (backend.auth.getToken()) {
-      // User is signed in, call Endpoint
-      app.waterApi = backend.api;
-      var request = app.waterApi.check_user({
-      });
-      request.execute(function(resp) {
-        if (resp.device_id) { // Ok get data
-          app.device_id = resp.device_id;
-          deviceConnected();
-        } else { // Setup device
-          app.route = 'setup';
-        }
-
-      });
-      app.route = 'home';
-    }
-    if (!backend.auth.getToken()) {
-      app.route = 'login';
-    }
-  }
-
   function deviceConnected() {
     var request = app.waterApi.valve_info({
       device_id: app.device_id
@@ -158,6 +136,30 @@ function loadJSON(path, success, error) {
       localStorage.valves = JSON.stringify(app.valves);
     });
   }
+
+  function userAuthed() {
+    if (backend.auth.getToken()) {
+      // User is signed in, call Endpoint
+      app.waterApi = backend.api;
+      var request = app.waterApi.check_user({
+      });
+      request.execute(function(resp) {
+        if (resp.device_id) { // Ok get data
+          app.device_id = resp.device_id;
+          deviceConnected();
+        } else { // Setup device
+          app.route = 'setup';
+        }
+
+      });
+      app.route = 'home';
+    }
+    if (!backend.auth.getToken()) {
+      app.route = 'login';
+    }
+  }
+
+
 
   app.useCurrentLocation = function() {
     app.geo = true;
@@ -370,7 +372,7 @@ function loadJSON(path, success, error) {
         });
       }
 
-      for (i = 0; i < 4; i++) {
+      for (var i = 0; i < 4; i++) {
         if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
           window.location.hash = '';
         } else {
