@@ -202,6 +202,7 @@ function loadJSON(path, success, error) {
         pointHighlightStroke: 'rgba(220,220,220,1)',
         data: [65, 59, 80, 81, 23, 55, 67]
       }
+
     ]
   };
   app.chartOptions = {
@@ -212,32 +213,31 @@ function loadJSON(path, success, error) {
     animation: false,
     scaleFontSize: 14,
     responsive: false,
-    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>",
     tooltipTemplate: '<%if (label){%><%=label%>: <%}%><%= value %>%',
   };
   app.usageRelativeData = [
         {
-          value: 300,
-          color: '#F7464A',
-          highlight: '#FF5A5E',
+          value: 20,
+          color: '#2196F3',
+          highlight: '#1565C0',
           label: 'Valve 1'
         },
         {
           value: 50,
-          color: '#46BFBD',
-          highlight: '#5AD3D1',
+          color: '#FF9800',
+          highlight: '#EF6C00',
           label: 'Valve 2'
         },
         {
-          value: 400,
-          color: '#ADB45C',
-          highlight: '#AFC870',
+          value: 5,
+          color: '#E91E63',
+          highlight: '#AD1457',
           label: 'Valve 3'
         },
         {
-          value: 100,
-          color: '#FDB45C',
-          highlight: '#FFC870',
+          value: 25,
+          color: '#4CAF50',
+          highlight: '#2E7D32',
           label: 'Valve 4'
         }
       ];
