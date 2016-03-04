@@ -35,8 +35,13 @@ class ScheduleResponse(messages.Message):
 
 
 class UsageResponse(messages.Message):
-    usage = messages.StringField(1)
-
+    usage = messages.IntegerField(1, repeated=True)
+    datapoint_num = messages.IntegerField(2)
+    datapoint_freq = messages.EnumField()
+    class Frequency(messages.Enum):
+        DAY = 1
+        WEEK = 2
+        MONTH = 3
 
 class SetupRequest(messages.Message):
     device_id = messages.StringField(1)
