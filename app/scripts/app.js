@@ -71,6 +71,55 @@ function loadJSON(path, success, error) {
     },
   ];
 
+  function updateDonutChart() {
+    var timeAllValves = app.valves[0].total_seconds + app.valves[1].total_seconds + app.valves[2].total_seconds + app.valves[3].total_seconds;
+    function createPrecentage(i) {
+      return Math.round(app.valves[i].total_seconds / timeAllValves * 100);
+    }
+    app.usageRelativeData = [
+          {
+            value: createPrecentage(0),
+            color: '#2196F3',
+            highlight: '#1565C0',
+            label: 'Valve 1'
+          },
+          {
+            value: createPrecentage(1),
+            color: '#FF9800',
+            highlight: '#EF6C00',
+            label: 'Valve 2'
+          },
+          {
+            value: createPrecentage(2),
+            color: '#E91E63',
+            highlight: '#AD1457',
+            label: 'Valve 3'
+          },
+          {
+            value: createPrecentage(3),
+            color: '#4CAF50',
+            highlight: '#2E7D32',
+            label: 'Valve 4'
+          }
+        ];
+  }
+
+  var a;
+
+  var filterMethod = function(obj) {
+    return obj.name === a;
+  };
+
+  function setImg(i) {
+    a = app.valves[i].header;
+    var result = app.valveNameList.filter(filterMethod);
+    if (0 < result.length) {
+      app.set(path(i, 'image'), result[0].url);
+    } else {
+      app.set(path(i, 'image'), '');
+    }
+  }
+
   var i = 0;
   if (!localStorage.valves) {
     app.valves = {};
@@ -80,12 +129,13 @@ function loadJSON(path, success, error) {
       app.valves[i].startIndex = 1;
       app.valves[i].hours = 0;
       app.valves[i].minutes = 0;
+      app.valves[i].total_seconds = 0;
       app.valves[i].url = 'valve' + String(i + 1);
-
     }
     localStorage.valves = JSON.stringify(app.valves);
   } else {
     app.valves = JSON.parse(localStorage.valves);
+    updateDonutChart();
   }
 
   var backend = document.getElementById('backend');
@@ -103,9 +153,7 @@ function loadJSON(path, success, error) {
       device_id: app.device_id
     });
     request.execute(function(resp) {
-      var filterMethod = function(obj) {
-        return obj.name === a;
-      };
+
       for (i = 0; i < 4; i++) {
         app.set(path(i, 'header'), resp.valves[i].name);
         var start_time = resp.valves[i].start_time;
@@ -120,18 +168,13 @@ function loadJSON(path, success, error) {
           app.set(path(i, 'startIndex'), 3);
         }
         var duration_seconds = resp.valves[i].duration_seconds;
+        app.set(path(i, 'total_seconds'), +duration_seconds);
         app.set(path(i, 'hours'), Math.floor(duration_seconds / 3600));
         duration_seconds %= 3600;
         app.set(path(i, 'minutes'), Math.floor(duration_seconds / 60));
 
-        var a = app.valves[i].header;
-        var result = app.valveNameList.filter(filterMethod);
-        console.log(result);
-        if (0 < result.length) {
-          app.set(path(i, 'image'), result[0].url);
-        } else {
-          app.set(path(i, 'image'), '');
-        }
+        setImg(i);
+        updateDonutChart();
       }
       localStorage.valves = JSON.stringify(app.valves);
     });
@@ -213,32 +256,8 @@ function loadJSON(path, success, error) {
     responsive: false,
     tooltipTemplate: '<%if (label){%><%=label%>: <%}%><%= value %>%',
   };
-  app.usageRelativeData = [
-        {
-          value: 20,
-          color: '#2196F3',
-          highlight: '#1565C0',
-          label: 'Valve 1'
-        },
-        {
-          value: 50,
-          color: '#FF9800',
-          highlight: '#EF6C00',
-          label: 'Valve 2'
-        },
-        {
-          value: 5,
-          color: '#E91E63',
-          highlight: '#AD1457',
-          label: 'Valve 3'
-        },
-        {
-          value: 25,
-          color: '#4CAF50',
-          highlight: '#2E7D32',
-          label: 'Valve 4'
-        }
-      ];
+
+
   app.barData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
@@ -343,7 +362,9 @@ function loadJSON(path, success, error) {
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
-
+    for (i = 0; i < 4; i++) {
+      setImg(i);
+    }
     function update() {
       var oldValves = JSON.parse(localStorage.valves);
       function sendUpdate(num) {
@@ -358,6 +379,8 @@ function loadJSON(path, success, error) {
           start = 23 * 60 * 60;
         }
         var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
+        app.set(path(num, 'total_seconds'), duration);
+        updateDonutChart();
         var request = app.waterApi.valve_edit({
           device_id: app.device_id,
           number: num,
@@ -380,7 +403,7 @@ function loadJSON(path, success, error) {
     }
 
     var editors = document.getElementsByTagName('schedule-editor');
-    for (var i = 0; i < editors.length; i++) {
+    for (i = 0; i < editors.length; i++) {
       editors[i].addEventListener('update', update);
     }
 
