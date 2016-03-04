@@ -257,7 +257,6 @@ function loadJSON(path, success, error) {
     tooltipTemplate: '<%if (label){%><%=label%>: <%}%><%= value %>%',
   };
 
-
   app.barData = {
     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
     datasets: [
