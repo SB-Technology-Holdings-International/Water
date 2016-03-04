@@ -6,13 +6,14 @@ import urllib2
 import json
 
 import datetime
+from math import cos, asin, sqrt
 import endpoints
 from protorpc import message_types, remote, messages
 from google.appengine.api import urlfetch
 import google.appengine.api.users
 import api_key
 import noaa_stations
-from math import cos, asin, sqrt
+
 import models
 import pytz
 # import crops
@@ -20,19 +21,24 @@ from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
                       StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
 
 API_EXPLORER = '292824132082.apps.googleusercontent.com'
-CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com', API_EXPLORER]
+CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com',
+              API_EXPLORER]
 
 __author__ = 'Sebastian Boyd'
 __copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
 
 
 def earth_distance(lat1, lon1, lat2, lon2):
+    '''Finds Distace between two points on earth'''
     p = 0.017453292519943295
-    a = 0.5 - cos((lat2 - lat1) * p) / 2 + cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
-    return 12742 * asin(sqrt(a))
+    a = cos((lat2 - lat1) * p) / 2
+    b = cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2
+    c = 0.5 - a + b
+    return 12742 * asin(sqrt(c))
 
 
 def find_noaa_station(lat, lng):
+    '''Find closest weather station'''
     distances = []
     for s in noaa_stations.stations:
         distances.append(earth_distance(lat, lng, s['latitude'], s['longitude']))
@@ -57,6 +63,7 @@ def load_eto(lat, lng, date_value):
 
 
 def load_precip(station_id, date_value):
+    '''Load precip data from NOAA'''
     date_string = date_value.strftime("%Y-%m-%d")
     base_url = 'http://www.ncdc.noaa.gov/cdo-web/api/v2/data?datasetid=GHCND&datatypeid=PRCP'
     start_date = '&startdate=' + date_string
@@ -72,23 +79,57 @@ def load_precip(station_id, date_value):
     else:
         return 0
 
-
 def yesterday_local_date():
-    tz = pytz.timezone('America/Los_Angeles')
-    utc_time = datetime.datetime.now() - datetime.timedelta(days=1)
-    local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
-    return local
-
-def today_local_datetime():
+    '''Get yesterday's date (time adjusted)'''
     tz = pytz.timezone('America/Los_Angeles')
     utc_time = datetime.datetime.now()
-    local = pytz.utc.localize(utc_time, is_dst=None).astimezone(tz).date()
-    return datetime.datetime.combine(local, datetime.time.min)
+    local_time = (tz.localize(utc_time) - datetime.timedelta(days=1)).date()
+    return local_time
 
-def find_schedule(device, device_key):
+def today_local_datetime():
+    '''Get today's date (time adjusted)'''
+    tz = pytz.timezone('America/Los_Angeles')
+    utc_time = datetime.datetime.now()
+    local_time = tz.localize(utc_time)
+    return datetime.datetime.combine(local_time, datetime.time.min)
+
+def create_schedule(device, device_key):
+    ''''Create today's schedule'''
+    schedule_units = []
     responses = []
     today = today_local_datetime()
-    schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today, ancestor=device_key).get()
+    # Generate schedule
+    yesterday = yesterday_local_date()
+    eto = load_eto(device.lat, device.lng, yesterday)
+    precip = load_precip(device.noaa_station_id, yesterday)
+    # Make up number
+    index = (eto - precip) / 0.244  # Local 100% value
+    if index < 0:
+        index = 0.0
+
+    max_schedules = models.Valve.query(ancestor=device_key).fetch()
+    start = 100  # fake, will be based on sunrise
+    for s in max_schedules:
+        duration = int(round(s.seconds_per_day * index))
+        if s.start_time:
+            start = s.start_time
+        responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
+                                        start_time=start))
+        schedule_units.append(models.ScheduleUnit(start_time=start,
+                                                  duration_seconds=duration,
+                                                  valve_id=s.valve_id))
+
+    day = models.ScheduleDay(schedule=schedule_units, date=today,
+                             index=index, parent=device_key)
+    day.put()
+    return responses
+
+def find_schedule(device, device_key):
+    '''Get today's schedule'''
+    responses = []
+    today = today_local_datetime()
+    schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today,
+                                            ancestor=device_key).get()
     if schedule_day:
         schedule_units = schedule_day.schedule
         for unit in schedule_units:
@@ -96,29 +137,7 @@ def find_schedule(device, device_key):
                                             start_time=unit.start_time,
                                             duration_seconds=unit.duration_seconds))
     else:
-        schedule_units = []
-        # Generate schedule
-        yesterday = yesterday_local_date()
-        eto = load_eto(device.lat, device.lng, yesterday)
-        krdi = 1
-        precip = load_precip(device.noaa_station_id, yesterday)
-        # Make up number
-        index = (eto - precip) / 0.244  # Local 100% value
-        if index < 0:
-            index = 0.0
-
-        max_schedules = models.Valve.query(ancestor=device_key).fetch()
-        start = 100  # fake, will be based on sunrise
-        for s in max_schedules:
-            duration = int(round(s.seconds_per_day * index))
-            if s.start_time:
-                start = s.start_time
-            responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,
-                                            start_time=start))
-            schedule_units.append(models.ScheduleUnit(start_time=start, duration_seconds=duration, valve_id=s.valve_id))
-
-        day = models.ScheduleDay(schedule=schedule_units, date=today, index=index, parent=device_key)
-        day.put()
+        responses = create_schedule(device, device_key)
     return ScheduleResponse(schedule=responses, status=Status.OK)
 
 
@@ -201,7 +220,8 @@ class WaterAPI(remote.Service):
         device_key = device.put()
         for i in range(4):
             valve_name = "Valve " + str(i + 1)
-            valve = models.Valve(valve_id=i, parent=device_key, name=valve_name, seconds_per_day=0, start_time=50400)
+            valve = models.Valve(valve_id=i, parent=device_key, name=valve_name,
+                                 seconds_per_day=0, start_time=50400)
             valve.put()
         return StatusResponse(status=Status.OK)
 
@@ -218,9 +238,12 @@ class WaterAPI(remote.Service):
         valves = models.Valve.query(ancestor=device_key).fetch()
         responses = []
         for v in valves:
-            responses.append(Valve(name=v.name, number=v.valve_id, start_time=v.start_time, duration_seconds=v.seconds_per_day))
+            responses.append(Valve(name=v.name, number=v.valve_id,
+                                   start_time=v.start_time,
+                                   duration_seconds=v.seconds_per_day))
 
         def get_key(item):
+            '''Key for sort'''
             return item.number
 
         responses.sort(key=get_key)
@@ -236,7 +259,8 @@ class WaterAPI(remote.Service):
         except AttributeError:
             return Valve(status=Status.BAD_DATA)
 
-        valve = models.Valve.query(models.Valve.valve_id == request.number, ancestor=device_key).get()
+        valve = models.Valve.query(models.Valve.valve_id == request.number,
+                                   ancestor=device_key).get()
 
         # Set name
         valve.name = request.name
@@ -260,7 +284,9 @@ class WaterAPI(remote.Service):
         max_schedules = models.MaxSchedule.query(ancestor=device_key).fetch()
         responses = []
         for i in max_schedules:
-            responses.append(ScheduledWater(start_time=i.start_time, duration_seconds=i.seconds_per_day, valve=i.valve_id))
+            responses.append(ScheduledWater(start_time=i.start_time,
+                                            duration_seconds=i.seconds_per_day,
+                                            valve=i.valve_id))
         if max_schedules:
             return ScheduleResponse(status=Status.OK, schedule=responses)
         else:

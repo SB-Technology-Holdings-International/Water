@@ -159,8 +159,6 @@ function loadJSON(path, success, error) {
     }
   }
 
-
-
   app.useCurrentLocation = function() {
     app.geo = true;
     app.mapZoom = 13;
@@ -206,10 +204,10 @@ function loadJSON(path, success, error) {
     ]
   };
   app.chartOptions = {
-    scaleOverride : true,
-    scaleSteps : 4,
-    scaleStepWidth : 25,
-    scaleStartValue : 0,
+    scaleOverride: true,
+    scaleSteps: 4,
+    scaleStepWidth: 25,
+    scaleStartValue: 0,
     animation: false,
     scaleFontSize: 14,
     responsive: false,
