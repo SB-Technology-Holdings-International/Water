@@ -1,6 +1,6 @@
-import gpio
 import datetime
 import time
+import gpio
 #from twisted.web import server, resource
 #from twisted.internet import reactor
 from apiclient.discovery import build
@@ -62,7 +62,10 @@ def main():
         if last_update != datetime.date.today():
             print "Updating from server..."
             schedule_list = []
-            schedule = service.get_schedule(body={'device_id': '000'}).execute()
+            try:
+                schedule = service.get_schedule(body={'device_id': '000'}).execute()
+            except:
+                time.sleep(10)
             # Format
             for s in schedule['schedule']:
                 start = int(s['start_time'])

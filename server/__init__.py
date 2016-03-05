@@ -56,6 +56,7 @@ def load_eto(lat, lng, date_value):
     data_req = '&dataItems=day-asce-eto'
     units = '&unitOfMeasure=E'
     url = base_url + targets + start_date + end_date + data_req + units
+    print url
     req = urllib2.Request(url, None, {'accept': 'application/json'})
     response = urllib2.urlopen(req, None, 15)
     json_data = response.read()

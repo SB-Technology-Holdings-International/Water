@@ -111,7 +111,7 @@ function mod(n, m) {
 
   function updateLineChart(data) {
     if (data.length < 7) {
-      for (i = 0; i < 6; i++) {
+      for (i = 0; data.length < 7; i++) {
         data.unshift(null);
       }
     }
