@@ -126,11 +126,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <paper-material elevation="0">
                 <h2 class="paper-font-display1">Watering Schedule</h2>
                 <div class="layout center justified" style="">
-                    <valve-card color="#00BCD4" valve="{{valves.0}}" data="{{valveNameList}}"></valve-card>
-                    <valve-card color="#00BCD4" valve="{{valves.1}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#2196F3" valve="{{valves.0}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#FF9800" valve="{{valves.1}}" data="{{valveNameList}}"></valve-card>
 
-                    <valve-card color="#00BCD4" valve="{{valves.2}}" data="{{valveNameList}}"></valve-card>
-                    <valve-card color="#00BCD4" valve="{{valves.3}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#E91E63" valve="{{valves.2}}" data="{{valveNameList}}"></valve-card>
+                    <valve-card color="#4CAF50" valve="{{valves.3}}" data="{{valveNameList}}"></valve-card>
 
                 </div>
               </paper-material>
@@ -162,10 +162,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <div class="horizontal center layout" style="width:90%">
                           <chart-doughnut data="[[usageRelativeData]]" class="square-chart" options="[[chartOptions]]"></chart-doughnut>
                           <div class="vertical layout" style="width:100%; margin-left:10%;">
-                            <div class="horizontal center layout"><div class="circle" style="background: #2196F3"></div>Valve 1</div>
-                            <div class="horizontal center layout"><div class="circle" style="background: #FF9800"></div>Valve 2</div>
-                            <div class="horizontal center layout"><div class="circle" style="background: #E91E63"></div>Valve 3</div>
-                            <div class="horizontal center layout"><div class="circle" style="background: #4CAF50"></div>Valve 4</div>
+                            <div class="horizontal center layout"><div class="circle" style="background: #2196F3"></div>{{valves.0.header}}</div>
+                            <div class="horizontal center layout"><div class="circle" style="background: #FF9800"></div>{{valves.1.header}}</div>
+                            <div class="horizontal center layout"><div class="circle" style="background: #E91E63"></div>{{valves.2.header}}</div>
+                            <div class="horizontal center layout"><div class="circle" style="background: #4CAF50"></div>{{valves.3.header}}</div>
                           </div>
                         </div>
                         <h2 class="paper-font-display1">Watering Index</h2>

@@ -54,7 +54,7 @@ function loadJSON(path, success, error) {
     {'name': 'Valve 3', 'url': ''},
     {'name': 'Valve 4', 'url': ''},
     {
-      'name': 'Garden',
+      'name': 'Vegetable Garden',
       'url': 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Jardin_potager_6.jpg'
     },
     {
@@ -81,25 +81,25 @@ function loadJSON(path, success, error) {
             value: createPrecentage(0),
             color: '#2196F3',
             highlight: '#1565C0',
-            label: 'Valve 1'
+            label: app.valves[0].header
           },
           {
             value: createPrecentage(1),
             color: '#FF9800',
             highlight: '#EF6C00',
-            label: 'Valve 2'
+            label: app.valves[1].header
           },
           {
             value: createPrecentage(2),
             color: '#E91E63',
             highlight: '#AD1457',
-            label: 'Valve 3'
+            label: app.valves[2].header
           },
           {
             value: createPrecentage(3),
             color: '#4CAF50',
             highlight: '#2E7D32',
-            label: 'Valve 4'
+            label: app.valves[3].header
           }
         ];
   }
@@ -196,7 +196,7 @@ function loadJSON(path, success, error) {
         }
 
       });
-      if (app.route === 'setup' || app.route === 'login'){
+      if (app.route === 'setup' || app.route === 'login') {
         app.route = 'home';
       } else {
         app.route = oldLocation;
