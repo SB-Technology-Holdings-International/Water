@@ -158,7 +158,7 @@ class WaterAPI(remote.Service):
         return find_schedule(device, device_key)
 
     @endpoints.method(UsageRequest, UsageResponse,
-                      name='get_usage', path='getusage')
+                      name='get_usage', path='getusage', allowed_client_ids=CLIENT_IDS)
     def get_usage(self, request):
         """ Look up usage for time """
         device = models.Device.query(models.Device.device_id == request.device_id).get()

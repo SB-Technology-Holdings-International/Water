@@ -159,7 +159,8 @@ gulp.task('copy', function() {
   }).pipe(gulp.dest(dist()));
 
   var yaml = gulp.src([
-    'app.yaml'
+    'app.yaml',
+    'index.yaml'
   ], {
     dot: true
 

@@ -28,6 +28,11 @@ function loadJSON(path, success, error) {
   xhr.open('GET', path, true);
   xhr.send();
 }
+
+function mod(n, m) {
+  return ((n % m) + m) % m;
+}
+
 (function(document) {
   'use strict';
 
@@ -42,7 +47,7 @@ function loadJSON(path, success, error) {
   app.lat = 37.0;
   app.lng = -120.0;
   app.mapZoom = 6;
-  app.valve0 = {};
+  var i;
 
   function path(n, prop) {
     return 'valves.' + String(n) + '.' + prop;
@@ -104,6 +109,37 @@ function loadJSON(path, success, error) {
         ];
   }
 
+  function updateLineChart(data) {
+    if (data.length < 7) {
+      for (i = 0; i < 6; i++) {
+        data.unshift(null);
+      }
+    }
+    var d = new Date();
+    var dow = d.getDay();
+    var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var adjusted = [];
+    for (i = 6; i >= 0; i--) {
+      adjusted.push(days[mod((dow - i), 7)]);
+    }
+    app.usageTimeData = {
+      labels: adjusted,
+      datasets: [
+        {
+          label: 'My First dataset',
+          fillColor: 'rgba(33, 150, 243, 0.2)',
+          strokeColor: '#2196F3',
+          pointColor: '#1976D2',
+          pointStrokeColor: '#fff',
+          pointHighlightFill: '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data: data
+        }
+
+      ]
+    };
+  }
+
   var a;
 
   var filterMethod = function(obj) {
@@ -120,7 +156,7 @@ function loadJSON(path, success, error) {
     }
   }
 
-  var i = 0;
+  i = 0;
   if (!localStorage.valves) {
     app.valves = {};
     for (i = 0; i < 4; i++) {
@@ -176,6 +212,16 @@ function loadJSON(path, success, error) {
         setImg(i);
         updateDonutChart();
       }
+      localStorage.valves = JSON.stringify(app.valves);
+    });
+
+    request = app.waterApi.get_usage({
+      device_id: app.device_id,
+      datapoint_num: 7,
+      datapoint_freq: 'DAY',
+    });
+    request.execute(function(resp) {
+      updateLineChart(resp.usage);
       localStorage.valves = JSON.stringify(app.valves);
     });
   }
@@ -236,22 +282,6 @@ function loadJSON(path, success, error) {
     signin(true, userAuthed);
   });
 
-  app.usageTimeData = {
-    labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    datasets: [
-      {
-        label: 'My First dataset',
-        fillColor: 'rgba(33, 150, 243, 0.2)',
-        strokeColor: '#2196F3',
-        pointColor: '#1976D2',
-        pointStrokeColor: '#fff',
-        pointHighlightFill: '#fff',
-        pointHighlightStroke: 'rgba(220,220,220,1)',
-        data: [65, 59, 80, 81, 23, 55, 67]
-      }
-
-    ]
-  };
   app.chartOptions = {
     scaleOverride: true,
     scaleSteps: 4,
