@@ -115,6 +115,7 @@ function mod(n, m) {
         data.unshift(null);
       }
     }
+    console.log(data);
     var d = new Date();
     var dow = d.getDay();
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -142,18 +143,9 @@ function mod(n, m) {
 
   var a;
 
-  var filterMethod = function(obj) {
-    return obj.name === a;
-  };
-
   function setImg(i) {
-    a = app.valves[i].header;
-    var result = app.valveNameList.filter(filterMethod);
-    if (0 < result.length) {
-      app.set(path(i, 'image'), result[0].url);
-    } else {
-      app.set(path(i, 'image'), '');
-    }
+    a = app.valves[i].header.replace(/\s+/g, ',');
+    app.set(path(i, 'image'), 'https://source.unsplash.com/400x200/weekly?' + a);
   }
 
   i = 0;
@@ -398,11 +390,12 @@ function mod(n, m) {
   app.addEventListener('dom-change', function() {
     console.log('Our app is ready to rock!');
     for (i = 0; i < 4; i++) {
-      setImg(i);
+      //setImg(i);
     }
     function update() {
       var oldValves = JSON.parse(localStorage.valves);
       function sendUpdate(num) {
+        console.log('update');
         var start = 0;
         if (app.valves[num].startIndex === 0) {
           start = 11 * 60 * 60;

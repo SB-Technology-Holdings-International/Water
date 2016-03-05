@@ -83,17 +83,17 @@ def load_precip(station_id, date_value):
 
 def yesterday_local_date():
     '''Get yesterday's date (time adjusted)'''
-    tz = pytz.timezone('America/Los_Angeles')
-    utc_time = datetime.datetime.now()
-    local_time = (tz.localize(utc_time) - datetime.timedelta(days=1)).date()
-    return local_time
+    local_time = today_local_datetime()
+    yesterday = (local_time - datetime.timedelta(days=1)).date()
+    return yesterday
 
 def today_local_datetime():
     '''Get today's date (time adjusted)'''
-    tz = pytz.timezone('America/Los_Angeles')
-    utc_time = datetime.datetime.now()
-    local_time = tz.localize(utc_time)
-    return datetime.datetime.combine(local_time, datetime.time.min)
+    utc = pytz.timezone('UTC')
+    pst = pytz.timezone('America/Los_Angeles')
+    utc_time = utc.localize(datetime.datetime.now())
+    local_time = utc_time.astimezone(pst)
+    return datetime.datetime.combine(local_time.replace(tzinfo=None), datetime.time.min)
 
 def create_schedule(device, device_key):
     ''''Create today's schedule'''
@@ -132,6 +132,8 @@ def find_schedule(device, device_key):
     today = today_local_datetime()
     schedule_day = models.ScheduleDay.query(models.ScheduleDay.date == today,
                                             ancestor=device_key).get()
+    print today
+    print schedule_day
     if schedule_day:
         schedule_units = schedule_day.schedule
         for unit in schedule_units:
