@@ -144,7 +144,7 @@ function mod(n, m) {
   var a;
 
   function setImg(i) {
-    a = app.valves[i].header.replace(/\s+/g, ',');
+    a = app.valves[i].header.replace(/\s+/g, ',').toLowerCase();
     app.set(path(i, 'image'), 'https://source.unsplash.com/400x200/weekly?' + a);
   }
 

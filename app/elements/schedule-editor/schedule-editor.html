@@ -118,6 +118,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     (function() {
       'use strict';
 
+      function toTitleCase(str) {
+          return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      }
+
       Polymer({
         is: 'schedule-editor',
 
@@ -128,11 +132,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         setImg: function() {
           if (this.valve.header) {
-            var a = this.valve.header.replace(/\s+/g, ',');
+            var a = this.valve.header.replace(/\s+/g, ',').toLowerCase();
             this.set('valve.image', 'https://source.unsplash.com/400x200/weekly?' + a);
           } else {
             this.set('valve.image', '');
           }
+          this.set('valve.header', toTitleCase(this.valve.header));
         },
 
         _InputChanged: function(e) {
