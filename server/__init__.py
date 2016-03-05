@@ -18,7 +18,8 @@ import models
 import pytz
 # import crops
 from messages import (DataMessage, ScheduleResponse, ScheduledWater, Valve,
-                      StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse)
+                      StatusResponse, Status, SetupRequest, ScheduleAdd, ValveDataResponse,
+                      UsageRequest, UsageResponse)
 
 API_EXPLORER = '292824132082.apps.googleusercontent.com'
 CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com',
@@ -155,6 +156,30 @@ class WaterAPI(remote.Service):
         except AttributeError:
             return ScheduleResponse(status=Status.BAD_DATA)
         return find_schedule(device, device_key)
+
+    @endpoints.method(UsageRequest, UsageResponse,
+                      name='get_usage', path='getusage')
+    def get_usage(self, request):
+        """ Look up usage for time """
+        device = models.Device.query(models.Device.device_id == request.device_id).get()
+        try:
+            device_key = device.key
+        except AttributeError:
+            return UsageRequest(status=Status.BAD_DATA)
+
+        if request.datapoint_freq == UsageRequest.Frequency.DAY:
+            today = today_local_datetime()
+            start = today - datetime.timedelta(days=(request.datapoint_num))
+            print today
+            print start
+            day_list = models.ScheduleDay.query(models.ScheduleDay.date > start,
+                                                ancestor=device_key).fetch()
+            day_list = sorted(day_list)
+            print day_list
+            usage = []
+            for d in day_list:
+                usage.append(d.index)
+        return UsageResponse(status=Status.OK, usage=usage)
 
     @endpoints.method(ScheduleAdd, StatusResponse,
                       name='schedule_add', path='addschedule', allowed_client_ids=CLIENT_IDS)

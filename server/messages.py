@@ -34,15 +34,18 @@ class ScheduleResponse(messages.Message):
     schedule = messages.MessageField(ScheduledWater, 2, repeated=True)
 
 
-class UsageResponse(messages.Message):
+class UsageRequest(messages.Message):
     class Frequency(messages.Enum):
         DAY = 1
         WEEK = 2
         MONTH = 3
-
-    usage = messages.IntegerField(1, repeated=True)
+    device_id = messages.StringField(1)
     datapoint_num = messages.IntegerField(2)
     datapoint_freq = messages.EnumField(Frequency, 3)
+
+class UsageResponse(messages.Message):
+    usage = messages.FloatField(1, repeated=True)
+    status = messages.EnumField(Status, 2)
 
 class SetupRequest(messages.Message):
     device_id = messages.StringField(1)
