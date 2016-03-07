@@ -1,6 +1,7 @@
 import datetime
 import time
 import gpio
+import sys
 #from twisted.web import server, resource
 #from twisted.internet import reactor
 from apiclient.discovery import build
@@ -64,17 +65,20 @@ def main():
             schedule_list = []
             try:
                 schedule = service.get_schedule(body={'device_id': '000'}).execute()
+                # Format
+                for s in schedule['schedule']:
+                    start = int(s['start_time'])
+                    duration = int(s['duration_seconds'])
+                    valve = int(s['valve'])
+                    schedule_list.append(Schedule(start_time=start, valve_number=valve, length=duration))
+                # If things work out:
+                last_update = datetime.date.today()
+                print schedule_list
             except:
+                e = sys.exc_info()[0]
+                print e
                 time.sleep(10)
-            # Format
-            for s in schedule['schedule']:
-                start = int(s['start_time'])
-                duration = int(s['duration_seconds'])
-                valve = int(s['valve'])
-                schedule_list.append(Schedule(start_time=start, valve_number=valve, length=duration))
-            # If things work out:
-            last_update = datetime.date.today()
-            print schedule_list
+
 
         if schedule_list != []:
             for i in schedule_list:
