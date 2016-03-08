@@ -160,7 +160,10 @@ gulp.task('copy', function() {
 
   var yaml = gulp.src([
     'app.yaml',
-    'index.yaml'
+    'index.yaml',
+    'module.yaml',
+    'dispatch.yaml',
+    'challenges'
   ], {
     dot: true
 

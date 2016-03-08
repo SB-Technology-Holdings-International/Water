@@ -104,15 +104,19 @@ def create_schedule(device, device_key):
     yesterday = yesterday_local_date()
     eto = load_eto(device.lat, device.lng, yesterday)
     precip = load_precip(device.noaa_station_id, yesterday)
+    print 'eto: ' + str(eto)
+    print 'precip: ' + str(precip)
     # Make up number
     index = (eto - precip) / 0.244  # Local 100% value
     if index < 0:
         index = 0.0
-
+    print 'index: ' + str(index)
     max_schedules = models.Valve.query(ancestor=device_key).fetch()
     start = 100  # fake, will be based on sunrise
     for s in max_schedules:
+        print 'max seconds:' + str(s.seconds_per_day)
         duration = int(round(s.seconds_per_day * index))
+        print 'adjusted seconds: ' + str(duration)
         if s.start_time:
             start = s.start_time
         responses.append(ScheduledWater(duration_seconds=duration, valve=s.valve_id,

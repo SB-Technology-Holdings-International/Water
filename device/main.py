@@ -32,6 +32,8 @@ class Schedule:
         if (now > start and now < end):
             # Turn on valve
             gpio.digital_write(self.valve_gpio, 1)
+            print start
+            print end
             print 'ON'
 
         if now > end:
