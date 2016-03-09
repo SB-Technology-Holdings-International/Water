@@ -234,8 +234,10 @@ function mod(n, m) {
         }
 
       });
+      console.log(app.route);
       if (app.route === 'setup' || app.route === 'login') {
-        app.route = 'home';
+        //app.route = 'home';
+        page('/app');
       } else {
         app.route = oldLocation;
       }
@@ -398,13 +400,13 @@ function mod(n, m) {
         console.log('update');
         var start = 0;
         if (app.valves[num].startIndex === 0) {
-          start = 11 * 60 * 60;
+          start = 3 * 60 * 60;
         } else if (app.valves[num].startIndex === 1) {
-          start = 14 * 60 * 60;
+          start = 6 * 60 * 60;
         } else if (app.valves[num].startIndex === 2) {
-          start = 21 * 60 * 60 + 30 * 60;
+          start = 13 * 60 * 60 + 30 * 60;
         } else if (app.valves[num].startIndex === 3) {
-          start = 23 * 60 * 60;
+          start = 15 * 60 * 60;
         }
         var duration = app.valves[num].hours * 3600 + app.valves[num].minutes * 60;
         app.set(path(num, 'total_seconds'), duration);
@@ -417,13 +419,13 @@ function mod(n, m) {
           name: app.valves[num].header
         });
         request.execute(function() {
-          window.location.hash = '';
+          page('/');
         });
       }
 
       for (var i = 0; i < 4; i++) {
         if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
-          window.location.hash = '';
+          page('/');
         } else {
           sendUpdate(i);
         }
