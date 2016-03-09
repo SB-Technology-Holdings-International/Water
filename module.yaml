@@ -11,6 +11,7 @@ handlers:
   upload: challenges/(.*)
   static_files: challenges/\1
   mime_type: text/plain
+  secure: never
 
 
 skip_files:
