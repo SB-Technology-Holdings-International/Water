@@ -81,32 +81,43 @@ function mod(n, m) {
     function createPrecentage(i) {
       return Math.round(app.valves[i].total_seconds / timeAllValves * 100);
     }
-    app.usageRelativeData = [
-          {
-            value: createPrecentage(0),
-            color: '#2196F3',
-            highlight: '#1565C0',
-            label: app.valves[0].header
-          },
-          {
-            value: createPrecentage(1),
-            color: '#FF9800',
-            highlight: '#EF6C00',
-            label: app.valves[1].header
-          },
-          {
-            value: createPrecentage(2),
-            color: '#E91E63',
-            highlight: '#AD1457',
-            label: app.valves[2].header
-          },
-          {
-            value: createPrecentage(3),
-            color: '#4CAF50',
-            highlight: '#2E7D32',
-            label: app.valves[3].header
-          }
-        ];
+    if (timeAllValves > 0) {
+      app.usageRelativeData = [
+            {
+              value: createPrecentage(0),
+              color: '#2196F3',
+              highlight: '#1565C0',
+              label: app.valves[0].header
+            },
+            {
+              value: createPrecentage(1),
+              color: '#FF9800',
+              highlight: '#EF6C00',
+              label: app.valves[1].header
+            },
+            {
+              value: createPrecentage(2),
+              color: '#E91E63',
+              highlight: '#AD1457',
+              label: app.valves[2].header
+            },
+            {
+              value: createPrecentage(3),
+              color: '#4CAF50',
+              highlight: '#2E7D32',
+              label: app.valves[3].header
+            }
+      ];
+    } else {
+      app.usageRelativeData = [
+            {
+              value: 100,
+              color: '#BDBDBD',
+              highlight: '#BDBDBD',
+              label: 'No Data'
+            }
+      ];
+    }
   }
 
   function updateLineChart(data) {
