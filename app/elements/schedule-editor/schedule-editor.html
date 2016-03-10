@@ -131,11 +131,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         setImg: function() {
-          if (this.valve.header) {
-            var a = this.valve.header.replace(/\s+/g, ',').toLowerCase();
-            this.set('valve.image', 'https://source.unsplash.com/400x200/weekly?' + a);
+          var a = this.valve.header;
+          var result = this.data.filter(function(obj) {
+            return obj.name.indexOf(a) > -1;
+          });
+          if (0 < result.length) {
+            this.set('valve.image', result[0].url);
           } else {
-            this.set('valve.image', '');
+            if (this.valve.header) {
+              a = this.valve.header.replace(/\s+/g, ',').toLowerCase();
+              this.set('valve.image', 'https://source.unsplash.com/400x200/weekly?' + a);
+            } else {
+              this.set('valve.image', '');
+            }
           }
           this.set('valve.header', toTitleCase(this.valve.header));
         },

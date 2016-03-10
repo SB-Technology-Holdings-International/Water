@@ -67,7 +67,7 @@ function mod(n, m) {
       'url': 'https://upload.wikimedia.org/wikipedia/commons/1/18/Knot_Garden_at_Little_Moreton_Hall%2C_Cheshire_-_geograph.org.uk_-_1527.jpg'
     },
     {
-      'name': 'Fruit Trees',
+      'name': 'Oranges',
       'url': 'https://upload.wikimedia.org/wikipedia/commons/b/b0/OrangeBloss_wb.jpg'
     },
     {
@@ -154,9 +154,19 @@ function mod(n, m) {
 
   var a;
 
+  var filterMethod = function(obj) {
+    return obj.name.indexOf(a) > -1;
+  };
+
   function setImg(i) {
-    a = app.valves[i].header.replace(/\s+/g, ',').toLowerCase();
-    app.set(path(i, 'image'), 'https://source.unsplash.com/400x200/weekly?' + a);
+    a = app.valves[i].header;
+    var result = app.valveNameList.filter(filterMethod);
+    if (0 < result.length) {
+      app.set(path(i, 'image'), result[0].url);
+    } else {
+      a = app.valves[i].header.replace(/\s+/g, ',').toLowerCase();
+      app.set(path(i, 'image'), 'https://source.unsplash.com/400x200/weekly?' + a);
+    }
   }
 
   i = 0;
