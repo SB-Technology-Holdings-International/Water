@@ -419,13 +419,13 @@ function mod(n, m) {
           name: app.valves[num].header
         });
         request.execute(function() {
-          page('/');
+          page('/app');
         });
       }
 
       for (var i = 0; i < 4; i++) {
         if (JSON.stringify(app.valves[i]) === JSON.stringify(oldValves[i])) {
-          page('/');
+          page('/app');
         } else {
           sendUpdate(i);
         }
