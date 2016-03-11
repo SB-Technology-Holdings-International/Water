@@ -41,8 +41,3 @@ paper-icon-button{
     background: #002256;
     color: white;
 }
-google-map {
-  width: 100%;
-  max-width: 720px;
-  height: 100%;
-}

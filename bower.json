@@ -19,7 +19,8 @@
     "geo-location": "ebidel/geo-location#~1.0.2",
     "google-map": "~1.1.7",
     "google-web-components": "~1.0.1",
-    "progress-bubble": "~1.1.0"
+    "progress-bubble": "~1.1.0",
+    "paper-stepper": "SB-Technology-Holdings-International/paper-stepper#master"
   },
   "devDependencies": {
     "web-component-tester": "*"

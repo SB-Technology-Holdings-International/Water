@@ -122,6 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Main Content -->
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
             <section data-route="home">
               <paper-material elevation="0">
                 <h2 class="paper-font-display1">Watering Schedule</h2>
@@ -193,22 +194,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             </section>
 
             <section data-route="setup">
-                <div class="vertical center layout setupFill">
-                  <h2 class="paper-font-display2" style="margin: 32px;">Setup</h2>
-                  <template is="dom-if" if="{{geo}}">
-                    <geo-location latitude="{{lat}}" longitude="{{lng}}" highAccuracy></geo-location>
-                  </template>
-                  <div class="horizontal center layout" id="locationDirections">
-                    <span>Set location on map or use</span>
-                    <paper-button raised onClick="{{useCurrentLocation}}" id="geoButton">Current Location</paper-button>
-                  </div>
-                  <google-map latitude="[[lat]]" longitude="[[lng]]" language="en" zoom="{{mapZoom}}">
-                    <google-map-marker latitude="{{lat}}" longitude="{{lng}}"
-                                       draggable="true">
-                    </google-map-marker>
-                  </google-map>
-                  <paper-input label="Device ID" value="{{inputDeviceID}}" id="setupDeviceIDInput"></paper-input>
+                <div>
+                  <paper-stepper vertical>
+                    <paper-step id="step1" label="Choose Location" summarize="Summarize if needed">
+                      <div class="horizontal center layout" id="locationDirections">
+                        <span>Set location on map or</span>
+                        <paper-button raised onClick="{{useCurrentLocation}}" style="background-color: #2196F3; color: white;" id="geoButton">Detect Location</paper-button>
+                      </div>
+                      <google-map latitude="[[lat]]" longitude="[[lng]]" language="en" zoom="{{mapZoom}}" style="height: 400px; margin-top: 16px;">
+                        <google-map-marker latitude="{{lat}}" longitude="{{lng}}"
+                                           draggable="true">
+                        </google-map-marker>
+                      </google-map>
+                      <template is="dom-if" if="{{geo}}">
+                        <geo-location latitude="{{lat}}" longitude="{{lng}}" highAccuracy></geo-location>
+                      </template>
+                    </paper-step>
+                    <paper-step label="Enter device information">
+                      <paper-input label="Device ID" value="{{inputDeviceID}}" id="setupDeviceIDInput"></paper-input>
+                    </paper-step>
+                    <paper-step label="Review Data">
+                      <paper-input label="Name"></paper-input>
+                      <paper-input label="Address"></paper-input>
+                    </paper-step>
+                  </paper-stepper>
+
                   <paper-button raised onClick="{{setupDone}}" id="setupDoneButton">Continue</paper-button>
+
+
+
                 </div>
             </section>
 
