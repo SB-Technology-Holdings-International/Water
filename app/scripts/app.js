@@ -122,6 +122,9 @@ function mod(n, m) {
 
   function updateLineChart(data) {
     if (data) {
+      for (i = 0; i < data.length; i++) {
+        data[i] = Math.round(data[i] * 100);
+      }
       for (i = 0; data.length < 7; i++) {
         data.unshift(null);
       }
@@ -441,6 +444,8 @@ function mod(n, m) {
         });
         request.execute(function() {
           page('/app');
+          app.$.toast.text = 'Schedule Updated';
+          app.$.toast.show();
         });
       }
 
