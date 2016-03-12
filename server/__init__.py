@@ -13,6 +13,7 @@ from google.appengine.api import urlfetch
 import google.appengine.api.users
 import api_key
 import noaa_stations
+import cimis_stations
 
 import models
 import pytz
@@ -45,6 +46,13 @@ def find_noaa_station(lat, lng):
         distances.append(earth_distance(lat, lng, s['latitude'], s['longitude']))
     return noaa_stations.stations[distances.index(min(distances))]['id']
 
+def find_cimis_station(lat, lng):
+    '''Find closest weather station'''
+    distances = []
+    for s in cimis_stations.stations:
+        distances.append(earth_distance(lat, lng, s['latitude'], s['longitude']))
+    return noaa_stations.stations[distances.index(min(distances))]['id']
+
 
 def load_eto(lat, lng, date_value):
     '''Load from CIMIS servers'''
@@ -63,6 +71,22 @@ def load_eto(lat, lng, date_value):
     data = json.loads(json_data)
     return float(data['Data']['Providers'][0]['Records'][0]['DayAsceEto']['Value'])
 
+def load_precip_cimis(station_id, date_value):
+    '''Load precip data from CIMIS'''
+    date_string = date_value.strftime("%Y-%m-%d")
+    base_url = 'http://et.water.ca.gov/api/data?appKey=' + api_key.cimis_key
+    targets = '&targets=' + station_id
+    start_date = '&startDate=' + date_string
+    end_date = '&endDate=' + date_string
+    data_req = '&dataItems=day-precip'
+    units = '&unitOfMeasure=E'
+    url = base_url + targets + start_date + end_date + data_req + units
+    print url
+    req = urllib2.Request(url, None, {'accept': 'application/json'})
+    response = urllib2.urlopen(req, None, 15)
+    json_data = response.read()
+    data = json.loads(json_data)
+    return float(data['Data']['Providers'][0]['Records'][0]['DayPrecip']['Value'])
 
 def load_precip(station_id, date_value):
     '''Load precip data from NOAA'''
@@ -103,7 +127,7 @@ def create_schedule(device, device_key):
     # Generate schedule
     yesterday = yesterday_local_date()
     eto = load_eto(device.lat, device.lng, yesterday)
-    precip = load_precip(device.noaa_station_id, yesterday)
+    precip = load_precip_cimis(device.cimis_station_id, yesterday)
     print 'eto: ' + str(eto)
     print 'precip: ' + str(precip)
     # Make up number
@@ -248,7 +272,7 @@ class WaterAPI(remote.Service):
 
         device = models.Device(device_id=request.device_id, lat=request.lat,
                                lng=request.lng, parent=person_key,
-                               noaa_station_id=find_noaa_station(request.lat, request.lng))
+                               cimis_station_id=find_cimis_station(request.lat, request.lng))
         device_key = device.put()
         for i in range(4):
             valve_name = "Valve " + str(i + 1)

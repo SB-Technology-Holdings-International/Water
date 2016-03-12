@@ -29,11 +29,6 @@ class Valve(ndb.Model):
     crop_id = ndb.IntegerProperty()
     start_time = ndb.IntegerProperty()
 
-
-class UsageDay(ndb.Model):
-  pass
-
-
 class Person(ndb.Model):
     '''One user'''
     user = ndb.UserProperty()
@@ -44,4 +39,5 @@ class Device(ndb.Model):
     device_id = ndb.StringProperty()
     lat = ndb.FloatProperty()
     lng = ndb.FloatProperty()
+    cimis_station_id = ndb.StringProperty()
     noaa_station_id = ndb.StringProperty()
