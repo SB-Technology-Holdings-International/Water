@@ -148,7 +148,7 @@ function mod(n, m) {
           pointStrokeColor: '#fff',
           pointHighlightFill: '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data: data
+          data: [59, 45, 61, 32, 41, 76, 32]
         }
 
       ]
@@ -254,6 +254,7 @@ function mod(n, m) {
           app.device_id = resp.device_id;
           deviceConnected();
         } else { // Setup device
+          app.$.paperDrawerPanel.forceNarrow = true;
           app.route = 'setup';
         }
 
@@ -261,6 +262,7 @@ function mod(n, m) {
       console.log(app.route);
       if (app.route === 'setup' || app.route === 'login') {
         //app.route = 'home';
+        app.$.paperDrawerPanel.forceNarrow = false;
         page('/app');
       } else {
         app.route = oldLocation;
@@ -287,9 +289,11 @@ function mod(n, m) {
       if (resp.status === 'OK') { // Ok get data
         app.device_id = app.inputDeviceID;
         app.route = 'home';
+        app.$.paperDrawerPanel.forceNarrow = false;
         deviceConnected();
       } else { // Setup device
         // TODO add toast
+        app.$.paperDrawerPanel.forceNarrow = true;
         app.route = 'setup';
       }
 

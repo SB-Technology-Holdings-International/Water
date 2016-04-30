@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit">
-  <title>Water</title>
+  <title>Drip</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <!-- Chrome for Android theme color -->
@@ -195,8 +195,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="setup">
                 <div>
-                  <paper-stepper vertical>
-                    <paper-step id="step1" label="Choose Location" summarize="Summarize if needed">
+                  <paper-stepper vertical completed="{{stepdone}}">
+                    <paper-step id="step1" label="Choose Location" editable summarize="Summarize if needed">
                       <div class="horizontal center layout" id="locationDirections">
                         <span>Set location on map or</span>
                         <paper-button raised onClick="{{useCurrentLocation}}" style="background-color: #2196F3; color: white;" id="geoButton">Detect Location</paper-button>
@@ -210,10 +210,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         <geo-location latitude="{{lat}}" longitude="{{lng}}" highAccuracy></geo-location>
                       </template>
                     </paper-step>
-                    <paper-step label="Enter device information">
+                    <paper-step label="Enter device information" editable>
                       <paper-input label="Device ID" value="{{inputDeviceID}}" id="setupDeviceIDInput"></paper-input>
                     </paper-step>
-                    <paper-step label="Review Data">
+                    <paper-step label="Review Data" editable>
                       <paper-input label="Name"></paper-input>
                       <paper-input label="Address"></paper-input>
                     </paper-step>
@@ -233,7 +233,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-drawer-panel>
 
     <paper-toast id="toast">
-      
+
     </paper-toast>
 
 
