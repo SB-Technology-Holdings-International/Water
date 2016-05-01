@@ -10,3 +10,4 @@ server/api_key.py
 .publish/
 .idea/
 acme/
+esp8266/.sync
