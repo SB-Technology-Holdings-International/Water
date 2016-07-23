@@ -1,5 +1,5 @@
-import socket
-import json
+import usocket
+import ujson
 try:
     import ussl
     SUPPORT_SSL = True
