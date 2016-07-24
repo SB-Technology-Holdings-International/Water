@@ -1,5 +1,5 @@
 import errno
-import uselect as select
+import select as select
 import usocket as _socket
 from core import *
 
