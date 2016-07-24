@@ -8,5 +8,5 @@ import ntptime
 ntptime.settime()
 
 pin = machine.Pin(2, machine.Pin.OUT)
-pin.high()
+pin.low()
 gc.collect()
