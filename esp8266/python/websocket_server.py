@@ -1,6 +1,7 @@
 import sys
 import socket
 import time
+import schedule_manager
 
 from websocket import *
 import websocket_helper
@@ -36,12 +37,17 @@ def stop():
 def data_in(sock):
     global ws
     data = ws.read()
-    print(data)
-    data = data.decode('UTF-8')
+    data = data.decode('UTF-8').strip('/').split('/')
     print(data)
     ws.write("cool")
-    if data == 'close':
+    if data[0] == 'close':
         stop()
+    elif data[0] == 'valve':
+        if data[2] == 'on':
+            pass
+        else:
+            # Turn off
+            pass
 
 def handle_conn(listen_sock):
     global ws
