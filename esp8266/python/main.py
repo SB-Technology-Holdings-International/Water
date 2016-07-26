@@ -2,6 +2,7 @@ import time
 import http_client
 import network
 from machine import Timer
+import websocket_server
 
 DEVICE_ID = '000' # Must be user set
 
@@ -65,3 +66,4 @@ def get_schedule():
 do_connect()
 schedule_list = get_schedule()
 time.time()
+websocket_server.start()
