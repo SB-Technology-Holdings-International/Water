@@ -42,12 +42,23 @@ def data_in(sock):
     ws.write("cool")
     if data[0] == 'close':
         stop()
+
     elif data[0] == 'valve':
         if data[2] == 'on':
-            pass
+            schedule_manager.add_item(schedule_manager.ScheduleItem(valve_number=data[0], start_time=time.time(), length=data[3]))
         else:
             # Turn off
             pass
+
+    elif data[0] == 'reboot':
+        # reboot
+        pass
+
+    elif data[0] == 'check_schedule':
+        pass
+
+    else:
+        ws.write('Error - Command Not Found')
 
 def handle_conn(listen_sock):
     global ws

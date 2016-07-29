@@ -4,6 +4,8 @@ import network
 from machine import Timer
 import schedule_manager
 import websocket_server
+import time
+import ntptime
 
 DEVICE_ID = '000' # Must be user set
 
@@ -22,8 +24,15 @@ def do_connect():
 
     print('network config:', wlan.ifconfig())
 
+while True:
+    try:
+        ntptime.settime()
+        break
+    except:
+        print('Error setting time, retrying...')
+        time.sleep(0.5)
+
 
 do_connect()
-schedule_list = get_schedule()
 time.time()
 websocket_server.start()

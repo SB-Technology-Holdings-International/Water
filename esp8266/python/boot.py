@@ -4,8 +4,6 @@ import gc
 #import webrepl
 #webrepl.start()
 import machine
-import ntptime
-ntptime.settime()
 
 pin = machine.Pin(2, machine.Pin.OUT)
 pin.low()

@@ -1,3 +1,4 @@
+schedule_list = []
 
 class ScheduleItem:
     def __init__(self, valve_number, start_time, length):
@@ -28,7 +29,8 @@ class ScheduleItem:
             self.done = True
 
 def get_schedule():
-    schedule_list = []
+    global schedule_list
+    temp_schedule_list = []
     url = 'https://watering-web-client.appspot.com/_ah/api/water/v1/getschedule?alt=json'
     response = http_client.post(url, json={'device_id': '000'})
     schedule = response.json()
@@ -36,8 +38,10 @@ def get_schedule():
         start = int(s['start_time'])
         duration = int(s['duration_seconds'])
         valve = int(s['valve'])
-        schedule_list.append(ScheduleItem(start_time=start, valve_number=valve, length=duration))
-    return schedule_list
+        temp_schedule_list.append(ScheduleItem(start_time=start, valve_number=valve, length=duration))
+    if temp_schedule_list:
+        schedule_list = temp_schedule_list
 
 def add_item(item):
-    pass
+    global schedule_list
+    schedule_list.append(item)
