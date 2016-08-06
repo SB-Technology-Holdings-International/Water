@@ -1,6 +1,6 @@
 '''Endpoints messages.'''
 
-from protorpc import messages
+from protorpc import messages, message_types
 
 
 class Status(messages.Enum):
@@ -31,7 +31,8 @@ class ScheduledWater(messages.Message):
 
 class ScheduleResponse(messages.Message):
     status = messages.EnumField(Status, 1)
-    schedule = messages.MessageField(ScheduledWater, 2, repeated=True)
+    day = message_types.DateTimeField(2)
+    schedule = messages.MessageField(ScheduledWater, 3, repeated=True)
 
 
 class UsageRequest(messages.Message):

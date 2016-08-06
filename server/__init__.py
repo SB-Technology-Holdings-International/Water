@@ -170,7 +170,7 @@ def find_schedule(device, device_key):
                                             duration_seconds=unit.duration_seconds))
     else:
         responses = create_schedule(device, device_key)
-    return ScheduleResponse(schedule=responses, status=Status.OK)
+    return ScheduleResponse(schedule=responses, status=Status.OK, day=today)
 
 
 @endpoints.api(name='water', version='v1')
