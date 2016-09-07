@@ -18,9 +18,13 @@ handlers:
   static_files: app/index.html
   upload: app/index\.html
   secure: always
+  http_headers:
+    Strict-Transport-Security: max-age=31536000
 - url: /
   static_dir: app
   secure: always
+  http_headers:
+    Strict-Transport-Security: max-age=31536000
 
 libraries:
 - name: endpoints
