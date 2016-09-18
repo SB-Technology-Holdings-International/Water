@@ -27,7 +27,7 @@ CLIENT_IDS = ['651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercont
               API_EXPLORER]
 
 __author__ = 'Sebastian Boyd'
-__copyright__ = 'Copyright (C) 2015 SB Technology Holdings International'
+__copyright__ = 'Copyright (C) 2015 - 2016 SB Technology Holdings International'
 
 
 def earth_distance(lat1, lon1, lat2, lon2):

@@ -4,7 +4,7 @@ import time
 import schedule_manager
 
 from websocket import *
-import websocket_helper
+import socket_helper as websocket_helper
 
 listen_s = None
 client_s = None
