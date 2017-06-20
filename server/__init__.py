@@ -274,10 +274,15 @@ class WaterAPI(remote.Service):
                                lng=request.lng, parent=person_key,
                                cimis_station_id=find_cimis_station(request.lat, request.lng))
         device_key = device.put()
+        # for static
+        names = ['Green Beans', 'Grapes', 'Garden', 'Lawn']
+        time_list = [10920, 0, 3600, 7200]
         for i in range(4):
-            valve_name = "Valve " + str(i + 1)
+            # valve_name = "Valve " + str(i + 1)
+            valve_name = names[i] # remove
+            secs = time_list[i] # remove
             valve = models.Valve(valve_id=i, parent=device_key, name=valve_name,
-                                 seconds_per_day=0, start_time=50400)
+                                 seconds_per_day=time_list[i], start_time=50400) # should be seconds_per_day=0
             valve.put()
         return StatusResponse(status=Status.OK)
 

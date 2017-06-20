@@ -255,7 +255,8 @@ function mod(n, m) {
           deviceConnected();
         } else { // Setup device
           app.$.paperDrawerPanel.forceNarrow = true;
-          app.route = 'setup';
+          //app.route = 'setup';
+          app.setupDone();
         }
 
       });
@@ -281,9 +282,9 @@ function mod(n, m) {
 
   app.setupDone = function() {
     var request = app.waterApi.add_device({
-      device_id: app.inputDeviceID,
-      lat: app.lat,
-      lng: app.lng
+      device_id: Math.floor(Math.random() * 1000000).toString(),
+      lat: 37.7,
+      lng: -122.45
     });
     request.execute(function(resp) {
       if (resp.status === 'OK') { // Ok get data
@@ -294,7 +295,7 @@ function mod(n, m) {
       } else { // Setup device
         // TODO add toast
         app.$.paperDrawerPanel.forceNarrow = true;
-        app.route = 'setup';
+        //app.route = 'setup';
       }
 
     });
