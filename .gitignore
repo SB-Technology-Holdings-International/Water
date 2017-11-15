@@ -1,16 +1,1 @@
-node_modules
-dist
-bower_components
-.tmp
-*.pyc
-.editorconfig
-sslkeys
-server/api_key.py
-=======
-.publish/
-.idea/
-acme/
-esp8266/.sync
-esp8266/c/user/user_config.h
-esp8266/c/build
-esp8266/c/firmware
+ssl_keys
