@@ -1,0 +1,76 @@
+<script src="https://smartlock.google.com/client"></script>
+<script>
+    window.onGoogleYoloLoad = (googleyolo) => {
+        let sendToken = function(tolken){
+            console.log(tolken);
+        }
+        const retrievePromise = googleyolo.retrieve({
+            supportedAuthMethods: [
+                "https://accounts.google.com"
+            ],
+            supportedIdTokenProviders: [
+                {
+                uri: "https://accounts.google.com",
+                clientId: "651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com"
+                }
+            ]
+        });
+        retrievePromise.then(
+            (credential) => {
+                console.log('retreive ok');
+                sendToken(credential.idToken);
+            },
+            (error) => {
+                console.log('');
+                const hintPromise = googleyolo.hint({
+                    supportedAuthMethods: [
+                        "https://accounts.google.com"
+                    ],
+                    supportedIdTokenProviders: [
+                        {
+                        uri: "https://accounts.google.com",
+                        clientId: "651504877594-9qh2hc91udrhht8gv1h69qarfa90hnt3.apps.googleusercontent.com"
+                        }
+                    ]
+                });
+
+                hintPromise.then((credential) => {
+            if (credential.idToken) {
+                console.log('hint ok');
+                sendToken(credential.idToken);
+            }
+        }, (error) => {
+            console.log(error);
+            switch (error.type) {
+                case "userCanceled":
+                    // The user closed the hint selector. Depending on the desired UX,
+                    // request manual sign up or do nothing.
+                    break;
+                case "noCredentialsAvailable":
+                    // Probably no account logged in
+                    // will prompt later
+                    break;
+                case "requestFailed":
+                    // The request failed, most likely because of a timeout.
+                    // You can retry another time if necessary.
+                    break;
+                case "operationCanceled":
+                    // The operation was programmatically canceled, do nothing.
+                    break;
+                case "illegalConcurrentRequest":
+                    // Another operation is pending, this one was aborted.
+                    break;
+                case "initializationError":
+                    // Failed to initialize. Refer to error.message for debugging.
+                    break;
+                case "configurationError":
+                    // Configuration error. Refer to error.message for debugging.
+                    break;
+                default:
+                // Unknown error, do nothing.
+            }
+        });
+            }
+        )
+    };
+</script>
